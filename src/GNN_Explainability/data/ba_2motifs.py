@@ -6,7 +6,7 @@ from torch_geometric.data import Data
 from ..enums.data_spec import DataSpec
 
 
-class BA2Motifs(Dataset):
+class BA2MotifsDataset(Dataset):
     """a BA2Motifs dataset. """
 
     def __init__(self, dataspec: DataSpec):
