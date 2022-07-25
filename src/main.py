@@ -5,7 +5,7 @@ from sys import argv
 import numpy as np
 import torch
 
-from GNN_Explainability.entrypoints.main import Entrypoint
+from GNN_Explainability.entrypoints.main import MainEntrypoint
 
 def seed_everything(seed: int):
     r"""Sets the seed for generating random numbers in PyTorch, numpy and
@@ -22,6 +22,6 @@ def seed_everything(seed: int):
 
 if __name__ == "__main__":
     seed_everything(12345)
-    script = import_module(f"entrypoints.{argv[1]}")
-    entrypoint: Entrypoint = getattr(script, 'Entrypoint')
+    script = import_module(f"GNN_Explainability.entrypoints.{argv[1]}")
+    entrypoint: MainEntrypoint = getattr(script, 'Entrypoint')
     entrypoint.run()

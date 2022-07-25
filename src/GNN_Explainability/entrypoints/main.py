@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Entrypoint(ABC):
+class MainEntrypoint(ABC):
 
     @abstractmethod
     def run():

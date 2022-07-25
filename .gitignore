@@ -127,8 +127,8 @@ dmypy.json
 
 results/
 Results/
-checkpoints/
-datasets/
+ckpt/
+dataset/
 
 # Pyre type checker
 .pyre/
