@@ -30,14 +30,14 @@ class BA2MotifsDataset(Dataset):
             l = 0.8 * dataset_num
             self.graph_inds = torch.arange(l)
 
-        elif self.dataspec == DataSpec.TEST:
+        elif self.dataspec == DataSpec.VAL:
             l1 = 0.8 * dataset_num
             l2 = 0.9 * dataset_num
             self.graph_inds = torch.arange(l1, l2)
         
         else:
             l = 0.9 * dataset_num
-            self.graph_inds = torch.arange(l)
+            self.graph_inds = torch.arange(l, dataset_num)
 
     
     def __len__(self):
