@@ -23,5 +23,5 @@ def seed_everything(seed: int):
 if __name__ == "__main__":
     seed_everything(12345)
     script = import_module(f"GNN_Explainability.entrypoints.{argv[1]}")
-    entrypoint: MainEntrypoint = getattr(script, 'Entrypoint')
+    entrypoint: MainEntrypoint = getattr(script, 'Entrypoint')()
     entrypoint.run()

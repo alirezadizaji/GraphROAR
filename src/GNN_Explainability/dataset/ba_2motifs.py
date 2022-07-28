@@ -16,7 +16,7 @@ class BA2MotifsDataset(Dataset):
         """
         self.dataspec: DataSpec = dataspec
 
-        ba_2motifs = torch.load('../dataset/ba_2motifs/processed/data.pt')
+        ba_2motifs = torch.load('../data/ba_2motifs/processed/data.pt')
         self.data: Data = ba_2motifs[0]
         dataset_num = self.data.y.numel()
         

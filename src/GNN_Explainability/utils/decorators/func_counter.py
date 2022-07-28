@@ -7,8 +7,9 @@ def counter(call_init: int=0):
         """ decorator to record number of calls of a function """
         @wraps(function)
         def wrapper(*args, **kwargs):
+            out = function(*args, **kwargs)
             wrapper.call += 1
-            return function(*args, **kwargs)
+            return out
         
         wrapper.call = call_init
         return wrapper

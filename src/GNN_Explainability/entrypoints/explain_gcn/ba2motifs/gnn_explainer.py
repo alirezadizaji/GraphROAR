@@ -58,7 +58,7 @@ class Entrypoint(MainEntrypoint):
                     raise Exception('there is an unhandled edge mask')
                 
                 edge_mask_new = edge_mask_new.cpu().numpy()
-                file_dir = os.path.join('GNN_Explainability', 'data', 'ba2motifs', 'gnnexplainer', dataspec)
+                file_dir = os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gnnexplainer', dataspec)
                 os.makedirs(file_dir, exist_ok=True)
                 
                 file_name = f"{i}"
