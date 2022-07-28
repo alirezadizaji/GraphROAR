@@ -7,7 +7,7 @@ from torch.nn import functional as F
 from torch.optim import Adam
 from torch_geometric.data import DataLoader, Data
 
-from ....data.ba_2motifs import BA2MotifsDataset
+from ....dataset.ba_2motifs import BA2MotifsDataset
 from ....enums.data_spec import DataSpec
 from ...main import MainEntrypoint
 
