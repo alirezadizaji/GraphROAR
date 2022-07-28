@@ -128,7 +128,7 @@ dmypy.json
 results/
 Results/
 ckpt/
-dataset/
+data/
 
 # Pyre type checker
 .pyre/
