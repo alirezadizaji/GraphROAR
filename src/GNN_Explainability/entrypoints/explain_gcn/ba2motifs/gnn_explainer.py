@@ -3,23 +3,15 @@ import random
 import os.path as osp
 import os
 
-from dig.xgraph.dataset import SynGraphDataset
-from dig.xgraph.evaluation import XCollector, ExplanationProcessor
 from dig.xgraph.method import GNNExplainer
 from dig.xgraph.models import *
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
-from torch_geometric.data import DataLoader, InMemoryDataset
-from torch_geometric.data import download_url, extract_zip
-
-from tqdm import tqdm
+from torch_geometric.data import DataLoader
 
 from dig.xgraph.models import *
 import numpy as np
 import torch
-from torch.nn import functional as F
-from torch.optim import Adam
 from torch_geometric.data import DataLoader, Data
 
 from ....data.ba_2motifs import BA2MotifsDataset
