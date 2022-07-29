@@ -39,7 +39,7 @@ class Entrypoint(MainEntrypoint):
                 data.to(device)
 
                 edge_masks, _, _ = \
-                    explainer(data.x, data.edge_index, sparsity=0.0, num_classes=2, target_label=data.y)
+                    explainer(data.x, data.edge_index, sparsity=0.0, num_classes=2, target_label=data.y, mask_features=True)
 
                 edge_mask = edge_masks[0].sigmoid()
 
