@@ -1,0 +1,6 @@
+torch-scatter
+torch-sparse
+torch-cluster
+torch-spline-conv
+torch-geometric==1.7.2
+dive-into-graphs
