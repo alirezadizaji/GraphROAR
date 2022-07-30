@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 
 from torch_geometric.data import DataLoader
 
@@ -29,6 +29,9 @@ class BaseConfig:
 
         self.base_model: 'GNNBasic' = None
         """ base model to check its explantion"""
+
+        self.save_dir: Optional[str] = None
+        r""" if given, then save logs into this directory, O.W. use `try_num` and `try_name` for this purpose """        
         
         self.optimizer: 'Optimizer' = None
         self.num_epochs: int = None

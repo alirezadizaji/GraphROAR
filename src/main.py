@@ -28,7 +28,10 @@ if __name__ == "__main__":
     entrypoint: MainEntrypoint = getattr(script, 'Entrypoint')()
 
     if entrypoint.conf.save_log_in_file:
-        save_dir = os.path.join('..', 'results', f"{entrypoint.conf.try_num}_{entrypoint.conf.try_name}")
+        if entrypoint.conf.save_dir is None:
+            save_dir = os.path.join('..', 'results', f"{entrypoint.conf.try_num}_{entrypoint.conf.try_name}")
+        else:
+            save_dir = entrypoint.conf.save_dir
         stdout_stderr_setter(save_dir)(entrypoint.run)()
     else:
         entrypoint.run()
