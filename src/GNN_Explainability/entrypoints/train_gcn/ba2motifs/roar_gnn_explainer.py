@@ -30,6 +30,7 @@ class Entrypoint(MainEntrypoint):
         conf.base_model = GNNWrapper(
             GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
         )
+        conf.base_model.to(conf.device)
         conf.optimizer = Adam(conf.base_model.parameters(), lr=1e-4)
         self.roar_percentage: float = None
 
