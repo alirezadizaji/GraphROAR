@@ -60,7 +60,7 @@ class Entrypoint(MainEntrypoint):
                 edge_mask = edge_masks[0].sigmoid()
 
                 # Thanks to DIG GNNExplainer, edge_mask should be replaced to have an identical order with edge_index
-                edge_mask_new = torch.full((data.edge_index.size(1),), fill_value=-100, dtype=torch.float)
+                edge_mask_new = torch.full((data.edge_index.size(1),), fill_value=-100, dtype=torch.float, device=edge_mask.device)
                 row, col = data.edge_index
                 self_loop_mask = row == col    
                 num = (~self_loop_mask).sum() 
