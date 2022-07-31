@@ -128,7 +128,6 @@ dmypy.json
 results/
 Results/
 ckpt/
-data/
 
 # Pyre type checker
 .pyre/
