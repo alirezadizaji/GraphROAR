@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 class MainEntrypoint(ABC):
     def __init__(self, conf: 'BaseConfig') -> None:
         self.conf = conf
+        self.conf.set_loaders()
 
     @abstractmethod
     def run(self):

@@ -36,15 +36,15 @@ class BaseConfig:
         self.optimizer: 'Optimizer' = None
         self.num_epochs: int = None
 
+        self.shuffle_training: bool = False
+
         self.train_loader: DataLoader = None
         self.val_loader: DataLoader = None
         self.test_loader: DataLoader = None
-
-        self.set_loaders()
-
+        
 
     def set_loaders(self):
         if self.dataset_name == Dataset.BA2Motifs:
-            self.train_loader = DataLoader(BA2MotifsDataset(DataSpec.TRAIN), shuffle=False)
+            self.train_loader = DataLoader(BA2MotifsDataset(DataSpec.TRAIN), shuffle=self.shuffle_training)
             self.val_loader = DataLoader(BA2MotifsDataset(DataSpec.VAL))
             self.test_loader = DataLoader(BA2MotifsDataset(DataSpec.TEST))

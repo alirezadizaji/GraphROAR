@@ -19,22 +19,27 @@ class Entrypoint(MainEntrypoint):
             try_name='ba2motifs',
             dataset_name=Dataset.BA2Motifs,
         )
+        
         conf.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         conf.num_epochs = 10
+        
         conf.save_log_in_file = False
+        conf.shuffle_training = True
+        
         conf.base_model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
         conf.base_model.to(conf.device)
+        
         conf.optimizer = Adam(conf.base_model.parameters(), lr=1e-4)
+        
         super(Entrypoint, self).__init__(conf)
 
     def run(self):
-        total_loss = []
-
         for epoch in tqdm(range(self.conf.num_epochs)):
             self.conf.base_model.train()
 
             correct = 0
             total = 0
+            total_loss = []
             for i, data in enumerate(self.conf.train_loader):
                 data: Data = data[0].to(self.conf.device)
                 x = self.conf.base_model(x=data.x, edge_index=data.edge_index, batch=data.batch)
@@ -50,7 +55,7 @@ class Entrypoint(MainEntrypoint):
                 y_pred = x.argmax(-1)
                 correct += torch.sum(y_pred == data.y).item()
                 total += data.y.numel()
-            
+
             print(f'epoch {epoch} train acc {correct/total}')
             
             with torch.no_grad():
