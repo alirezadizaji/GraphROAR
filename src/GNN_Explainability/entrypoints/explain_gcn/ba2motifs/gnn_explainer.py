@@ -13,13 +13,29 @@ from dig.xgraph.models import *
 import numpy as np
 import torch
 from torch_geometric.data import DataLoader, Data
+from torch.optim import Adam
 
-from ....data.ba_2motifs import BA2MotifsDataset
-from ....enums.data_spec import DataSpec
+from ....config.base_config import BaseConfig
+from ....dataset.ba_2motifs import BA2MotifsDataset
+from ....enums import *
 from ...main import MainEntrypoint
 
 class Entrypoint(MainEntrypoint):
-    def run():
+    def __init__(self):
+        conf = BaseConfig(
+            try_num=2,
+            try_name='ba2motifs_gnnexplainer',
+            dataset_name=Dataset.BA2Motifs,
+        )
+        conf.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        conf.num_epochs = 10
+        conf.save_log_in_file = False
+        conf.base_model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
+        conf.base_model.to(conf.device)
+        conf.optimizer = Adam(conf.base_model.parameters(), lr=1e-4)
+        super(Entrypoint, self).__init__(conf)
+        
+    def run(self):
         device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         
         train_loader = DataLoader(BA2MotifsDataset(DataSpec.TRAIN), shuffle=False)
