@@ -12,12 +12,14 @@ from GNN_Explainability.config.base_config import BaseConfig
 
 from ....enums import Dataset
 from ...main import MainEntrypoint
+from ....utils.visualization import visualization
+
 
 class Entrypoint(MainEntrypoint):
     def __init__(self):
         conf = BaseConfig(
-            try_num=3,
-            try_name='pgexplainer',
+            try_num=4,
+            try_name='ba2motifs_pgexplainer',
             dataset_name=Dataset.BA2Motifs,
         )
         conf.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -32,44 +34,34 @@ class Entrypoint(MainEntrypoint):
 
     def run(self):
         
-        explainer = PGExplainer(self.conf.base_model, in_channels=600, device=self.conf.device, explain_graph=True, epochs=100, k=1)
+        explainer = PGExplainer(self.conf.base_model, in_channels=600, device=self.conf.device, explain_graph=True, epochs=100)
+
+        dataset = []
+        for i, data in enumerate(self.conf.train_loader):
+            data: Data = data[0]
+            data.edge_index = remove_self_loops(data.edge_index)[0]
+            dataset.append(data)
+
+        explainer.train_explanation_network(dataset)
+
+        torch.save(explainer.state_dict(), './GNN_Explainability/checkpoints/ba2motifs_gin_3l_pgexplainer.pt')
+        # explainer.load_state_dict(torch.load('./GNN_Explainability/checkpoints/ba2motifs_gin_3l_pgexplainer.pt', map_location=self.conf.device))
 
         for dataspec, loader in zip(
-                ['train', 'val', 'test'],
-                [self.conf.train_loader, self.conf.val_loader, self.conf.test_loader]):
-            dataset = []
-            for i, data in enumerate(loader):
-                data: Data = data[0]
-                data.edge_index = remove_self_loops(data.edge_index)[0]
-                dataset.append(data)
-
-            explainer.train_explanation_network(dataset)
-
+                ['val', 'test'],
+                [self.conf.val_loader, self.conf.test_loader]):
             for i, data in enumerate(loader):
                 data: Data = data[0]
                 print(f'explain graph {i} gt label {data.y}', flush=True)
                 _, masks, _ = \
                         explainer(data.x, data.edge_index, y=data.y)
                 
-                edge_mask = masks[0].sigmoid()
-
-                # Thanks to DIG GNNExplainer, edge_mask should be replaced to have an identical order with edge_index
-                edge_mask_new = torch.full((data.edge_index.size(1),), fill_value=-100, dtype=torch.float)
-                row, col = data.edge_index
-                self_loop_mask = row == col    
-                num = (~self_loop_mask).sum() 
-                edge_mask_new[~self_loop_mask] = edge_mask[:num]
-
-                if torch.any(self_loop_mask):
-                    self_loop_node_inds = row[self_loop_mask]
-                    edge_mask_new[self_loop_mask] = edge_mask[num:][self_loop_node_inds]
-
-                if torch.any(edge_mask_new == -100):
-                    raise Exception('there is an unhandled edge mask')
-                
-                edge_mask_new = edge_mask_new.detach().cpu().numpy()
-                file_dir = os.path.join('GNN_Explainability', 'data', 'ba2motifs', 'gnnexplainer', dataspec)
+                edge_mask = masks[0]
+                print(edge_mask)
+                data.edge_index = data.edge_index[:, edge_mask >= 0.5]
+                visualization(data, data.y.item())
+                file_dir = os.path.join('GNN_Explainability', 'data', 'ba2motifs', 'pgexplainer', dataspec)
                 os.makedirs(file_dir, exist_ok=True)
                 
                 file_name = f"{i}"
-                np.save(os.path.join(file_dir, file_name), edge_mask_new)                
+                np.save(os.path.join(file_dir, file_name), edge_mask.detach().cpu().numpy())                

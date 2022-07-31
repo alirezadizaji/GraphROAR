@@ -9,8 +9,6 @@ from torch_geometric.data import DataLoader, Data
 
 
 from ....config.base_config import BaseConfig
-from ....dataset.ba_2motifs import BA2MotifsDataset
-from ....enums.data_spec import DataSpec
 from ....enums.dataset import Dataset
 from ...main import MainEntrypoint
 from ....models.gnn_wrapper import GNNWrapper
@@ -31,6 +29,7 @@ class Entrypoint(MainEntrypoint):
             GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
         )
         conf.base_model.to(conf.device)
+        conf.save_log_in_file = False
         conf.optimizer = Adam(conf.base_model.parameters(), lr=1e-4)
         self.roar_percentage: float = None
 
