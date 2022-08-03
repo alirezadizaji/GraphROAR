@@ -1,11 +1,14 @@
+from typing import Dict, List, Optional
+
 import matplotlib.pyplot as plt
 import networkx as nx
 from torch_geometric.data import Data
 from torch_geometric.utils import to_networkx
 
-def visualization(data: Data, title: str):
+def visualization(data: Data, title: str, pos: Optional[Dict[int, List[int]]] = None):
     graph = to_networkx(data)
-    pos = nx.kamada_kawai_layout(graph)
+    if pos is None:
+        pos = nx.kamada_kawai_layout(graph)
     nx.draw_networkx_nodes(graph, pos,
                         node_size=300)
 
@@ -18,3 +21,5 @@ def visualization(data: Data, title: str):
     
     plt.title(title)
     plt.show()
+
+    return pos

@@ -19,6 +19,8 @@ from ....config.base_config import BaseConfig
 from ....dataset.ba_2motifs import BA2MotifsDataset
 from ....enums import *
 from ...main import MainEntrypoint
+from ....utils.visualization import visualization
+
 
 class Entrypoint(MainEntrypoint):
     def __init__(self):
@@ -46,18 +48,19 @@ class Entrypoint(MainEntrypoint):
         model.to(device)
         model.load_state_dict(torch.load('./GNN_Explainability/checkpoints/ba2motifs_gin_3l.pt', map_location=device))
         
-        explainer = GNNExplainer(model, epochs=100, lr=0.01, explain_graph=True)
+        explainer = GNNExplainer(model, epochs=500, lr=0.01, explain_graph=True)
 
         for dataspec, loader in zip(['train', 'val', 'test'], [train_loader, val_loader, test_loader]):
             for i, data in enumerate(loader):
                 data: Data = data[0]
+
                 print(f'explain graph {i} gt label {data.y}', flush=True)
                 data.to(device)
 
                 edge_masks, _, _ = \
-                    explainer(data.x, data.edge_index, sparsity=0.0, num_classes=2, target_label=data.y)
+                    explainer(data.x, data.edge_index, sparsity=0.0, num_classes=2, target_label=data.y, mask_features=True)
 
-                edge_mask = edge_masks[0].sigmoid()
+                edge_mask = edge_masks[data.y.item()].data.sigmoid()
 
                 # Thanks to DIG GNNExplainer, edge_mask should be replaced to have an identical order with edge_index
                 edge_mask_new = torch.full((data.edge_index.size(1),), fill_value=-100, dtype=torch.float, device=edge_mask.device)
@@ -73,9 +76,9 @@ class Entrypoint(MainEntrypoint):
                 if torch.any(edge_mask_new == -100):
                     raise Exception('there is an unhandled edge mask')
                 
-                edge_mask_new = edge_mask_new.cpu().numpy()
                 file_dir = os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gnnexplainer', dataspec)
                 os.makedirs(file_dir, exist_ok=True)
                 
                 file_name = f"{i}"
+                edge_mask_new = edge_mask_new.cpu().numpy()
                 np.save(os.path.join(file_dir, file_name), edge_mask_new)                
