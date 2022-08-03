@@ -30,32 +30,28 @@ class Entrypoint(MainEntrypoint):
             dataset_name=Dataset.BA2Motifs,
         )
         conf.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        conf.num_epochs = 10
+        
+        conf.num_epochs = 500
         conf.save_log_in_file = False
+        conf.shuffle_training = False
+        
         conf.base_model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
         conf.base_model.to(conf.device)
-        conf.optimizer = Adam(conf.base_model.parameters(), lr=1e-4)
+        conf.base_model.load_state_dict(torch.load('./GNN_Explainability/checkpoints/ba2motifs_gin_3l.pt', map_location=conf.device))
+
         super(Entrypoint, self).__init__(conf)
         
     def run(self):
-        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        
-        train_loader = DataLoader(BA2MotifsDataset(DataSpec.TRAIN), shuffle=False)
-        val_loader = DataLoader(BA2MotifsDataset(DataSpec.VAL), shuffle=False)
-        test_loader = DataLoader(BA2MotifsDataset(DataSpec.TEST), shuffle=False)
-        
-        model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
-        model.to(device)
-        model.load_state_dict(torch.load('./GNN_Explainability/checkpoints/ba2motifs_gin_3l.pt', map_location=device))
-        
-        explainer = GNNExplainer(model, epochs=500, lr=0.01, explain_graph=True)
+        explainer = GNNExplainer(self.conf.base_model, epochs=self.conf.num_epochs, lr=0.01, explain_graph=True)
 
-        for dataspec, loader in zip(['train', 'val', 'test'], [train_loader, val_loader, test_loader]):
+        for dataspec, loader in zip(
+                ['train', 'val', 'test'], 
+                [self.conf.train_loader, self.conf.val_loader, self.conf.test_loader]):
             for i, data in enumerate(loader):
                 data: Data = data[0]
 
                 print(f'explain graph {i} gt label {data.y}', flush=True)
-                data.to(device)
+                data.to(self.conf.device)
 
                 edge_masks, _, _ = \
                     explainer(data.x, data.edge_index, sparsity=0.0, num_classes=2, target_label=data.y, mask_features=True)
@@ -78,7 +74,6 @@ class Entrypoint(MainEntrypoint):
                 
                 file_dir = os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gnnexplainer', dataspec)
                 os.makedirs(file_dir, exist_ok=True)
-                
                 file_name = f"{i}"
                 edge_mask_new = edge_mask_new.cpu().numpy()
                 np.save(os.path.join(file_dir, file_name), edge_mask_new)                
