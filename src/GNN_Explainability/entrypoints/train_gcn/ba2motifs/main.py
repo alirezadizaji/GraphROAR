@@ -5,12 +5,12 @@ import numpy as np
 import torch
 from torch.nn import functional as F
 from torch.optim import Adam
-from torch_geometric.data import DataLoader, Data
 
 from ....config.base_config import BaseConfig
-from ....dataset.ba_2motifs import BA2MotifsDataset
+from ....dataset import BaseData
 from ....enums import *
 from ...main import MainEntrypoint
+from ....utils.visualization import visualization
 
 class Entrypoint(MainEntrypoint):
     def __init__(self):
@@ -21,15 +21,15 @@ class Entrypoint(MainEntrypoint):
         )
         
         conf.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        conf.num_epochs = 10
+        conf.num_epochs = 100
         
         conf.save_log_in_file = False
         conf.shuffle_training = True
         
-        conf.base_model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
+        conf.base_model = GCN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
         conf.base_model.to(conf.device)
         
-        conf.optimizer = Adam(conf.base_model.parameters(), lr=1e-4)
+        conf.optimizer = Adam(conf.base_model.parameters(), lr=1e-3)
         
         super(Entrypoint, self).__init__(conf)
 
@@ -41,7 +41,8 @@ class Entrypoint(MainEntrypoint):
             total = 0
             total_loss = []
             for i, data in enumerate(self.conf.train_loader):
-                data: Data = data[0].to(self.conf.device)
+                data: BaseData = data[0].to(self.conf.device)
+
                 x = self.conf.base_model(x=data.x, edge_index=data.edge_index, batch=data.batch)
                 x = F.log_softmax(x, dim=-1)
                 loss = - torch.mean(x[torch.arange(x.size(0)), data.y])
@@ -62,7 +63,7 @@ class Entrypoint(MainEntrypoint):
                 correct = 0
                 total = 0
                 for data in self.conf.val_loader:
-                    data: Data = data[0].to(self.conf.device)
+                    data: BaseData = data[0].to(self.conf.device)
                     x = self.conf.base_model(x=data.x, edge_index=data.edge_index)
                     x = F.log_softmax(x, dim=-1)
                     y_pred = x.argmax(-1)

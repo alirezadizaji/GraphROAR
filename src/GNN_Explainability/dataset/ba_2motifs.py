@@ -1,8 +1,11 @@
 from typing import Dict, List
+
+import numpy as np
 import torch
 from torch.utils.data import Dataset
 from torch_geometric.data import Data
 
+from ..dataset.base_data import BaseData
 from ..enums.data_spec import DataSpec
 
 
@@ -17,40 +20,51 @@ class BA2MotifsDataset(Dataset):
         self.dataspec: DataSpec = dataspec
 
         ba_2motifs = torch.load('../data/ba_2motifs/processed/data.pt')
-        self.data: Data = ba_2motifs[0]
-        dataset_num = self.data.y.numel()
+        d: Data = ba_2motifs[0]
+        names = [str(i) for i in range(d.y.numel())]
         
+        self.data: BaseData = BaseData(name=names, x=d.x, edge_index=d.edge_index, y=d.y, pos=d.pos)
+
+        train_inds, val_inds, test_inds = list(), list(), list()
+        
+        for label in torch.unique(self.data.y):
+            label_inds = torch.nonzero(self.data.y == label)
+            
+            size = label_inds.numel()
+            train_size = int(size * 0.8)
+            val_size = int(size * 0.1)
+            test_size = size - (train_size + val_size)
+
+            train, val, test = torch.split(label_inds, [train_size, val_size, test_size])
+
+            train_inds = train_inds + train.flatten().tolist()
+            val_inds = val_inds + val.flatten().tolist()
+            test_inds = test_inds + test.flatten().tolist()
+            
         meta_info: Dict[str, torch.Tensor] = ba_2motifs[1]
         self.batch_nodes_inds: torch.Tensor = meta_info['x']
         self.batch_y_inds: torch.Tensor = meta_info['y']
         self.batch_edges_inds: torch.Tensor = meta_info['edge_index']
 
-
         if self.dataspec == DataSpec.TRAIN:
-            l = 0.8 * dataset_num
-            self.graph_inds = torch.arange(l)
-
+            self.graph_inds = train_inds
         elif self.dataspec == DataSpec.VAL:
-            l1 = 0.8 * dataset_num
-            l2 = 0.9 * dataset_num
-            self.graph_inds = torch.arange(l1, l2)
-        
+            self.graph_inds = val_inds
         else:
-            l = 0.9 * dataset_num
-            self.graph_inds = torch.arange(l, dataset_num)
-
+            self.graph_inds = test_inds
     
     def __len__(self):
-        return self.graph_inds.numel()
+        return len(self.graph_inds)
 
-    def __getitem__(self, inds):
-        datas: List[Data] = []
+    def __getitem__(self, inds) -> List[BaseData]:
+        datas: List[BaseData] = []
         
         if isinstance(inds, int):
             inds = [inds]
 
         for idx in inds:
-            graph_ind = self.graph_inds[idx].long()
+            graph_ind = self.graph_inds[idx]
+
             batch_node_ind_start = self.batch_nodes_inds[graph_ind]
             batch_node_ind_end = self.batch_nodes_inds[graph_ind + 1]
             x = self.data.x[batch_node_ind_start: batch_node_ind_end]
@@ -59,11 +73,10 @@ class BA2MotifsDataset(Dataset):
             batch_edge_ind_end = self.batch_edges_inds[graph_ind + 1]
             edge_index = self.data.edge_index[:, batch_edge_ind_start: batch_edge_ind_end]            
 
-            batch_y_ind_start = self.batch_y_inds[graph_ind]
-            batch_y_ind_end = self.batch_y_inds[graph_ind + 1]
-            y = self.data.y[batch_y_ind_start: batch_y_ind_end]
+            y = self.data.y[self.batch_y_inds[graph_ind]]
+            names = self.data.name[self.batch_y_inds[graph_ind]]
 
-            data = Data(x=x, edge_index=edge_index, y=y)
+            data = BaseData(name=names, x=x, edge_index=edge_index, y=y)
             datas.append(data)
         
         return datas
