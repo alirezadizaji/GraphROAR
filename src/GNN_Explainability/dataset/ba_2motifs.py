@@ -1,6 +1,5 @@
 from typing import Dict, List
 
-import numpy as np
 import torch
 from torch.utils.data import Dataset
 from torch_geometric.data import Data
@@ -20,11 +19,9 @@ class BA2MotifsDataset(Dataset):
         self.dataspec: DataSpec = dataspec
 
         ba_2motifs = torch.load('../data/ba_2motifs/processed/data.pt')
-        d: Data = ba_2motifs[0]
-        names = [str(i) for i in range(d.y.numel())]
+        self.data: Data = ba_2motifs[0]
+        self.data.name = [str(i) for i in range(self.data.y.numel())]
         
-        self.data: BaseData = BaseData(name=names, x=d.x, edge_index=d.edge_index, y=d.y, pos=d.pos)
-
         train_inds, val_inds, test_inds = list(), list(), list()
         
         for label in torch.unique(self.data.y):
@@ -74,9 +71,10 @@ class BA2MotifsDataset(Dataset):
             edge_index = self.data.edge_index[:, batch_edge_ind_start: batch_edge_ind_end]            
 
             y = self.data.y[self.batch_y_inds[graph_ind]]
-            names = self.data.name[self.batch_y_inds[graph_ind]]
+            name = self.data.name[self.batch_y_inds[graph_ind]]
 
-            data = BaseData(name=names, x=x, edge_index=edge_index, y=y)
+            data = Data(x=x, edge_index=edge_index, y=y)
+            data.name = [name]
             datas.append(data)
-        
+
         return datas

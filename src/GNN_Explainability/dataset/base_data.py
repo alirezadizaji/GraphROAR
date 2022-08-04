@@ -8,4 +8,4 @@ class BaseData(Data):
         
         super().__init__(x, edge_index, edge_attr, y, pos, normal, face, **kwargs) 
         
-        self.name = [str(i) for i in range(y.numel())]
+        self.name = name

@@ -37,6 +37,7 @@ class BaseConfig:
         self.num_epochs: int = None
 
         self.shuffle_training: bool = False
+        self.batch_size: int = 32
 
         self.train_loader: DataLoader = None
         self.val_loader: DataLoader = None
@@ -45,6 +46,6 @@ class BaseConfig:
 
     def set_loaders(self):
         if self.dataset_name == Dataset.BA2Motifs:
-            self.train_loader = DataLoader(BA2MotifsDataset(DataSpec.TRAIN), shuffle=self.shuffle_training)
+            self.train_loader = DataLoader(BA2MotifsDataset(DataSpec.TRAIN), batch_size=self.batch_size, shuffle=self.shuffle_training)
             self.val_loader = DataLoader(BA2MotifsDataset(DataSpec.VAL))
             self.test_loader = DataLoader(BA2MotifsDataset(DataSpec.TEST))

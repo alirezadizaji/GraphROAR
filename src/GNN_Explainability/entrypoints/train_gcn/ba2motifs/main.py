@@ -5,6 +5,8 @@ import numpy as np
 import torch
 from torch.nn import functional as F
 from torch.optim import Adam
+from torch_geometric.data import Batch
+from torch_geometric.utils import add_remaining_self_loops
 
 from ....config.base_config import BaseConfig
 from ....dataset import BaseData
@@ -41,9 +43,8 @@ class Entrypoint(MainEntrypoint):
             total = 0
             total_loss = []
             for i, data in enumerate(self.conf.train_loader):
-                data: BaseData = data[0].to(self.conf.device)
-
-                x = self.conf.base_model(x=data.x, edge_index=data.edge_index, batch=data.batch)
+                data=data[0]
+                x = self.conf.base_model(data=data)
                 x = F.log_softmax(x, dim=-1)
                 loss = - torch.mean(x[torch.arange(x.size(0)), data.y])
                 loss.backward()
@@ -51,7 +52,7 @@ class Entrypoint(MainEntrypoint):
                 self.conf.optimizer.zero_grad()
 
                 total_loss.append(loss.item())
-                if i % 20 == 0:
+                if i % 1 == 0:
                     print(f'epoch {epoch} iter {i} loss value {np.mean(total_loss)}')
                 y_pred = x.argmax(-1)
                 correct += torch.sum(y_pred == data.y).item()
@@ -63,8 +64,8 @@ class Entrypoint(MainEntrypoint):
                 correct = 0
                 total = 0
                 for data in self.conf.val_loader:
-                    data: BaseData = data[0].to(self.conf.device)
-                    x = self.conf.base_model(x=data.x, edge_index=data.edge_index)
+                    data = data[0]
+                    x = self.conf.base_model(data=data)
                     x = F.log_softmax(x, dim=-1)
                     y_pred = x.argmax(-1)
                     correct += torch.sum(y_pred == data.y).item()
