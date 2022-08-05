@@ -23,7 +23,7 @@ class Entrypoint(MainEntrypoint):
             dataset_name=Dataset.BA2Motifs,
         )
         conf.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        
+
         conf.num_epochs = 300
         conf.save_log_in_file = False
         conf.shuffle_training = True
@@ -44,8 +44,7 @@ class Entrypoint(MainEntrypoint):
                 [self.conf.train_loader, self.conf.val_loader, self.conf.test_loader]):
             for i, data in enumerate(loader):
                 data = data[0]
-
-                print(f'explain graph {i} gt label {data.y}', flush=True)
+                print(f'explain graph {data.name[0]} gt label {data.y}', flush=True)
                 data.to(self.conf.device)
 
                 edge_masks, _, _ = \
@@ -67,7 +66,8 @@ class Entrypoint(MainEntrypoint):
                 if torch.any(edge_mask_new == -100):
                     raise Exception('there is an unhandled edge mask')
                 
-                file_dir = os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gnnexplainer', dataspec)
+                file_dir = os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gnnexplainer')
                 os.makedirs(file_dir, exist_ok=True)
                 edge_mask_new = edge_mask_new.cpu().numpy()
+
                 np.save(os.path.join(file_dir, data.name[0]), edge_mask_new)                

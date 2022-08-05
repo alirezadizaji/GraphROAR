@@ -1,38 +1,37 @@
 import os
-from typing import Tuple
+from typing import List, Tuple
 from typing_extensions import Protocol
 
 import numpy as np
 import torch
 from torch import nn
+from torch_geometric.data import Batch
 
 from .decorators.func_counter import counter
 
 class ForwardPreHook(Protocol):
-    def __call__(self, module: nn.Module, inp: Tuple[torch.Tensor, ...]) -> Tuple[torch.Tensor, ...]:
+    def __call__(self, module: nn.Module, inp: Tuple[Batch]) -> Tuple[Batch]:
         ...
 
-def edge_elimination(root_dir: str, data_spec: str, percentage: float,
-        thd:float=0.5) -> ForwardPreHook:
+def edge_elimination(root_dir: str, ratio: float, thd:float=0.5) -> ForwardPreHook:
     
-    @counter(0)
-    def _hook(module: nn.Module, inp: Tuple[torch.Tensor, ...]) -> Tuple[torch.Tensor, ...]:
-        inp = list(inp)
+    def _hook(_: nn.Module, inp: Tuple[List[Batch]]) -> Tuple[Batch]:
+        data: Batch = inp[0][0]
+        graphs = data.to_data_list()
 
-        edge_mask_dir = os.path.join(root_dir, data_spec, f"{_hook.call}.npy")
-        edge_mask = (np.load(edge_mask_dir) >= thd).astype(np.uint8)
+        for g in graphs:
+            edge_index = g.edge_index
 
-        for i, inpi in enumerate(inp):
-            if inpi.size(0) == 2:
-                edge_index = inpi
-                break
-        edge_mask = edge_index.new_tensor(edge_mask)
-        
-        k = int(torch.nonzero(edge_mask).numel() * (1 - percentage))
-        _, inds = torch.topk(edge_mask, k)
-        edge_index = edge_index[:, inds]
+            edge_mask_dir = os.path.join(root_dir, f"{g.name}.npy")
+            edge_mask = np.load(edge_mask_dir)
 
-        inp[i] = edge_index
-        return tuple(inp)
+            edge_mask = edge_index.new_tensor(edge_mask, dtype=torch.float)
+            k = int(edge_mask[edge_mask >= thd].numel() * (1 - ratio))
+            _, inds = torch.topk(edge_mask, k)
+            g.edge_index = edge_index[:, inds]
+
+        data: Batch = Batch.from_data_list(graphs)
+        inp = ([data])
+        return inp
     
     return _hook
