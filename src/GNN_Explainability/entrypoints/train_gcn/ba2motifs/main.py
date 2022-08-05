@@ -5,11 +5,8 @@ import numpy as np
 import torch
 from torch.nn import functional as F
 from torch.optim import Adam
-from torch_geometric.data import Batch
-from torch_geometric.utils import add_remaining_self_loops
 
 from ....config.base_config import BaseConfig
-from ....dataset import BaseData
 from ....enums import *
 from ...main import MainEntrypoint
 from ....utils.visualization import visualization
@@ -28,7 +25,7 @@ class Entrypoint(MainEntrypoint):
         conf.save_log_in_file = False
         conf.shuffle_training = True
         
-        conf.base_model = GCN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
+        conf.base_model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
         conf.base_model.to(conf.device)
         
         conf.optimizer = Adam(conf.base_model.parameters(), lr=1e-3)
@@ -43,7 +40,7 @@ class Entrypoint(MainEntrypoint):
             total = 0
             total_loss = []
             for i, data in enumerate(self.conf.train_loader):
-                data=data[0]
+                data=data[0].to(self.conf.device)
                 x = self.conf.base_model(data=data)
                 x = F.log_softmax(x, dim=-1)
                 loss = - torch.mean(x[torch.arange(x.size(0)), data.y])
@@ -64,7 +61,7 @@ class Entrypoint(MainEntrypoint):
                 correct = 0
                 total = 0
                 for data in self.conf.val_loader:
-                    data = data[0]
+                    data = data[0].to(self.conf.device)
                     x = self.conf.base_model(data=data)
                     x = F.log_softmax(x, dim=-1)
                     y_pred = x.argmax(-1)

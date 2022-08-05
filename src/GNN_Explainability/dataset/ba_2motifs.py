@@ -74,7 +74,7 @@ class BA2MotifsDataset(Dataset):
             name = self.data.name[self.batch_y_inds[graph_ind]]
 
             data = Data(x=x, edge_index=edge_index, y=y)
-            data.name = [name]
+            data.name = name
             datas.append(data)
 
         return datas
