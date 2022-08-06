@@ -22,7 +22,8 @@ class Entrypoint(MainEntrypoint):
             try_name='roar_gnnexplainer',
             dataset_name=Dataset.BA2Motifs,
         )
-        conf.device = torch.device('cpu')
+
+        conf.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         conf.num_epochs = 100
 
         conf.save_log_in_file = False
@@ -36,7 +37,7 @@ class Entrypoint(MainEntrypoint):
             GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
         )
         self.conf.base_model.to(self.conf.device)
-        self.conf.optimizer = Adam(self.conf.base_model.parameters(), lr=1e-2)
+        self.conf.optimizer = Adam(self.conf.base_model.parameters(), lr=1e-3)
     
     def _train_for_one_epoch(self, epoch_num: int):
         self.conf.base_model.train()
@@ -85,7 +86,7 @@ class Entrypoint(MainEntrypoint):
 
 
     def run(self):
-        for ratio in [0.1, 0.5, 0.7, 0.9]:
+        for ratio in [0.1, 0.3, 0.5, 0.7, 0.9]:
             self._init_model_and_optim()
 
             self.roar_ratio = ratio

@@ -26,9 +26,11 @@ def edge_elimination(root_dir: str, ratio: float, thd:float=0.5) -> ForwardPreHo
             edge_mask = np.load(edge_mask_dir)
 
             edge_mask = edge_index.new_tensor(edge_mask, dtype=torch.float)
-            k = int(edge_mask[edge_mask >= thd].numel() * (1 - ratio))
+            k = int(edge_mask.numel() * ratio)
             _, inds = torch.topk(edge_mask, k)
-            g.edge_index = edge_index[:, inds]
+            mask = torch.ones_like(edge_mask).bool()
+            mask[inds] = False
+            g.edge_index = edge_index[:, mask]
 
         data: Batch = Batch.from_data_list(graphs)
         inp = ([data])

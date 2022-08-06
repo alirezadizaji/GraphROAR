@@ -24,7 +24,7 @@ class Entrypoint(MainEntrypoint):
         
         conf.save_log_in_file = False
         conf.shuffle_training = True
-        
+
         conf.base_model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
         conf.base_model.to(conf.device)
         
@@ -62,6 +62,7 @@ class Entrypoint(MainEntrypoint):
                 total = 0
                 for data in self.conf.val_loader:
                     data = data[0].to(self.conf.device)
+
                     x = self.conf.base_model(data=data)
                     x = F.log_softmax(x, dim=-1)
                     y_pred = x.argmax(-1)
