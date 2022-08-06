@@ -4,8 +4,8 @@ from torch_geometric.data import Batch
 
 
 class GNNWrapper(nn.Module):
-    """ the only point of this class is to pass `x` and `edge_index` as separate input
-    arguments and therefore torch hooks could recognize them"""
+    r""" The point of this class is to only enable using hooks with DIG models as 
+    most of which do not support hooking due to using ONLY keyword arguments in `forward` function."""
     
     def __init__(self, model: GNNBasic) -> None:
         super().__init__()
