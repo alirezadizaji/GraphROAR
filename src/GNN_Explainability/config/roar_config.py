@@ -1,9 +1,12 @@
+from dataclasses import dataclass, field
+from typing import List
+
 from ..enums import dataset
 from .base_config import BaseConfig
 
+@dataclass
 class ROARConfig(BaseConfig):
-    def __init__(self, try_num: int, try_name: str, dataset_name: dataset):
-        super().__init__(try_num, try_name, dataset_name)
+    edge_masks_load_dir: str 
+    """ the root directory from which edge masks are loaded """
 
-        self.edge_masks_root_dir: str = None
-        """ the root directory where all edge masks from an explanation method are located """
+    roar_ratios: List[float] = field(default_factory=list)

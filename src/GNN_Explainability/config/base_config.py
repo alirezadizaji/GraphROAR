@@ -1,51 +1,42 @@
-from typing import Optional, TYPE_CHECKING
-
-from torch_geometric.data import DataLoader
-
-from ..dataset import *
-from ..enums import *
+from dataclasses import dataclass
+import os
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from dig.xgraph.models import GNNBasic
-    from torch.optim import Optimizer
+    from ..enums import Dataset, OptimType
 
 
+@dataclass
 class BaseConfig:
-    def __init__(self, try_num: int, try_name: str, dataset_name: Dataset):
-        self.try_num: int = try_num
-        """ number of experiment """
+    try_num: int
+    """ number of experiment """
 
-        self.try_name: str = try_name
-        """ name of experiment """
+    try_name: str
+    """ name of experiment """
 
-        self.dataset_name: Dataset = dataset_name
-        """ dataset name, to fill dataloader with """
+    dataset_name: 'Dataset'
+    """ dataset name, to fill dataloader with """
 
-        self.device = None
-        """ device to run """
+    training_config: 'TrainingConfig' 
+    """ config of your training including optimizer, number of epochs and data shuffling """
 
-        self.save_log_in_file: bool = True
-        """ if True then save logs in a file, O.W. in terminal """
+    device: str
+    """ device to run """
 
-        self.base_model: 'GNNBasic' = None
-        """ base model to check its explantion"""
+    save_log_in_file: bool
+    """ if True then save logs in a file, O.W. in terminal """
 
-        self.save_dir: Optional[str] = None
-        r""" if given, then save logs into this directory, O.W. use `try_num` and `try_name` for this purpose """        
-        
-        self.optimizer: 'Optimizer' = None
-        self.num_epochs: int = None
 
-        self.shuffle_training: bool = False
-        self.batch_size: int = 32
+    @property
+    def save_dir(self):
+        folder_name = "_".join([self.try_name, self.try_num, self.dataset_name])
+        root = "../results"
+        return os.path.join(root, folder_name)
 
-        self.train_loader: DataLoader = None
-        self.val_loader: DataLoader = None
-        self.test_loader: DataLoader = None
-        
-
-    def set_loaders(self):
-        if self.dataset_name == Dataset.BA2Motifs:
-            self.train_loader = DataLoader(BA2MotifsDataset(DataSpec.TRAIN), batch_size=self.batch_size, shuffle=self.shuffle_training)
-            self.val_loader = DataLoader(BA2MotifsDataset(DataSpec.VAL))
-            self.test_loader = DataLoader(BA2MotifsDataset(DataSpec.TEST))
+@dataclass
+class TrainingConfig:
+    num_epochs: int
+    optim_type: 'OptimType'
+    lr: float = 1e-3
+    shuffle_training: bool = True
+    batch_size: int = 32

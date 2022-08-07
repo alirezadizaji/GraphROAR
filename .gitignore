@@ -129,6 +129,7 @@ results/
 Results/
 data/
 ckpt/
+checkpoints/
 
 # Pyre type checker
 .pyre/
