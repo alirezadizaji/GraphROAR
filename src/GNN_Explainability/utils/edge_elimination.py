@@ -13,7 +13,7 @@ class ForwardPreHook(Protocol):
     def __call__(self, module: nn.Module, inp: Tuple[Batch]) -> Tuple[Batch]:
         ...
 
-def edge_elimination(root_dir: str, ratio: float, thd:float=0.5) -> ForwardPreHook:
+def edge_elimination(root_dir: str, ratio: float) -> ForwardPreHook:
     
     def _hook(_: nn.Module, inp: Tuple[List[Batch]]) -> Tuple[Batch]:
         data: Batch = inp[0][0]

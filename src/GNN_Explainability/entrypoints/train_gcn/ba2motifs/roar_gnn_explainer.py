@@ -5,10 +5,10 @@ import numpy as np
 import torch
 from torch.nn import functional as F
 from torch.optim import Adam
-from torch_geometric.data import DataLoader, Data
+from torch_geometric.data import DataLoader, Batch
 
 
-from ....config.base_config import BaseConfig
+from ....config import ROARConfig
 from ....enums.dataset import Dataset
 from ...main import MainEntrypoint
 from ....models.gnn_wrapper import GNNWrapper
@@ -17,7 +17,7 @@ from ....utils.edge_elimination import edge_elimination
 class Entrypoint(MainEntrypoint):
     
     def __init__(self):
-        conf = BaseConfig(
+        conf = ROARConfig(
             try_num=3,
             try_name='roar_gnnexplainer',
             dataset_name=Dataset.BA2Motifs,
@@ -27,6 +27,7 @@ class Entrypoint(MainEntrypoint):
         conf.num_epochs = 100
 
         conf.save_log_in_file = False
+        conf.edge_masks_root_dir = '../data/ba_2motifs/explanation/gnnexplainer'
         conf.shuffle_training = True
         self.roar_ratio: float = None
 
@@ -92,7 +93,7 @@ class Entrypoint(MainEntrypoint):
             self.roar_ratio = ratio
             
             handle = self.conf.base_model.register_forward_pre_hook(
-                edge_elimination('../data/ba_2motifs/explanation/gnnexplainer', self.roar_ratio))
+                edge_elimination(self.conf.edge_masks_root_dir, self.roar_ratio))
 
             for epoch in tqdm(range(self.conf.num_epochs)):
                 self.epoch = epoch
