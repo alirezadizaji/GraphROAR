@@ -52,9 +52,7 @@ class Entrypoint(MainEntrypoint):
                                  sparsity=0.0,
                                  num_classes=2)
 
-                edge_mask = edge_masks[y_pred.item()].data.sigmoid()
-                print(edge_mask)
-                pos = visualization(data, data.y.item())
+                edge_mask = edge_masks[y_pred.item()].data
                 
                 # edge_mask should be replaced to have an identical order with edge_index
                 edge_mask_new = torch.full((data.edge_index.size(1),), fill_value=-100, dtype=torch.float, device=edge_mask.device)
@@ -72,9 +70,6 @@ class Entrypoint(MainEntrypoint):
                 
                 file_dir = os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gradcam')
                 os.makedirs(file_dir, exist_ok=True)
-                # print(edge_mask_new)
-                data.edge_index = data.edge_index[:, edge_mask_new >= 0.5]
-                visualization(data, y_pred.item(), pos)
                 edge_mask_new = edge_mask_new.cpu().numpy()
 
                 np.save(os.path.join(file_dir, data.name[0]), edge_mask_new)                
