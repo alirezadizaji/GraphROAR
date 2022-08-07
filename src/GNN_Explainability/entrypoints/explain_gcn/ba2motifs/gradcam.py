@@ -1,6 +1,6 @@
 import os
 
-from dig.xgraph.method import GNNExplainer
+from dig.xgraph.method import GradCAM
 from dig.xgraph.models import *
 import numpy as np
 import torch
@@ -18,8 +18,8 @@ from ....utils.visualization import visualization
 class Entrypoint(MainEntrypoint):
     def __init__(self):
         conf = BaseConfig(
-            try_num=2,
-            try_name='ba2motifs_gnnexplainer',
+            try_num=6,
+            try_name='ba2motifs_gradcam',
             dataset_name=Dataset.BA2Motifs,
         )
         conf.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -36,20 +36,26 @@ class Entrypoint(MainEntrypoint):
         super(Entrypoint, self).__init__(conf)
         
     def run(self):
-        explainer = GNNExplainer(self.conf.base_model, epochs=self.conf.num_epochs,
-                 lr=0.01, explain_graph=True, coff_edge_size=0.0, coff_node_feat_size=0.0)
-
-        for loader in [self.conf.train_loader, self.conf.val_loader, self.conf.test_loader]:
+        explainer = GradCAM(self.conf.base_model, explain_graph=True)
+        
+        for dataspec, loader in zip(
+                ['train', 'val', 'test'], 
+                [self.conf.train_loader, self.conf.val_loader, self.conf.test_loader]):
             for i, data in enumerate(loader):
-                data = data[0]
-                data.to(self.conf.device)
+                data = data[0].to(self.conf.device)
+
                 y_pred = self.conf.base_model(data=data).argmax(-1)
                 print(f'explain graph {data.name[0]} gt label {data.y.item()} pred label {y_pred.item()}', flush=True)
+               
                 edge_masks, _, _ = \
-                    explainer(data.x, data.edge_index, sparsity=0.0, num_classes=2, target_label=y_pred, mask_features=True)
-                assert len(edge_masks) == 1, "target label is passed and edge_masks len must be one"
-                edge_mask = edge_masks[0].data.sigmoid()
+                    explainer(data.x, data.edge_index,
+                                 sparsity=0.0,
+                                 num_classes=2)
 
+                edge_mask = edge_masks[y_pred.item()].data.sigmoid()
+                print(edge_mask)
+                pos = visualization(data, data.y.item())
+                
                 # edge_mask should be replaced to have an identical order with edge_index
                 edge_mask_new = torch.full((data.edge_index.size(1),), fill_value=-100, dtype=torch.float, device=edge_mask.device)
                 row, col = data.edge_index
@@ -64,8 +70,11 @@ class Entrypoint(MainEntrypoint):
                 if torch.any(edge_mask_new == -100):
                     raise Exception('there is an unhandled edge mask')
                 
-                file_dir = os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gnnexplainer')
+                file_dir = os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gradcam')
                 os.makedirs(file_dir, exist_ok=True)
+                # print(edge_mask_new)
+                data.edge_index = data.edge_index[:, edge_mask_new >= 0.5]
+                visualization(data, y_pred.item(), pos)
                 edge_mask_new = edge_mask_new.cpu().numpy()
 
                 np.save(os.path.join(file_dir, data.name[0]), edge_mask_new)                
