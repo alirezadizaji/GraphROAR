@@ -1,5 +1,5 @@
 from abc import abstractmethod, ABC
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generic, TypeVar
 
 import torch 
 
@@ -13,28 +13,13 @@ if TYPE_CHECKING:
     from dig.xgraph.models import GNNBasic
 
 class ExplainerEntrypoint(MainEntrypoint, ABC):
-    def __init__(self, conf: 'ExplainConfig', model: 'GNNBasic', explainer) -> None:
-        super().__init__(conf, model)
-
-        self._explainer = explainer
-        """ explainer method """
-
-    def get_model_pred(self, data: 'Data'):
-        y_pred = self.model(data=data).argmax(-1)
-        return y_pred
-
     @abstractmethod
-    def last_step_todo(self, out_x):
-        """ Anything needs to do at last with explainer output """
-        pass
-    
-    @abstractmethod
-    def get_edge_mask(self, out_x) -> torch.Tensor:
+    def get_edge_mask(self, out_x, data: 'Data') -> torch.Tensor:
         pass
 
     @counter(0)
     def visualize_sample(self, data: 'Data', edge_mask: torch.Tensor):
-        conf: 'ExplainConfig' = self.conf
+        conf = self.conf
         if self.visualize_sample.call > conf.num_instances_to_visualize:
             return
 

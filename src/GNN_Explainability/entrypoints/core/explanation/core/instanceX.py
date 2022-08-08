@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generic, TypeVar
 
 import numpy as np
 
@@ -11,35 +11,35 @@ if TYPE_CHECKING:
     from .....config import ExplainConfig
     from dig.xgraph.models import GNNBasic
 
-class InstanceX(ExplainerEntrypoint, ABC):
+TExp = TypeVar('TExp')
+class InstanceX(ExplainerEntrypoint, Generic[TExp], ABC):
     """ Entrypoints for instance-based explainers """
 
-    def __init__(self, conf: 'ExplainConfig', model: 'GNNBasic', explainer) -> None:
+    def __init__(self, conf: 'ExplainConfig', model: 'GNNBasic', explainer: TExp) -> None:
+        super().__init__(conf, model)        
+        
         if self.conf.training_config.batch_size > 1:
             print("** WARNING: for instance-based explainer, batch size is changed to one", flush=True)
             self.conf.training_config.batch_size = 1
-
-        super().__init__(conf, model, explainer)
-
+        
+        self.explainer = explainer
+        
     @abstractmethod
     def explain_instance(self, data: 'Data'):
         pass
 
     def run(self):
-        conf: 'ExplainConfig' = self.conf
-
         for loader in [self.train_loader, self.val_loader, self.test_loader]:
             for data in loader:
                 data: 'Data' = data[0].to(self.conf.device)
                 out_x = self.explain_instance(data)
-                edge_mask = self.get_edge_mask(out_x)
+                edge_mask = self.get_edge_mask(out_x, data)
 
-                if conf.edge_mask_save_dir is not None:
+                if self.conf.edge_mask_save_dir is not None:
                     if not hasattr(data, 'name'):
                         raise Exception('data object must have name attribute.')
-                    save_dir = os.path.join(conf.edge_mask_save_dir, f"{data.name}.npy")
+                    save_dir = os.path.join(self.conf.edge_mask_save_dir, f"{data.name}.npy")
                     np.save(save_dir, edge_mask.cpu().numpy())
                 
-                self.last_step_todo(out_x)
-                self.visualize_sample()
+                self.visualize_sample(data, edge_mask)
                 

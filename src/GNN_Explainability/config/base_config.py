@@ -26,10 +26,9 @@ class BaseConfig:
     save_log_in_file: bool
     """ if True then save logs in a file, O.W. in terminal """
 
-
     @property
     def save_dir(self):
-        folder_name = "_".join([self.try_name, self.try_num, self.dataset_name])
+        folder_name = "_".join([str(self.try_num), self.try_name, self.dataset_name])
         root = "../results"
         return os.path.join(root, folder_name)
 
