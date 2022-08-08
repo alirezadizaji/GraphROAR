@@ -6,7 +6,7 @@ import torch
 from GNN_Explainability.config.base_config import BaseConfig
 
 from ....enums import Dataset
-from ...main import MainEntrypoint
+from ...core.main import MainEntrypoint
 from ....utils.visualization import visualization
 
 

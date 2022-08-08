@@ -11,7 +11,7 @@ import torch
 
 from ....config.base_config import BaseConfig
 from ....enums import *
-from ...main import MainEntrypoint
+from ...core.main import MainEntrypoint
 from ....utils.visualization import visualization
 
 
