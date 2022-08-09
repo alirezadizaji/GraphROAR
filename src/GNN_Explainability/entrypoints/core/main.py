@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import os
 from typing import TYPE_CHECKING, Tuple
 
 from torch.optim import Adam, SGD
@@ -26,6 +27,8 @@ class MainEntrypoint(ABC):
 
         self.optimizer: 'Optimizer' = self.get_optimizer()
 
+        os.makedirs(self.conf.save_dir, exist_ok=True)
+        
     def get_loaders(self) -> Tuple['DataLoader', 'DataLoader', 'DataLoader']:
         if self.conf.dataset_name == Dataset.BA2Motifs:
             train_set = BA2MotifsDataset(DataSpec.TRAIN)

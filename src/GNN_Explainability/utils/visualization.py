@@ -1,3 +1,4 @@
+import os
 from typing import Dict, List, Optional
 
 import matplotlib.pyplot as plt
@@ -5,7 +6,11 @@ import networkx as nx
 from torch_geometric.data import Data
 from torch_geometric.utils import to_networkx
 
-def visualization(data: Data, title: str, pos: Optional[Dict[int, List[int]]] = None):
+def visualization(data: Data, 
+        title: str,
+        pos: Optional[Dict[int, List[int]]] = None,
+        save_dir: Optional[str] = None):
+    
     graph = to_networkx(data)
     if pos is None:
         pos = nx.kamada_kawai_layout(graph)
@@ -20,6 +25,10 @@ def visualization(data: Data, title: str, pos: Optional[Dict[int, List[int]]] = 
     nx.draw_networkx_labels(graph, pos)
     
     plt.title(title)
-    plt.show()
+    if save_dir is not None:
+        save_dir = os.path.join(save_dir, title)
+        plt.savefig(save_dir, dpi=600)
+    else:
+        plt.show()
 
     return pos

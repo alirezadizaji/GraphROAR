@@ -11,7 +11,7 @@ from torch_geometric.utils import add_remaining_self_loops, remove_self_loops
 from GNN_Explainability.config.base_config import BaseConfig
 
 from ....enums import Dataset
-from ...main import MainEntrypoint
+from ...core.main import MainEntrypoint
 from ....utils.visualization import visualization
 
 

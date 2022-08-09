@@ -1,0 +1,41 @@
+from abc import abstractmethod, ABC
+import os
+from typing import TYPE_CHECKING, Generic, TypeVar
+
+import matplotlib.pyplot as plt
+import torch 
+
+from ...main import MainEntrypoint
+from .....utils.decorators.func_counter import counter
+from .....utils.visualization import visualization
+
+if TYPE_CHECKING:
+    from .....config import ExplainConfig
+    from torch_geometric.data import Data
+    from dig.xgraph.models import GNNBasic
+
+class ExplainerEntrypoint(MainEntrypoint, ABC):
+    @abstractmethod
+    def get_edge_mask(self, out_x, data: 'Data') -> torch.Tensor:
+        pass
+
+    @counter(0)
+    def visualize_sample(self, data: 'Data', edge_mask: torch.Tensor):
+        conf = self.conf
+        if self.visualize_sample.call > conf.num_instances_to_visualize:
+            return
+
+        if not hasattr(data, 'name'):
+            raise Exception('The data instance must have `name` attribute.')
+
+        name = data.name
+        if conf.save_visualization:
+            save_dir = os.path.join(conf.save_dir, 'visualizations')
+            os.makedirs(save_dir, exist_ok=True)
+        else:
+            save_dir = None
+        pos = visualization(data, f'{name[0]}_org', save_dir=save_dir)
+        plt.close()
+        data.edge_index = data.edge_index[:, edge_mask >= 0.5]
+        visualization(data, f"{name[0]}_X", pos, save_dir)
+        plt.close()
