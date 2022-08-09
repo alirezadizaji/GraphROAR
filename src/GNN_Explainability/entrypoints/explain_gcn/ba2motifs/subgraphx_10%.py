@@ -34,7 +34,6 @@ class Entrypoint(SubgraphXEntrypoint):
         model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
         model.load_state_dict(torch.load('../checkpoints/ba2motifs_gin_3l.pt', map_location=conf.device))
 
-        explainer = SubgraphX(model, num_classes=conf.num_classes, device=conf.device, 
-                        explain_graph=conf.explain_graph, reward_method=conf.reward_method)
-        
+        # explainer will be initiated during explaining an instance
+        explainer = None
         super().__init__(conf, model, explainer)
