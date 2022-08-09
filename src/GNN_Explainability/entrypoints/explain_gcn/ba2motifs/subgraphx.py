@@ -1,3 +1,5 @@
+import os
+
 from dig.xgraph.method import SubgraphX
 from dig.xgraph.models import *
 import torch
@@ -22,7 +24,7 @@ class Entrypoint(SubgraphXEntrypoint):
             save_visualization=True,
             visualize_explainer_perf=True,
             num_instances_to_visualize=20,
-            edge_mask_save_dir='../data/ba_2motifs/explanation/subgraphx_10%',
+            edge_mask_save_dir=os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'subgraphx_10%'),
             sparsity=0.0,
             explain_graph=True,
             reward_method='mc_l_shapley',

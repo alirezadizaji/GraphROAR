@@ -9,63 +9,40 @@ from dig.xgraph.models import *
 import numpy as np
 import torch
 
-from ....config.base_config import BaseConfig
+from GNN_Explainability.config.base_config import TrainingConfig
+
+from ....entrypoints.core import GNNExplainerEntrypoint
+
+from ....config import GNNExplainerConfig
 from ....enums import *
-from ...core.main import MainEntrypoint
-from ....utils.visualization import visualization
 
 
-class Entrypoint(MainEntrypoint):
+class Entrypoint(GNNExplainerEntrypoint):
     def __init__(self):
-        conf = BaseConfig(
+        conf = GNNExplainerConfig(
             try_num=2,
-            try_name='ba2motifs_gnnexplainer',
+            try_name='gnnexplainer',
             dataset_name=Dataset.BA2Motifs,
-        )
-        conf.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-
-        conf.num_epochs = 300
-        conf.save_log_in_file = False
-        conf.shuffle_training = True
-        conf.batch_size = 1
+            training_config=TrainingConfig(300, OptimType.ADAM, 0.01, batch_size=1),
+            save_log_in_file=False,
+            num_classes=2,
+            save_visualization=False,
+            visualize_explainer_perf=True,
+            edge_mask_save_dir=os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gnnexplainer'),
+            num_instances_to_visualize=10,
+            explain_graph=True,
+            mask_features=True,
+            coff_edge_size=0.0,
+            sparsity=0.0,
+            device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
+            coff_node_feat_size=0.0)
         
-        conf.base_model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
-        conf.base_model.to(conf.device)
-        conf.base_model.load_state_dict(torch.load('./GNN_Explainability/checkpoints/ba2motifs_gin_3l.pt', map_location=conf.device))
-
-        super(Entrypoint, self).__init__(conf)
+        model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=conf.num_classes)
+        model.to(conf.device)
+        model.load_state_dict(torch.load('../checkpoints/ba2motifs_gin_3l.pt', map_location=conf.device))
         
-    def run(self):
-        explainer = GNNExplainer(self.conf.base_model, epochs=self.conf.num_epochs,
-                 lr=0.01, explain_graph=True, coff_edge_size=0.0, coff_node_feat_size=0.0)
+        explainer = GNNExplainer(model, epochs=conf.training_config.num_epochs,
+                 lr=conf.training_config.lr, explain_graph=conf.explain_graph, 
+                 coff_edge_size=conf.coff_edge_size, coff_node_feat_size=conf.coff_node_feat_size)
 
-        for loader in [self.conf.train_loader, self.conf.val_loader, self.conf.test_loader]:
-            for i, data in enumerate(loader):
-                data = data[0]
-                data.to(self.conf.device)
-                y_pred = self.conf.base_model(data=data).argmax(-1)
-                print(f'explain graph {data.name[0]} gt label {data.y.item()} pred label {y_pred.item()}', flush=True)
-                edge_masks, _, _ = \
-                    explainer(data.x, data.edge_index, sparsity=0.0, num_classes=2, target_label=y_pred, mask_features=True)
-                assert len(edge_masks) == 1, "target label is passed and edge_masks len must be one"
-                edge_mask = edge_masks[0].data.sigmoid()
-
-                # edge_mask should be replaced to have an identical order with edge_index
-                edge_mask_new = torch.full((data.edge_index.size(1),), fill_value=-100, dtype=torch.float, device=edge_mask.device)
-                row, col = data.edge_index
-                self_loop_mask = row == col    
-                num = (~self_loop_mask).sum() 
-                edge_mask_new[~self_loop_mask] = edge_mask[:num]
-
-                if torch.any(self_loop_mask):
-                    self_loop_node_inds = row[self_loop_mask]
-                    edge_mask_new[self_loop_mask] = edge_mask[num:][self_loop_node_inds]
-
-                if torch.any(edge_mask_new == -100):
-                    raise Exception('there is an unhandled edge mask')
-                
-                file_dir = os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gnnexplainer')
-                os.makedirs(file_dir, exist_ok=True)
-                edge_mask_new = edge_mask_new.cpu().numpy()
-
-                np.save(os.path.join(file_dir, data.name[0]), edge_mask_new)                
+        super().__init__(conf, model, explainer)
