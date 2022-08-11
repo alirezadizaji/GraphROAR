@@ -23,7 +23,7 @@ class ROAREntrypoint(TrainEntrypoint):
         x = self.model([data])
         return x
     
-    def _save_model_weight(self, name: str) -> None:
+    def _save_model_weight(self, name: str='model') -> None:
         wrapper: GNNWrapper = self.model
         torch.save(wrapper.model.state_dict(), os.path.join(self.conf.save_dir, f'{name}.pt'))
 
