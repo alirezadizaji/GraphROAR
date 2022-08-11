@@ -4,13 +4,10 @@ import torch
 from torch.utils.data import Dataset
 from torch_geometric.data import Data
 
-from ..dataset.base_data import BaseData
 from ..enums.data_spec import DataSpec
 
 
 class BA2MotifsDataset(Dataset):
-    """a BA2Motifs dataset. """
-
     def __init__(self, dataspec: DataSpec):
         """
         Args:
@@ -53,8 +50,8 @@ class BA2MotifsDataset(Dataset):
     def __len__(self):
         return len(self.graph_inds)
 
-    def __getitem__(self, inds) -> List[BaseData]:
-        datas: List[BaseData] = []
+    def __getitem__(self, inds) -> List[Data]:
+        batch: List[Data] = []
         
         if isinstance(inds, int):
             inds = [inds]
@@ -74,6 +71,6 @@ class BA2MotifsDataset(Dataset):
             name = self.data.name[self.batch_y_inds[graph_ind]]
             data = Data(x=x, edge_index=edge_index, y=y)
             data.name = name
-            datas.append(data)
+            batch.append(data)
 
-        return datas
+        return batch

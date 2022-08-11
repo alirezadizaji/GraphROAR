@@ -31,11 +31,15 @@ class MainEntrypoint(ABC):
         
     def get_loaders(self) -> Tuple['DataLoader', 'DataLoader', 'DataLoader']:
         if self.conf.dataset_name == Dataset.BA2Motifs:
-            train_set = BA2MotifsDataset(DataSpec.TRAIN)
-            val_set = BA2MotifsDataset(DataSpec.VAL)
-            test_set = BA2MotifsDataset(DataSpec.TEST)
+            cls = BA2MotifsDataset
+        elif self.conf.dataset_name == Dataset.MUTAG:
+            cls = MUTAGDataset
         else:
             raise NotImplementedError()
+
+        train_set = cls(DataSpec.TRAIN)
+        val_set = cls(DataSpec.VAL)
+        test_set = cls(DataSpec.TEST)
 
         train = DataLoader(train_set, 
                     batch_size=self.conf.training_config.batch_size, 
