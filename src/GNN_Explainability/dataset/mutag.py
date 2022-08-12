@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-import pandas as pd
+import numpy as np
 import torch
 from torch.utils.data import Dataset
 from torch_geometric.data import Data
@@ -18,16 +18,18 @@ class MUTAGDataset(Dataset):
 
         self.graphs: List[Data] = list()
 
-        edge_index = (torch.from_numpy(
-            pd.read_csv("../data/MUTAG/raw/MUTAG_A.txt", sep=',', header=None).to_numpy())).t()
-        
-        node_to_graph_ind = (torch.from_numpy(
-            pd.read_csv("../data/MUTAG/raw/MUTAG_graph_indicator.txt", header=None).to_numpy())).squeeze()
+        edge_index = (torch.from_numpy(np.loadtxt("../data/MUTAG/raw_org/MUTAG_A.txt", delimiter=','))
+                .t().long())
+        node_to_graph_ind = (torch.from_numpy(np.loadtxt("../data/MUTAG/raw_org/MUTAG_graph_indicator.txt"))
+                .squeeze().long())
+        node_labels_in_once = (torch.from_numpy(np.loadtxt("../data/MUTAG/raw_org/MUTAG_node_labels.txt"))
+                .squeeze().long())
+        y = (torch.from_numpy(np.loadtxt("../data/MUTAG/raw_org/MUTAG_graph_labels.txt"))
+                .squeeze().long())
+
+        num_unique_nodes = torch.unique(node_labels_in_once).numel()
         src = edge_index[0]
-        
-        y = (torch.from_numpy(
-            pd.read_csv("../data/MUTAG/raw/MUTAG_graph_labels.txt", header=None).to_numpy())).squeeze()
-        
+
         # split edges into their graphs
         edge_to_graph_ind = node_to_graph_ind[src - 1]
         _, sorted_edge_inds = torch.sort(edge_to_graph_ind, stable=True)
@@ -42,15 +44,16 @@ class MUTAGDataset(Dataset):
             es = es - 1
 
             # reset node indices to start from zero
-            nodes_index = torch.zeros(es.max().item() + 1).long()
-            values = torch.unique(es)
-            num_nodes = values.numel()
-            nodes_index[values] = torch.arange(num_nodes)
-            es = nodes_index[es.flatten()].view(2, -1)
+            nodes_mapping = torch.zeros(es.max().item() + 1).long()
+            nodes_index = torch.unique(es)
+            num_nodes = nodes_index.numel()
+            new_nodes_index = torch.arange(num_nodes)
+            nodes_mapping[nodes_index] = new_nodes_index
+            es = nodes_mapping[es.flatten()].view(2, -1)
 
-            label = (y[i] > 0).long()
-            x = torch.ones(num_nodes, 10)
-            graph = Data(x=x, edge_index=es, y=label)
+            x = torch.zeros(num_nodes, num_unique_nodes)
+            x[new_nodes_index, node_labels_in_once[nodes_index]] = 1
+            graph = Data(x=x, edge_index=es, y=y[i])
             graph.name = str(i)
             self.graphs.append(graph)
         

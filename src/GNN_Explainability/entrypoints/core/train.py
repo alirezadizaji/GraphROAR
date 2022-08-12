@@ -8,6 +8,7 @@ import torch
 from torch.nn import functional as F
 
 from . import MainEntrypoint
+
 if TYPE_CHECKING:
     from torch_geometric.data import Batch, DataLoader
     from ...config import BaseConfig
