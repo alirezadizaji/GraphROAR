@@ -40,7 +40,8 @@ class InstanceX(ExplainerEntrypoint, Generic[TExp], ABC):
                 edge_mask = self.get_edge_mask(out_x, data)
 
                 if self.conf.edge_mask_save_dir is not None:
-                    save_dir = os.path.join(self.conf.edge_mask_save_dir, f"{data.name}.npy")
+                    os.makedirs(self.conf.edge_mask_save_dir, exist_ok=True)
+                    save_dir = os.path.join(self.conf.edge_mask_save_dir, f"{data.name[0]}.npy")
                     np.save(save_dir, edge_mask.cpu().numpy())
                 
                 self.visualize_sample(data, edge_mask)
