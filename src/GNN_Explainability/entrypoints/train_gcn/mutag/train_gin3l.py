@@ -12,7 +12,7 @@ class Entrypoint(TrainEntrypoint):
             try_num=12,
             try_name='gin3l',
             dataset_name=Dataset.MUTAG,
-            training_config=TrainingConfig(100, OptimType.ADAM, batch_size=128),
+            training_config=TrainingConfig(500, OptimType.ADAM, batch_size=128),
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=False,
         )
