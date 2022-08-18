@@ -20,6 +20,15 @@ class Arguments:
     ratio: float
     symmetric: bool = False
 
+    @property
+    def item(self):
+        return dict(
+            root_dir=self.root_dir,
+            ratio=self.ratio,
+            symmetric=self.symmetric
+        )
+
+
 def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool) -> Callable[[Batch], Batch]:
     def _edge_eliminator(data: Batch):
         graphs = data.to_data_list()
@@ -39,6 +48,8 @@ def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool) -> Callab
                 edge_mask = edge_mask_sym[edge_index[0], edge_index[1]]
         
             k = int(edge_mask.numel() * ratio)
+            if symmetric and k % 2 == 1:
+                k = k - 1            
             _, inds = torch.topk(edge_mask, k)
             mask = torch.ones_like(edge_mask).bool()
             mask[inds] = False
@@ -46,11 +57,11 @@ def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool) -> Callab
 
         data: Batch = Batch.from_data_list(graphs)
         return data
-        
+
     return _edge_eliminator
 
 def edge_elimination_hook(arguments: Arguments):
-    edge_eliminator = init_edge_eliminator(**arguments)
+    edge_eliminator = init_edge_eliminator(**arguments.item)
     def _hook(_: nn.Module, inp: Tuple[List[Batch]]) -> Tuple[Batch]:
         if isinstance(inp[0], Batch):
             data: Batch = inp[0]
