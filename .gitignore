@@ -130,7 +130,9 @@ Results/
 data/
 ckpt/
 checkpoints/
-tmp.py
+*tmp*.py
+*.zip
+
 
 # Pyre type checker
 .pyre/
