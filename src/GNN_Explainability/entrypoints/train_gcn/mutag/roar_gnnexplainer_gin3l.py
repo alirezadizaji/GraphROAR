@@ -11,8 +11,6 @@ from torch_geometric.data import DataLoader, Batch
 from ....config import ROARConfig, TrainingConfig
 from ....enums import *
 from ...core import ROAREntrypoint
-from ....models.gnn_wrapper import GNNWrapper
-from ....utils.edge_elimination import edge_elimination
 
 class Entrypoint(ROAREntrypoint):
     

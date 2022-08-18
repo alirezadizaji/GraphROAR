@@ -4,10 +4,9 @@ from typing import TYPE_CHECKING
 
 import torch
 
-from GNN_Explainability.models.gnn_wrapper import GNNWrapper
-
+from ...models.gnn_wrapper import GNNWrapper
 from .train import TrainEntrypoint
-from ...utils.edge_elimination import edge_elimination
+from ...utils.edge_elimination import Arguments, edge_elimination_hook
 
 if TYPE_CHECKING:
     from ...config import ROARConfig
@@ -31,7 +30,7 @@ class ROAREntrypoint(TrainEntrypoint):
     def eliminate_edges(self, roar_ratio: float):
         conf: 'ROARConfig' = self.conf
         handle = self.model.register_forward_pre_hook(
-                edge_elimination(conf.edge_masks_load_dir, roar_ratio))
+                edge_elimination_hook(Arguments(conf.edge_masks_load_dir, roar_ratio, conf.edge_mask_symmetric)))
         
         yield None
 
