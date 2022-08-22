@@ -7,7 +7,7 @@ import torch
 
 from ...models.gnn_wrapper import GNNWrapper
 from .train import TrainEntrypoint
-from ...utils.edge_elimination import Arguments, edge_elimination_hook
+from ...utils.edge_elimination import EdgeEliminatorArgs, edge_elimination_hook
 from ...utils.seed_changer import seed_changer
 
 if TYPE_CHECKING:
@@ -58,7 +58,7 @@ class ROAREntrypoint(TrainEntrypoint):
     def eliminate_edges(self):
         conf: 'ROARConfig' = self.conf
         handle = self.model.register_forward_pre_hook(
-                edge_elimination_hook(Arguments(conf.edge_masks_load_dir, self.roar_ratio, conf.edge_mask_symmetric)))
+                edge_elimination_hook(EdgeEliminatorArgs(conf.edge_masks_load_dir, self.roar_ratio, conf.edge_mask_symmetric)))
         
         yield None
 

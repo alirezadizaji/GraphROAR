@@ -15,4 +15,7 @@ class ROARConfig(BaseConfig):
     edge_mask_random_weighting: bool = False
     r""" if True then create random edge mask and save it in `edge_masks_load_dir` """
     
+    eliminate_top_most_edges: bool = True
+    """ If True then eliminate top most edges otherwise keep them and eliminate the rest """
+    
     roar_ratios: List[float] = field(default_factory=list)

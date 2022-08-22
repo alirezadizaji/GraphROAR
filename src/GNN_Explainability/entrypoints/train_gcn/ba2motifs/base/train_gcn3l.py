@@ -2,9 +2,9 @@
 from dig.xgraph.models import *
 import torch
 
-from ....config import BaseConfig, TrainingConfig
-from ....enums import *
-from ...core import TrainEntrypoint
+from .....config import BaseConfig, TrainingConfig
+from .....enums import *
+from ....core import TrainEntrypoint
 
 class Entrypoint(TrainEntrypoint):
     def __init__(self):
