@@ -1,13 +1,13 @@
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 
 from ..enums import dataset
 from .base_config import BaseConfig
 
 @dataclass
 class ROARConfig(BaseConfig):
-    edge_masks_load_dir: str 
-    """ the root directory from which edge masks are loaded """
+    edge_masks_load_dir: Optional[str]
+    """ If given then edge masks are loaded from this directory, O.W. use random weighting """
 
     edge_mask_symmetric: bool = True
     """ If true then edge masks must be symmetric"""

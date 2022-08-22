@@ -11,21 +11,23 @@ if TYPE_CHECKING:
     from GNN_Explainability.entrypoints.core.main import MainEntrypoint
 
 
-def seed_everything(seed: int):
+def global_seed(seed: int):
     r"""Sets the seed for generating random numbers in PyTorch, numpy and
     Python.
 
     Args:
         seed (int): The desired seed.
     """
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
 
+    global_seed.seed = seed
+    
+    random.seed(global_seed.seed)
+    np.random.seed(global_seed.seed)
+    torch.manual_seed(global_seed.seed)
+    torch.cuda.manual_seed_all(global_seed.seed)
 
 if __name__ == "__main__":
-    seed_everything(12345)
+    global_seed(12345)
     script = import_module(f"GNN_Explainability.entrypoints.{argv[1]}")
     entrypoint: 'MainEntrypoint' = getattr(script, 'Entrypoint')()
 
