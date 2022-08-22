@@ -15,7 +15,7 @@ class EdgeEliminatorInitializer(Protocol):
 
 @dataclass
 class Arguments:
-    root_dir: Optional[str]
+    root_dir: str
     ratio: float
     symmetric: bool = False
 
@@ -35,12 +35,8 @@ def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool) -> Callab
         for g in graphs:
             edge_index: torch.Tensor = g.edge_index
 
-            # if root directory is not given then use random edge mask weighting
-            if root_dir is None:
-                edge_mask = torch.rand_like(edge_index)
-            else:
-                edge_mask_dir = os.path.join(root_dir, f"{g.name}.npy")
-                edge_mask = np.load(edge_mask_dir)
+            edge_mask_dir = os.path.join(root_dir, f"{g.name}.npy")
+            edge_mask = np.load(edge_mask_dir)
 
             edge_mask = edge_index.new_tensor(edge_mask, dtype=torch.float)
             if symmetric:
