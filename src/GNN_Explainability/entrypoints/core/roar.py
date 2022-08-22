@@ -40,14 +40,15 @@ class ROAREntrypoint(TrainEntrypoint):
         print("@@@ start random edge mask creation @@@", flush=True)
         for loader in [self.train_loader, self.val_loader, self.test_loader]:
             for batch_data in loader:
+                batch_data = batch_data[0]
                 
                 B = batch_data.y.numel()
                 for i in range(B):
                     data = batch_data[i]
                     num_edges = data.edge_index.size(1)
                     rand_edge_mask = torch.rand(num_edges)
-                    os.makedirs(self.conf.edge_mask_save_dir, exist_ok=True)
-                    path = os.path.join(self.conf.edge_mask_save_dir, f"{data.name}.npy")
+                    os.makedirs(self.conf.edge_masks_load_dir, exist_ok=True)
+                    path = os.path.join(self.conf.edge_masks_load_dir, f"{data.name}.npy")
                     np.save(path, rand_edge_mask)
 
         print("random edge mask creation done.", flush=True)
