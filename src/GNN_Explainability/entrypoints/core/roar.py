@@ -58,7 +58,7 @@ class ROAREntrypoint(TrainEntrypoint):
     def eliminate_edges(self):
         conf: 'ROARConfig' = self.conf
         handle = self.model.register_forward_pre_hook(
-                edge_elimination_hook(EdgeEliminatorArgs(conf.edge_masks_load_dir, self.roar_ratio, conf.edge_mask_symmetric)))
+                edge_elimination_hook(EdgeEliminatorArgs(conf.edge_masks_load_dir, self.roar_ratio, conf.edge_mask_symmetric, conf.eliminate_top_most_edges)))
         
         yield None
 

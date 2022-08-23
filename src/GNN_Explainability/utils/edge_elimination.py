@@ -52,7 +52,10 @@ def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool,
         
             k = int(edge_mask.numel() * ratio)
             if symmetric and k % 2 == 1:
-                k = k - 1            
+                if eliminate_top_most:
+                    k = k - 1            
+                else:
+                    k = k + 1
             _, inds = torch.topk(edge_mask, k)
             
             if eliminate_top_most:
