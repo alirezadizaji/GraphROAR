@@ -8,9 +8,9 @@ from torch.optim import Adam
 from torch_geometric.data import DataLoader, Batch
 
 
-from ....config import ROARConfig, TrainingConfig
-from ....enums import *
-from ...core import ROAREntrypoint
+from .....config import ROARConfig, TrainingConfig
+from .....enums import *
+from ....core import ROAREntrypoint
 
 class Entrypoint(ROAREntrypoint):
     

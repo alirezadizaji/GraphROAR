@@ -8,21 +8,22 @@ from torch.optim import Adam
 from torch_geometric.data import DataLoader, Batch
 
 
-from ....config import ROARConfig, TrainingConfig
-from ....enums import *
-from ...core import ROAREntrypoint
+from .....config import ROARConfig, TrainingConfig
+from .....enums import *
+from ....core import ROAREntrypoint
 
 class Entrypoint(ROAREntrypoint):
     
     def __init__(self):
         conf = ROARConfig(
-            try_num=17,
-            try_name='roar_gnnexplainer_gin3l',
+            try_num=20,
+            try_name='roar_random_gin3l',
             dataset_name=Dataset.MUTAG,
             training_config=TrainingConfig(500, OptimType.ADAM, batch_size=128),
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
-            edge_masks_load_dir='../data/MUTAG/explanation/gnnexplainer',
+            edge_masks_load_dir='../data/MUTAG/explanation/random',
+            edge_mask_random_weighting=True, # random roar
             roar_ratios=[0.1, 0.3, 0.5, 0.7, 0.9],
         )
 
