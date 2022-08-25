@@ -39,7 +39,7 @@ class Entrypoint(GradCAMEntrypoint):
         
         model = GIN_3l(model_level='graph', dim_node=14, dim_hidden=300, num_classes=2)
         model.to(conf.device)
-        # model.load_state_dict(torch.load('../results/12_gin3l_MUTAG/model.pt', map_location=conf.device))
+        model.load_state_dict(torch.load('../results/12_gin3l_MUTAG/model.pt', map_location=conf.device))
 
         explainer = GradCAM(model, explain_graph=conf.explain_graph)
 
