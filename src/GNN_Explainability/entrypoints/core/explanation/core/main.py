@@ -34,8 +34,18 @@ class ExplainerEntrypoint(MainEntrypoint, ABC):
             os.makedirs(save_dir, exist_ok=True)
         else:
             save_dir = None
-        pos = visualization(data, f'{name[0]}_org', save_dir=save_dir)
+        pos = visualization(data,
+            f'{name[0]}_org_{data.y.item()}',
+            save_dir=save_dir,
+            node_color_setter=self.conf.node_color_setter,
+            legend=self.conf.plt_legend)
         plt.close()
+        
         data.edge_index = data.edge_index[:, edge_mask >= 0.5]
-        visualization(data, f"{name[0]}_X", pos, save_dir)
+        visualization(data,
+            f"{name[0]}_X_{data.y.item()}",
+            pos,
+            save_dir,
+            node_color_setter=self.conf.node_color_setter,
+            legend=self.conf.plt_legend)
         plt.close()
