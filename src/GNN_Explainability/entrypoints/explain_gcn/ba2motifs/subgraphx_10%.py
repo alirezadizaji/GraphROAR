@@ -26,9 +26,11 @@ class Entrypoint(SubgraphXEntrypoint):
             num_instances_to_visualize=20,
             edge_mask_save_dir=os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'subgraphx_10%'),
             sparsity=0.0,
+            node_color_setter=None,
+            plt_legend=None,
             explain_graph=True,
             reward_method='mc_l_shapley',
-            get_max_nodes=(lambda data: int(data.edge_index.size(1)/2 * 0.1) + 1),
+            get_max_nodes=(lambda data: int(data.x.size(0) * 0.1) + 1),
         )
 
         model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)

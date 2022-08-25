@@ -31,6 +31,8 @@ class Entrypoint(GradCAMEntrypoint):
             edge_mask_save_dir=os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gradcam'),
             num_instances_to_visualize=10,
             sparsity=0.0,
+node_color_setter=None,
+plt_legend=None,
             explain_graph=True,
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
         )

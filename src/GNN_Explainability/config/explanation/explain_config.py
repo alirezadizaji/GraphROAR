@@ -1,7 +1,11 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import TYPE_CHECKING, Optional, Dict, Any, List
+
+from GNN_Explainability.utils.visualization import NodeColor
 
 from ..base_config import BaseConfig
+if TYPE_CHECKING:
+    from ...enums import Color
 
 @dataclass
 class ExplainConfig(BaseConfig):
@@ -21,6 +25,12 @@ class ExplainConfig(BaseConfig):
     """ Number of random instances to be visualized for explanation """
 
     sparsity: float
+
     explain_graph: bool
+    """ If true then explain graph, O.W. explain node """
 
+    node_color_setter: Optional[NodeColor]
+    """ node color setter used for visualization (NOTE: keys must be node's feature) """
 
+    plt_legend: Optional[Dict['Color', str]]
+    """ legend to display """

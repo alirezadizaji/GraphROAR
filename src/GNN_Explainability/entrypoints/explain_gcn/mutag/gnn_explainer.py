@@ -16,6 +16,18 @@ from ....entrypoints.core import GNNExplainerEntrypoint
 from ....config import GNNExplainerConfig
 from ....enums import *
 
+def color_setter(x):
+    i = torch.nonzero(x).item()
+    if i == 1:   # O
+        return Color.GREEN
+    elif i == 3: # H
+        return Color.YELLOW
+    elif i == 4: # N
+        return Color.RED
+    elif i == 7:
+        return Color.PINK
+
+legend = {Color.GREEN: "O", Color.YELLOW: "H", Color.RED: "N", Color.PINK: "S"}
 
 class Entrypoint(GNNExplainerEntrypoint):
     def __init__(self):
@@ -34,6 +46,8 @@ class Entrypoint(GNNExplainerEntrypoint):
             mask_features=True,
             coff_edge_size=0.0,
             sparsity=0.0,
+            node_color_setter=color_setter,
+            plt_legend=legend,
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             coff_node_feat_size=0.0)
         

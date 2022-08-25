@@ -26,6 +26,8 @@ class Entrypoint(SubgraphXEntrypoint):
             num_instances_to_visualize=20,
             edge_mask_save_dir=os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'subgraphx_50%'),
             sparsity=0.0,
+            node_color_setter=None,
+            plt_legend=None,
             explain_graph=True,
             reward_method='mc_l_shapley',
             get_max_nodes=(lambda data: int(data.edge_index.size(1)/2 * 0.5) + 1),
