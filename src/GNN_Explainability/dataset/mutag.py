@@ -9,6 +9,8 @@ from ..enums.data_spec import DataSpec
 
 
 class MUTAGDataset(Dataset):
+    use_latest_version: bool = False
+
     def __init__(self, dataspec: DataSpec):
         """
         Args:
@@ -18,13 +20,17 @@ class MUTAGDataset(Dataset):
 
         self.graphs: List[Data] = list()
 
-        edge_index = (torch.from_numpy(np.loadtxt("../data/MUTAG/raw_org/MUTAG_A.txt", delimiter=','))
+        if self.use_latest_version:
+            foldername = 'raw'
+        else:
+            foldername = 'raw_org'
+        edge_index = (torch.from_numpy(np.loadtxt(f"../data/MUTAG/{foldername}/MUTAG_A.txt", delimiter=','))
                 .t().long())
-        node_to_graph_ind = (torch.from_numpy(np.loadtxt("../data/MUTAG/raw_org/MUTAG_graph_indicator.txt"))
+        node_to_graph_ind = (torch.from_numpy(np.loadtxt(f"../data/MUTAG/{foldername}/MUTAG_graph_indicator.txt"))
                 .squeeze().long())
-        node_labels_in_once = (torch.from_numpy(np.loadtxt("../data/MUTAG/raw_org/MUTAG_node_labels.txt"))
+        node_labels_in_once = (torch.from_numpy(np.loadtxt(f"../data/MUTAG/{foldername}/MUTAG_node_labels.txt"))
                 .squeeze().long())
-        y = (torch.from_numpy(np.loadtxt("../data/MUTAG/raw_org/MUTAG_graph_labels.txt"))
+        y = (torch.from_numpy(np.loadtxt(f"../data/MUTAG/{foldername}/MUTAG_graph_labels.txt"))
                 .squeeze().long())
 
         num_unique_nodes = torch.unique(node_labels_in_once).numel()
