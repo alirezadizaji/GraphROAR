@@ -29,7 +29,7 @@ class Entrypoint(SubgraphXEntrypoint):
             node_color_setter=None,
             plt_legend=None,
             explain_graph=True,
-            reward_method='mc_l_shapley',
+            reward_method='mc_shapley',
             get_max_nodes=(lambda data: int(data.x.size(0) * 0.1) + 1),
         )
 
