@@ -12,8 +12,8 @@ class SubgraphXEntrypoint(InstanceX[SubgraphX]):
         # explainer is initiated here because `min_atoms` attribute might be filled based on the given instance number of edges
         self.explainer = SubgraphX(self.model, num_classes=self.conf.num_classes, device=self.conf.device, 
                         explain_graph=self.conf.explain_graph, reward_method=self.conf.reward_method,
-                        min_atoms=self.conf.get_max_nodes(data), high2low=True, 
-                        subgraph_building_method='split', verbose=True, rollout=10)
+                        min_atoms=self.conf.get_max_nodes(data), high2low=self.conf.high2low, 
+                        subgraph_building_method='split', verbose=True, rollout=self.conf.n_rollout)
         
         y_pred = self.model(data=data).argmax(-1).item()
         out_x = self.explainer.explain(data.x, data.edge_index,

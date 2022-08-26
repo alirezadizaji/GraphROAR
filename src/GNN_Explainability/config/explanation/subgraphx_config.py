@@ -9,3 +9,5 @@ from .explain_config import ExplainConfig
 class SubgraphXConfig(ExplainConfig):
     reward_method: str
     get_max_nodes: Callable[[Data], int]
+    n_rollout: int
+    high2low: bool = True
