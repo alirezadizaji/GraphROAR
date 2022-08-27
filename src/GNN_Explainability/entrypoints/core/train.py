@@ -39,6 +39,9 @@ class TrainEntrypoint(MainEntrypoint):
     def _save_model_weight(self, epoch_num: int) -> None:
         torch.save(self.model.state_dict(), self._get_weight_save_path(epoch_num))
 
+    def _remove_model_weight(self, epoch_num: int) -> None:
+        os.remove(self._get_weight_save_path(epoch_num))
+
     def _train_for_one_epoch(self, epoch_num: int) -> None:
         conf: 'BaseConfig' = self.conf
 
@@ -86,13 +89,21 @@ class TrainEntrypoint(MainEntrypoint):
 
     def run(self):
         val_accs = np.zeros(self.conf.training_config.num_epochs)
-
+        best_epoch = None
         for epoch in tqdm(range(self.conf.training_config.num_epochs)):
             self.epoch = epoch
             self._train_for_one_epoch(epoch)  
-            self._save_model_weight(epoch)
-            val_accs[epoch] = self._validate_for_one_epoch(epoch, self.val_loader)              
-        
+            val = self._validate_for_one_epoch(epoch, self.val_loader) 
+            val_accs[epoch] = val
+
+            # save only best epoch in terms of validation accuracy             
+            if best_epoch is None or val > val_accs[best_epoch]:
+                if best_epoch is not None:
+                    self._remove_model_weight(best_epoch)
+                self._save_model_weight(epoch)
+                best_epoch = epoch
+                print(f"### Best epoch changed to {best_epoch} acc {val} ###", flush=True)
+
         # evaluate best epoch on test set
         best_epoch = val_accs.argmax()
         self.model.load_state_dict(torch.load(self._get_weight_save_path(best_epoch), map_location=self.conf.device))

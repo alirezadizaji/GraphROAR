@@ -16,8 +16,8 @@ class Entrypoint(ROAREntrypoint):
     
     def __init__(self):
         conf = ROARConfig(
-            try_num=11,
-            try_name='roar_30%_subgraphx_gin3l',
+            try_num=32,
+            try_name='roar_subgraphx_0.1_gin3l',
             dataset_name=Dataset.BA2Motifs,
             training_config=TrainingConfig(100, OptimType.ADAM),
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
