@@ -12,11 +12,11 @@ class Entrypoint(TrainEntrypoint):
             try_num=1,
             try_name='gcn3l',
             dataset_name=Dataset.BA2Motifs,
-            training_config=TrainingConfig(100, OptimType.ADAM, lr=1e-2, batch_size=64),
+            training_config=TrainingConfig(100, OptimType.ADAM, lr=1e-3, batch_size=64),
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
-            save_log_in_file=False,
+            save_log_in_file=True,
         )
         
-        model = GCN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
+        model = GCN_3l_BN(model_level='graph', dim_node=10, dim_hidden=20, num_classes=2)
                 
         super(Entrypoint, self).__init__(conf, model)
