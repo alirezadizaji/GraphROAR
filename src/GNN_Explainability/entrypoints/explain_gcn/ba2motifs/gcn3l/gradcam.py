@@ -39,7 +39,7 @@ class Entrypoint(GradCAMEntrypoint):
         
         model = GCN_3l_BN(model_level='graph', dim_node=10, dim_hidden=20, num_classes=2)
         model.to(conf.device)
-        model.load_state_dict(torch.load('../1_gcn3l_BA2Motifs/weights/16', map_location=conf.device))
+        model.load_state_dict(torch.load('../results/1_gcn3l_BA2Motifs/weights/16', map_location=conf.device))
 
         explainer = GradCAM(model, explain_graph=conf.explain_graph)
 
