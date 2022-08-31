@@ -9,10 +9,10 @@ import torch
 from torch_geometric.data import Data
 from torch_geometric.utils import add_remaining_self_loops, remove_self_loops
 
-from ....config.base_config import BaseConfig, TrainingConfig
-from ....enums import *
-from ...core.main import MainEntrypoint
-from ....utils.visualization import visualization
+from .....config.base_config import BaseConfig, TrainingConfig
+from .....enums import *
+from ....core.main import MainEntrypoint
+from .....utils.visualization import visualization
 
 
 class Entrypoint(MainEntrypoint):

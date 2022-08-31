@@ -5,16 +5,16 @@ from dig.xgraph.models import *
 import torch
 
 
-from ....config import SubgraphXConfig, TrainingConfig
-from ....entrypoints.core.explanation.subgraphx import SubgraphXEntrypoint
+from .....config import SubgraphXConfig, TrainingConfig
+from .....entrypoints.core.explanation.subgraphx import SubgraphXEntrypoint
 
-from ....enums import *
+from .....enums import *
 
 
 class Entrypoint(SubgraphXEntrypoint):
     def __init__(self):
         conf = SubgraphXConfig(
-            try_num=8,
+            try_num=9,
             try_name='subgraphx',
             dataset_name=Dataset.BA2Motifs,
             training_config=TrainingConfig(100, OptimType.ADAM, batch_size=1),
@@ -24,13 +24,13 @@ class Entrypoint(SubgraphXEntrypoint):
             save_visualization=True,
             visualize_explainer_perf=True,
             num_instances_to_visualize=20,
-            edge_mask_save_dir=os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'subgraphx_50%'),
+            edge_mask_save_dir=os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'subgraphx_70%'),
             sparsity=0.0,
             node_color_setter=None,
             plt_legend=None,
             explain_graph=True,
             reward_method='mc_shapley',
-            get_max_nodes=(lambda data: int(data.edge_index.size(1)/2 * 0.5) + 1),
+            get_max_nodes=(lambda data: int(data.edge_index.size(1)/2 * 0.7) + 1),
             n_rollout=10
         )
 

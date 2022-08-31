@@ -11,10 +11,10 @@ import torch
 
 from GNN_Explainability.config.base_config import TrainingConfig
 
-from ....entrypoints.core import GNNExplainerEntrypoint
+from .....entrypoints.core import GNNExplainerEntrypoint
 
-from ....config import GNNExplainerConfig
-from ....enums import *
+from .....config import GNNExplainerConfig
+from .....enums import *
 
 
 class Entrypoint(GNNExplainerEntrypoint):

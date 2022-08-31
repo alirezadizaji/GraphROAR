@@ -11,10 +11,10 @@ import torch
 
 from GNN_Explainability.config.base_config import TrainingConfig
 
-from ....entrypoints.core import GradCAMEntrypoint
+from .....entrypoints.core import GradCAMEntrypoint
 
-from ....config import ExplainConfig
-from ....enums import *
+from .....config import ExplainConfig
+from .....enums import *
 
 
 class Entrypoint(GradCAMEntrypoint):

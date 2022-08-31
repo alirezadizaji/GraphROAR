@@ -5,10 +5,10 @@ from dig.xgraph.models import *
 import torch
 
 
-from ....config import SubgraphXConfig, TrainingConfig
-from ....entrypoints.core.explanation.subgraphx import SubgraphXEntrypoint
+from .....config import SubgraphXConfig, TrainingConfig
+from .....entrypoints.core.explanation.subgraphx import SubgraphXEntrypoint
 
-from ....enums import *
+from .....enums import *
 
 
 class Entrypoint(SubgraphXEntrypoint):
