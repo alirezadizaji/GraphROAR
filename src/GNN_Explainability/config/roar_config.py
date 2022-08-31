@@ -18,4 +18,7 @@ class ROARConfig(BaseConfig):
     eliminate_top_most_edges: bool = True
     """ If True then eliminate top most edges otherwise keep them and eliminate the rest """
     
+    skip_during_evaluation: bool = False
+    """ If True then skip ROAR during evaluation (validation and test phases), O.W. apply it on them too """
+    
     roar_ratios: List[float] = field(default_factory=list)

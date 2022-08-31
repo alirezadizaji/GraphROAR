@@ -19,6 +19,7 @@ class EdgeEliminatorArgs:
     ratio: float
     symmetric: bool = False
     eliminate_top_most: bool = True
+    skip_set: List[str] = []
 
     @property
     def item(self):
@@ -72,14 +73,19 @@ def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool,
 
     return _edge_eliminator
 
-def edge_elimination_hook(arguments: EdgeEliminatorArgs):
+def edge_elimination_hook(arguments: EdgeEliminatorArgs, skip_during_eval: bool = False):
     edge_eliminator = init_edge_eliminator(**arguments.item)
-    def _hook(_: nn.Module, inp: Tuple[List[Batch]]) -> Tuple[Batch]:
+    def _hook(model: nn.Module, inp: Tuple[List[Batch]]) -> Tuple[Batch]:
         if isinstance(inp[0], Batch):
             data: Batch = inp[0]
         else:
             data: Batch = inp[0][0]
-        data = edge_eliminator(data) 
+        
+        # If necessary skip during evaluation if model is not in training mode
+        if skip_during_eval and not model.training:
+            pass
+        else:
+            data = edge_eliminator(data) 
         inp = ([data])
         return inp
 
