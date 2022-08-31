@@ -19,7 +19,6 @@ class EdgeEliminatorArgs:
     ratio: float
     symmetric: bool = False
     eliminate_top_most: bool = True
-    skip_set: List[str] = []
 
     @property
     def item(self):
