@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
+
 from . import InstanceX
+from .utils import compatible_edge_mask
 
 import torch
 from dig.xgraph.method.gradcam import GradCAM
@@ -21,17 +23,6 @@ class GradCAMEntrypoint(InstanceX[GradCAM]):
         edge_mask = edge_masks[y_pred.item()].data
                 
         # edge_mask should be replaced to have an identical order with edge_index
-        edge_mask_new = torch.full((data.edge_index.size(1),), fill_value=-100, dtype=torch.float, device=edge_mask.device)
-        row, col = data.edge_index
-        self_loop_mask = row == col    
-        num = (~self_loop_mask).sum() 
-        edge_mask_new[~self_loop_mask] = edge_mask[:num]
-
-        if torch.any(self_loop_mask):
-            self_loop_node_inds = row[self_loop_mask]
-            edge_mask_new[self_loop_mask] = edge_mask[num:][self_loop_node_inds]
-
-        if torch.any(edge_mask_new == -100):
-            raise Exception('there is an unhandled edge mask')
-
+        edge_mask_new = compatible_edge_mask(data, edge_mask)
+        
         return edge_mask_new
