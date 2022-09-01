@@ -17,7 +17,7 @@ class Entrypoint(PGExplainerEntrypoint):
             try_name='pgexplainer_gin3l',
             dataset_name=Dataset.BA2Motifs,
             device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
-            save_log_in_file=False,
+            save_log_in_file=True,
             training_config=TrainingConfig(30, OptimType.ADAM, lr=3e-3, batch_size=1),
             num_classes=2,
             save_visualization=True,
