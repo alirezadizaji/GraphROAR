@@ -1,3 +1,4 @@
 from .explain_config import ExplainConfig
 from .gnnexplainer_config import GNNExplainerConfig
 from .subgraphx_config import SubgraphXConfig
+from .pgexplainer_config import PGExplainerConfig
