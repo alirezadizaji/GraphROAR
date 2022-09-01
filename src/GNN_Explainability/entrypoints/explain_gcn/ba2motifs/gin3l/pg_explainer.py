@@ -28,15 +28,15 @@ class Entrypoint(PGExplainerEntrypoint):
             explain_graph=True,
             node_color_setter=None,
             plt_legend=None,
-            explainer_load_dir=os.path.join('..', 'results', '4_pgexplainer_gcn3l_BA2Motifs', 'weights', 'model.pt')
+            explainer_load_dir=os.path.join('..', 'results', '4_pgexplainer_gin3l_BA2Motifs', 'weights', 'model.pt')
         )
 
-        model = GCN_3l_BN(model_level='graph', dim_node=10, dim_hidden=20, num_classes=2)
+        model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
         model.load_state_dict(torch.load('../checkpoints/ba2motifs_gin_3l.pt', map_location=conf.device))
  
-        explainer = PGExplainer(self.model, in_channels=40, 
-                device=self.conf.device, explain_graph=True,
-                epochs=self.conf.training_config.num_epochs, 
+        explainer = PGExplainer(model, in_channels=600, 
+                device=conf.device, explain_graph=True,
+                epochs=conf.training_config.num_epochs, 
                 lr=conf.training_config.lr, coff_size=conf.coff_size,
                 coff_ent=conf.coff_ent, t0=conf.t0, t1=conf.t1,
                 sample_bias=conf.sample_bias)

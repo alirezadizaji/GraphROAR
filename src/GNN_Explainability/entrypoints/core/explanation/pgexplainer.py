@@ -69,6 +69,7 @@ class PGExplainerEntrypoint(ExplainerEntrypoint):
                 edge_mask = self.get_edge_mask(out_x, data)
                 
                 edge_mask_new = torch.full((data.edge_index.size(1), ), fill_value=-torch.inf, dtype=torch.float32)
+                edge_mask_new = edge_mask_new.to(edge_mask.device)
                 edge_mask_new[mask] = edge_mask
                 self.visualize_sample(data, edge_mask_new)
 
