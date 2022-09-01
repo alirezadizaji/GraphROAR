@@ -4,7 +4,7 @@ from dig.xgraph.method import PGExplainer
 from dig.xgraph.models import *
 import torch
 
-
+from ..gin3l.gnn_explainer import color_setter, legend
 from .....config import PGExplainerConfig, TrainingConfig
 from .....enums import *
 from ....core import PGExplainerEntrypoint
@@ -13,28 +13,28 @@ from ....core import PGExplainerEntrypoint
 class Entrypoint(PGExplainerEntrypoint):
     def __init__(self):
         conf = PGExplainerConfig(
-            try_num=4,
+            try_num=87,
             try_name='pgexplainer_gin3l',
-            dataset_name=Dataset.BA2Motifs,
+            dataset_name=Dataset.MUTAG,
             device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
             training_config=TrainingConfig(30, OptimType.ADAM, lr=3e-3, batch_size=1),
             num_classes=2,
             save_visualization=True,
             visualize_explainer_perf=True,
-            edge_mask_save_dir=os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'pgexplainer'),
+            edge_mask_save_dir=os.path.join('..', 'data', 'MUTAG', 'explanation', 'gcn3l', 'pgexplainer'),
             num_instances_to_visualize=20,
             sparsity=0.0,
             explain_graph=True,
-            node_color_setter=None,
-            plt_legend=None,
-            explainer_load_dir=os.path.join('..', 'results', '4_pgexplainer_gin3l_BA2Motifs', 'weights', 'model.pt')
+            node_color_setter=color_setter,
+            plt_legend=legend,
         )
 
-        model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
-        model.load_state_dict(torch.load('../checkpoints/ba2motifs_gin_3l.pt', map_location=conf.device))
+        model = GCN_3l_BN(model_level='graph', dim_node=7, dim_hidden=60, num_classes=2)
+        model.to(conf.device)
+        model.load_state_dict(torch.load('../results/13_gcn3l_MUTAG/126', map_location=conf.device))
  
-        explainer = PGExplainer(model, in_channels=600, 
+        explainer = PGExplainer(model, in_channels=120, 
                 device=conf.device, explain_graph=conf.explain_graph,
                 epochs=conf.training_config.num_epochs, 
                 lr=conf.training_config.lr, coff_size=conf.coff_size,
