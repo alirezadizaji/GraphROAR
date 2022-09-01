@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import os
-from typing import TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..enums import Dataset, OptimType
@@ -39,3 +39,4 @@ class TrainingConfig:
     lr: float = 1e-3
     shuffle_training: bool = True
     batch_size: int = 32
+    early_stop: Optional[int] = None

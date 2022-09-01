@@ -1,7 +1,7 @@
 import math
 import os
 from tqdm import tqdm
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from dig.xgraph.models import *
 import numpy as np
@@ -87,6 +87,15 @@ class TrainEntrypoint(MainEntrypoint):
             print(f'epoch{epoch_num} {loader.dataset.dataspec.lower()} acc {acc}', flush=True)
             return acc
 
+    def _early_stopping(self, epoch: int, best_epoch: Optional[int]) -> bool:
+        thd = self.conf.training_config.early_stop
+        best = best_epoch if best_epoch is not None else 0
+        difference = epoch - best
+        if difference >= thd:
+            return True
+        
+        return False
+        
     def run(self):
         val_accs = np.zeros(self.conf.training_config.num_epochs)
         best_epoch = None
@@ -103,6 +112,12 @@ class TrainEntrypoint(MainEntrypoint):
                 self._save_model_weight(epoch)
                 best_epoch = epoch
                 print(f"### Best epoch changed to {best_epoch} acc {val} ###", flush=True)
+
+            # check early stopping if necessary
+            if self.conf.training_config.early_stop is not None and \
+                     self._early_stopping(epoch, best_epoch):
+                print(f"*** EARLY STOPPING: epoch No. {epoch}, best epoch No. {best_epoch} ***", flush=True)
+                break
 
         # evaluate best epoch on test set
         best_epoch = val_accs.argmax()
