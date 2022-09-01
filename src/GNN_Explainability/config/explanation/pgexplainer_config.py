@@ -10,5 +10,5 @@ class PGExplainerConfig(ExplainConfig):
     t0: float = 5.0
     t1: float = 1.0
     sample_bias: float = 0.0
-
+    topk_selection: int = 10
     explainer_load_dir: Optional[str] = None

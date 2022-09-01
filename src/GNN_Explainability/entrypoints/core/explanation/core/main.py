@@ -19,6 +19,12 @@ class ExplainerEntrypoint(MainEntrypoint, ABC):
     def get_edge_mask(self, out_x, data: 'Data') -> torch.Tensor:
         pass
 
+    
+    def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        edge_index = edge_index[:, edge_mask >= 0.5]
+        return edge_index
+
+
     @counter(0)
     def visualize_sample(self, data: 'Data', edge_mask: torch.Tensor):
         conf = self.conf
@@ -41,7 +47,7 @@ class ExplainerEntrypoint(MainEntrypoint, ABC):
             legend=self.conf.plt_legend)
         plt.close()
         
-        data.edge_index = data.edge_index[:, edge_mask >= 0.5]
+        data.edge_index = self._select_explainable_edges(data.edge_index, edge_mask)
         visualization(data,
             f"{name[0]}_X_{data.y.item()}",
             pos,

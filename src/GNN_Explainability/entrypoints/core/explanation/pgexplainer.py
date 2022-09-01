@@ -2,17 +2,16 @@ import os
 from typing import TYPE_CHECKING, List
 
 from dig.xgraph.method import PGExplainer
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from torch_geometric.data import Data
-from torch_geometric.utils import add_remaining_self_loops
+from torch_geometric.utils import remove_self_loops
 
-from GNN_Explainability.entrypoints.core.explanation.utils.compatible_edge_mask import compatible_edge_mask
 
 from ....enums import *
 from ...core.explanation.core.main import ExplainerEntrypoint
-from ....utils.visualization import visualization
+from .utils import compatible_edge_mask
+
 if TYPE_CHECKING:
     from ....config import PGExplainerConfig
     from dig.xgraph.models import GNNBasic
@@ -28,6 +27,18 @@ class PGExplainerEntrypoint(ExplainerEntrypoint):
 
         self.explainer = explainer
 
+    def get_edge_mask(self, out_x, data: 'Data') -> torch.Tensor:
+        masks = out_x[1]
+        edge_mask = masks[0]
+        
+        return edge_mask
+
+    def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        conf: 'PGExplainerConfig' = self.conf
+        edge_index = edge_index[:, edge_mask.topk(conf.topk_selection)[1]]
+
+        return edge_index
+
     def run(self):
         conf: 'PGExplainerConfig' = self.conf
         if conf.explainer_load_dir is not None:
@@ -37,27 +48,32 @@ class PGExplainerEntrypoint(ExplainerEntrypoint):
 
             for data in self.train_loader:
                 data: Data = data[0]
-                data.edge_index = add_remaining_self_loops(data.edge_index)[0]
+                data.edge_index = remove_self_loops(data.edge_index)[0]
                 dataset.append(data)
             
             self.explainer.train_explanation_network(dataset)
             
-            model_weight_path = os.sep.join([conf.save_dir, 'weights', 'explainer.pt'])
+            model_weight_path = os.sep.join([conf.save_dir, 'weights', 'model.pt'])
+            os.makedirs(os.path.dirname(model_weight_path), exist_ok=True)
             torch.save(self.explainer.state_dict(), model_weight_path)
 
         for loader in [self.train_loader, self.val_loader, self.test_loader]:
             for data in loader:
                 data: Data = data[0]
-                edge_index = add_remaining_self_loops(data.edge_index)
+                row, col = data.edge_index
+                mask = row != col
+                edge_index = data.edge_index[:, mask]
                 
                 print(f"graph {data.name[0]}, label {data.y.item()}", flush=True)
-                _, masks, _ = self.explainer(data.x, edge_index, y=data.y)
-                edge_mask = masks[0]
+                out_x = self.explainer(data.x, edge_index, y=data.y)
+                edge_mask = self.get_edge_mask(out_x, data)
                 
-                edge_mask_new = compatible_edge_mask(data, edge_mask)
-                self.visualize_sample(data, edge_mask)
+                edge_mask_new = torch.full((data.edge_index.size(1), ), fill_value=-torch.inf, dtype=torch.float32)
+                edge_mask_new[mask] = edge_mask
+                self.visualize_sample(data, edge_mask_new)
 
+                edge_mask_new[~mask] = 1.0
                 if conf.edge_mask_save_dir is not None:
                     os.makedirs(conf.edge_mask_save_dir, exist_ok=True)
                     file_name = f"{data.name[0]}"
-                    np.save(os.path.join(conf.edge_mask_save_dir, file_name), edge_mask_new)                
+                    np.save(os.path.join(conf.edge_mask_save_dir, file_name), edge_mask_new.detach().cpu().numpy())                
