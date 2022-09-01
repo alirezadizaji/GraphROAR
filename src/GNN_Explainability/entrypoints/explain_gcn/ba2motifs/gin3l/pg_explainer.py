@@ -27,7 +27,8 @@ class Entrypoint(PGExplainerEntrypoint):
             sparsity=0.0,
             explain_graph=True,
             node_color_setter=None,
-            plt_legend=None
+            plt_legend=None,
+            explainer_load_dir=os.path.join('..', 'results', '4_pgexplainer_gcn3l_BA2Motifs', 'weights', 'model.pt')
         )
 
         model = GCN_3l_BN(model_level='graph', dim_node=10, dim_hidden=20, num_classes=2)

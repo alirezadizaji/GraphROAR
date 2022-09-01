@@ -33,6 +33,9 @@ class MUTAGDataset(Dataset):
         y = (torch.from_numpy(np.loadtxt(f"../data/MUTAG/{foldername}/MUTAG_graph_labels.txt"))
                 .squeeze().long())
 
+        # all negative labels might be either of 0 or -1 so label all of them to 0
+        y = (y == 1).long()
+
         num_unique_nodes = torch.unique(node_labels_in_once).numel()
         src = edge_index[0]
 
