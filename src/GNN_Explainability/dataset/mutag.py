@@ -1,3 +1,4 @@
+from random import shuffle
 from typing import Dict, List
 
 import numpy as np
@@ -9,7 +10,7 @@ from ..enums.data_spec import DataSpec
 
 
 class MUTAGDataset(Dataset):
-    use_latest_version: bool = False
+    use_latest_version: bool = True
 
     def __init__(self, dataspec: DataSpec):
         """
@@ -66,6 +67,8 @@ class MUTAGDataset(Dataset):
             graph.name = str(i)
             self.graphs.append(graph)
         
+        shuffle(self.graphs)
+
         train_inds, val_inds, test_inds = list(), list(), list()
         
         for label in torch.unique(y):
@@ -73,10 +76,10 @@ class MUTAGDataset(Dataset):
             
             size = label_inds.numel()
             train_size = int(size * 0.8)
-            val_size = int(size * 0.1)
-            test_size = size - (train_size + val_size)
+            test_size = int(size * 0.1)
+            val_size = size - (train_size + test_size)
 
-            train, val, test = torch.split(label_inds, [train_size, val_size, test_size])
+            train, test, val = torch.split(label_inds, [train_size, test_size, val_size])
 
             train_inds = train_inds + train.flatten().tolist()
             val_inds = val_inds + val.flatten().tolist()
