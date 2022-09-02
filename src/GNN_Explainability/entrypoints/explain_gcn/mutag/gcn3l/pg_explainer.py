@@ -14,7 +14,7 @@ class Entrypoint(PGExplainerEntrypoint):
     def __init__(self):
         conf = PGExplainerConfig(
             try_num=87,
-            try_name='pgexplainer_gin3l',
+            try_name='pgexplainer_gcn3l',
             dataset_name=Dataset.MUTAG,
             device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
@@ -32,7 +32,7 @@ class Entrypoint(PGExplainerEntrypoint):
 
         model = GCN_3l_BN(model_level='graph', dim_node=7, dim_hidden=60, num_classes=2)
         model.to(conf.device)
-        model.load_state_dict(torch.load('../results/13_gcn3l_MUTAG/126', map_location=conf.device))
+        model.load_state_dict(torch.load('../results/13_gcn3l_MUTAG/weights/126', map_location=conf.device))
  
         explainer = PGExplainer(model, in_channels=120, 
                 device=conf.device, explain_graph=conf.explain_graph,

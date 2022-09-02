@@ -35,7 +35,7 @@ class Entrypoint(SubgraphXEntrypoint):
 
         model = GCN_3l_BN(model_level='graph', dim_node=7, dim_hidden=60, num_classes=2)
         model.to(conf.device)
-        model.load_state_dict(torch.load('../results/13_gcn3l_MUTAG/126', map_location=conf.device))
+        model.load_state_dict(torch.load('../results/13_gcn3l_MUTAG/weights/126', map_location=conf.device))
 
         # explainer will be initiated during explaining an instance
         explainer = None
