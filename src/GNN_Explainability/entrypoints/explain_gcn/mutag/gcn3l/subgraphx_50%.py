@@ -23,7 +23,7 @@ class Entrypoint(SubgraphXEntrypoint):
             save_visualization=True,
             visualize_explainer_perf=True,
             num_instances_to_visualize=20,
-            edge_mask_save_dir=os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gcn3l', 'subgraphx_50%'),
+            edge_mask_save_dir=os.path.join('..', 'data', 'MUTAG', 'explanation', 'gcn3l', 'subgraphx_50%'),
             sparsity=0.0,
             node_color_setter=color_setter,
             plt_legend=legend,
