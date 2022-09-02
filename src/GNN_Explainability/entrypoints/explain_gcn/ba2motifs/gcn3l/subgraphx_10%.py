@@ -19,9 +19,9 @@ class Entrypoint(SubgraphXEntrypoint):
             dataset_name=Dataset.BA2Motifs,
             training_config=TrainingConfig(100, OptimType.ADAM, batch_size=1),
             device=torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
-            save_log_in_file=False,
+            save_log_in_file=True,
             num_classes=2,
-            save_visualization=False,
+            save_visualization=True,
             visualize_explainer_perf=True,
             num_instances_to_visualize=20,
             edge_mask_save_dir=os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gcn3l', 'subgraphx_10%'),
@@ -30,7 +30,7 @@ class Entrypoint(SubgraphXEntrypoint):
             plt_legend=None,
             explain_graph=True,
             reward_method='mc_shapley',
-            get_max_nodes=(lambda data: int(data.x.size(0) * 0.5) + 1),
+            get_max_nodes=(lambda data: int(data.x.size(0) * 0.1) + 1),
             n_rollout=20
         )
 
