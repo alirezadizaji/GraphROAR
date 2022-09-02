@@ -19,6 +19,7 @@ class Entrypoint(ROAREntrypoint):
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
             edge_masks_load_dir=os.path.join('..', 'data', 'MUTAG', 'explanation', 'gcn3l', 'random'),
+            edge_mask_random_weighting=True, # random roar
             roar_ratios=[0.1, 0.3, 0.5, 0.7, 0.9],
         )
 
