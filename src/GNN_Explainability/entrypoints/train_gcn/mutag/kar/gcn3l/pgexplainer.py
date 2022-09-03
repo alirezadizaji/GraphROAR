@@ -13,7 +13,7 @@ class Entrypoint(ROAREntrypoint):
     def __init__(self):
         conf = ROARConfig(
             try_num=117,
-            try_name='roar_pgexplainer_gcn3l',
+            try_name='kar_pgexplainer_gcn3l',
             dataset_name=Dataset.MUTAG,
             training_config=TrainingConfig(500, OptimType.ADAM, batch_size=32, early_stop=100),
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
