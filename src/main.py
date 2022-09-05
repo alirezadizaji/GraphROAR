@@ -27,8 +27,11 @@ def global_seed(seed: int):
     torch.cuda.manual_seed_all(global_seed.seed)
 
 if __name__ == "__main__":
-    global_seed(12345)
-    script = import_module(f"GNN_Explainability.entrypoints.{argv[1]}")
+    # seeds for running
+    # BA-2Motifs: 12345
+    # MUTAG: 3423
+    global_seed(argv[1])
+    script = import_module(f"GNN_Explainability.entrypoints.{argv[2]}")
     entrypoint: 'MainEntrypoint' = getattr(script, 'Entrypoint')()
 
     if entrypoint.conf.save_log_in_file:
