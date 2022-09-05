@@ -20,6 +20,7 @@ class Entrypoint(ROAREntrypoint):
             save_log_in_file=True,
             edge_masks_load_dir=os.path.join('..', 'data', 'MUTAG', 'explanation', 'gcn3l', 'random'),
             eliminate_top_most_edges=False,
+            edge_mask_random_weighting=True, # random roar
             roar_ratios=[0.1, 0.3, 0.5, 0.7, 0.9],
         )
 
