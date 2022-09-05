@@ -32,7 +32,7 @@ class Entrypoint(PGExplainerEntrypoint):
 
         model = GIN_3l(model_level='graph', dim_node=7, dim_hidden=60, num_classes=2)
         model.to(conf.device)
-        model.load_state_dict(torch.load('../results/12_gin3l_MUTAG/weights/106', map_location=conf.device))
+        model.load_state_dict(torch.load('../results/12_gin3l_MUTAG/weights/176', map_location=conf.device))
  
         explainer = PGExplainer(model, in_channels=120, 
                 device=conf.device, explain_graph=conf.explain_graph,
