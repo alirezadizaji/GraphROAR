@@ -19,18 +19,17 @@ def global_seed(seed: int):
         seed (int): The desired seed.
     """
 
-    global_seed.seed = seed
-    
-    random.seed(global_seed.seed)
-    np.random.seed(global_seed.seed)
-    torch.manual_seed(global_seed.seed)
-    torch.cuda.manual_seed_all(global_seed.seed)
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
 
 if __name__ == "__main__":
     # seeds for running
     # BA-2Motifs: 12345
     # MUTAG: 3423
-    global_seed(argv[1])
+    GLOBAL_SEED = int(argv[1])
+    global_seed(GLOBAL_SEED)
     script = import_module(f"GNN_Explainability.entrypoints.{argv[2]}")
     entrypoint: 'MainEntrypoint' = getattr(script, 'Entrypoint')()
 
