@@ -11,6 +11,7 @@ from ..enums.data_spec import DataSpec
 
 class MUTAGDataset(Dataset):
     use_latest_version: bool = True
+    indices: List[int] = None
 
     def __init__(self, dataspec: DataSpec):
         """
@@ -67,7 +68,16 @@ class MUTAGDataset(Dataset):
             graph.name = str(i)
             self.graphs.append(graph)
         
-        shuffle(self.graphs)
+        # determine indices of graphs and shuffle them
+        if MUTAGDataset.indices is None:
+            num_graphs = len(self.graphs)
+            indices = np.arange(num_graphs).tolist()
+            shuffle(indices)
+            MUTAGDataset.indices = indices
+
+        # reorder graphs and their labels
+        self.graphs = [self.graphs[i] for i in MUTAGDataset.indices]
+        y = y[MUTAGDataset.indices]
 
         train_inds, val_inds, test_inds = list(), list(), list()
         
