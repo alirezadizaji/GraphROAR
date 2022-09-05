@@ -12,7 +12,7 @@ class Entrypoint(ROAREntrypoint):
     
     def __init__(self):
         conf = ROARConfig(
-            try_num=168,
+            try_num=178,
             try_name='roar_subgraphx_0.9_gcn3l_skip_eval',
             dataset_name=Dataset.MUTAG,
             training_config=TrainingConfig(500, OptimType.ADAM, batch_size=32, early_stop=100),
