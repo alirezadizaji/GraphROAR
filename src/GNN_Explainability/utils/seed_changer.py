@@ -1,8 +1,8 @@
 from contextlib import contextmanager
 import time
 
-from main import GLOBAL_SEED, global_seed
-
+from main import global_seed
+from ..context.constants import Constants
 
 @contextmanager
 def seed_changer(end=100000):
@@ -10,6 +10,5 @@ def seed_changer(end=100000):
     print(f"@@@@@ seed changes to {seed} @@@@@", flush=True)
     global_seed(seed)        
     yield
-
-    global_seed(GLOBAL_SEED)
+    global_seed(Constants.GLOBAL_SEED)
     

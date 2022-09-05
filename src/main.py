@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import torch
-
+from GNN_Explainability.context.constants import Constants
 from GNN_Explainability.utils.decorators.stdout_stderr_setter import stdout_stderr_setter
 if TYPE_CHECKING:
     from GNN_Explainability.entrypoints.core.main import MainEntrypoint
@@ -28,8 +28,11 @@ if __name__ == "__main__":
     # seeds for running
     # BA-2Motifs: 12345
     # MUTAG: 3423
-    GLOBAL_SEED = int(argv[1])
-    global_seed(GLOBAL_SEED)
+
+    Constants.GLOBAL_SEED = int(argv[1])
+    print(f"%%% RUNNING SEED {Constants.GLOBAL_SEED} %%%", flush=True)
+    
+    global_seed(Constants.GLOBAL_SEED)
     script = import_module(f"GNN_Explainability.entrypoints.{argv[2]}")
     entrypoint: 'MainEntrypoint' = getattr(script, 'Entrypoint')()
 
