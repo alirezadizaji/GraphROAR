@@ -30,7 +30,6 @@ if __name__ == "__main__":
     # MUTAG: 3423
 
     Constants.GLOBAL_SEED = int(argv[1])
-    print(f"%%% RUNNING SEED {Constants.GLOBAL_SEED} %%%", flush=True)
     
     global_seed(Constants.GLOBAL_SEED)
     script = import_module(f"GNN_Explainability.entrypoints.{argv[2]}")
@@ -38,4 +37,6 @@ if __name__ == "__main__":
 
     if entrypoint.conf.save_log_in_file:
         entrypoint.run = stdout_stderr_setter(entrypoint.conf.save_dir)(entrypoint.run)
+
+    print(f"%%% RUNNING SEED {Constants.GLOBAL_SEED} %%%", flush=True)
     entrypoint.run()
