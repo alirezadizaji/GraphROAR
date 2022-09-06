@@ -34,6 +34,8 @@ class MainEntrypoint(ABC):
             cls = BA2MotifsDataset
         elif self.conf.dataset_name == Dataset.MUTAG:
             cls = MUTAGDataset
+        elif self.conf.dataset_name == Dataset.REDDIT_BINARY:
+            cls = RedditDataset
         else:
             raise NotImplementedError()
 
