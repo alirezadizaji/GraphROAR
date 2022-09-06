@@ -21,6 +21,6 @@ class RedditDataset(GraphClsDataset):
                 .squeeze().long())
 
         # All nodes are unique and therefore have identical features
-        node_labels_in_once = torch.zeros_like(y)
+        node_labels_in_once = torch.zeros_like(node_to_graph_ind)
 
         return edge_index, node_to_graph_ind, node_labels_in_once, y
