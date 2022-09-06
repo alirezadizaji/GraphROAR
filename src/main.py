@@ -28,6 +28,7 @@ if __name__ == "__main__":
     # seeds for running
     # BA-2Motifs: 12345
     # MUTAG: 3423
+    # REDDIT-BINARY: 12345
 
     Constants.GLOBAL_SEED = int(argv[1])
     
