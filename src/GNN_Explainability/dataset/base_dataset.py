@@ -1,13 +1,14 @@
-from abc import ABC, abstractmethod
+from abc import ABC
+import os
 from random import shuffle
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING, List, Tuple
 
 import numpy as np
 import torch
 from torch.utils.data import Dataset
 from torch_geometric.data import Data
 
-from ..enums.data_spec import DataSpec
+from ..enums import DataSpec, Dataset
 
 if TYPE_CHECKING:
     from torch import Tensor
@@ -15,16 +16,79 @@ if TYPE_CHECKING:
 
 class GraphClsDataset(Dataset, ABC):
     indices: List[int] = None
+    """ it records the graph indices to be same for all separations """
 
-    @abstractmethod
-    def _read_file(self) -> Tuple['Tensor', 'Tensor', 'Tensor', 'Tensor']:
+    dataset_name: Dataset = None
+
+    raw_folder_name: str = 'raw'
+    """ foldername where the raw text files are located """
+    
+    processed_name: str = 'processed'
+    """ processed foldername to save the processed text files """
+
+    def _read_raw_file(self) -> Tuple['Tensor', 'Tensor', 'Tensor', 'Tensor']:
+
+        datasetname = self.dataset_name
+        raw_folder_name = self.raw_folder_name
+
+        base_path = os.path.join("..", "data", datasetname)
+        
+        edge_index = (torch.from_numpy(
+                np.loadtxt(
+                    os.path.join(base_path, raw_folder_name, f"{datasetname}_A.txt"), 
+                    delimiter=','))
+                .t()
+                .long())
+
+        node_to_graph_ind = (torch.from_numpy(
+                np.loadtxt(
+                    os.path.join(base_path, raw_folder_name, f"{datasetname}_graph_indicator.txt"), 
+                    delimiter=','))
+                .squeeze()
+                .long())
+        
+        y = (torch.from_numpy(
+                np.loadtxt(
+                    os.path.join(base_path, raw_folder_name, f"{datasetname}_graph_labels.txt"), 
+                    delimiter=','))
+                .squeeze()
+                .long())
+
+        path_4 = os.path.join(base_path, raw_folder_name, f"{datasetname}_node_labels.txt") 
+        if os.path.exists(path_4):
+            node_labels_in_once = (torch.from_numpy(np.loadtxt(path_4, delimiter=','))
+                    .squeeze()
+                    .long())
+        else:
+            # All nodes are unique and therefore have identical features
+            node_labels_in_once = torch.zeros_like(node_to_graph_ind)
+
+        processed_name = self.processed_name
+        os.makedirs(os.path.join(base_path, processed_name), exist_ok=True)
+        # save processed files
+        torch.save(edge_index, os.path.join(base_path, processed_name, 'edge_index.pt'))
+        torch.save(node_to_graph_ind, os.path.join(base_path, processed_name, 'node_to_graph_ind.pt'))
+        torch.save(node_labels_in_once, os.path.join(base_path, processed_name, 'node_labels_in_once.pt'))
+        torch.save(y, os.path.join(base_path, processed_name, 'y.pt'))
+
+
+    def _get_processed_files(self) -> Tuple['Tensor', 'Tensor', 'Tensor', 'Tensor']:
         r""" it returns four tensors:
         - edge_index
         - node_to_graph_ind: maps each node id to its graph id
         - node_labels_in_once: all unique nodes (in terms of their feature) exist
         - y: graph labels 
         """
-        pass
+        processed_name = self.processed_name
+        base_path = os.path.join("..", "data", self.dataset_name)
+        
+        edge_index = torch.load(os.path.join(base_path, processed_name, 'edge_index.pt'))
+        node_to_graph_ind = torch.load(os.path.join(base_path, processed_name, 'node_to_graph_ind.pt'))
+        node_labels_in_once = torch.load(os.path.join(base_path, processed_name, 'node_labels_in_once.pt'))
+        y = torch.load(os.path.join(base_path, processed_name, 'y.pt'))
+
+        return edge_index, node_to_graph_ind, node_labels_in_once, y
+
 
     def __init__(self, dataspec: DataSpec):
         """
@@ -34,8 +98,11 @@ class GraphClsDataset(Dataset, ABC):
         self.dataspec: DataSpec = dataspec
 
         self.graphs: List[Data] = list()
-
-        edge_index, node_to_graph_ind, node_labels_in_once, y = self._read_file()
+        
+        path = os.path.join("..", "data", self.dataset_name, self.processed_name)
+        if not os.path.exists(path):
+            self._read_raw_file()
+        edge_index, node_to_graph_ind, node_labels_in_once, y = self._get_processed_files()
 
         # all negative labels might be either of 0 or -1 so label all of them to 0
         y = (y == 1).long()
