@@ -33,7 +33,9 @@ class Entrypoint(GNNExplainerEntrypoint):
             coff_edge_size=0.0,
             sparsity=0.0,
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
-            coff_node_feat_size=0.0)
+            coff_node_feat_size=0.0,
+            plt_legend=None,
+            node_color_setter=None)
         
         model = GIN_3l(model_level='graph', dim_node=1, dim_hidden=60, num_classes=conf.num_classes)
         model.to(conf.device)

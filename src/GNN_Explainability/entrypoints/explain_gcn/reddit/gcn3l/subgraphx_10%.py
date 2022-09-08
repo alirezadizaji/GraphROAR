@@ -27,7 +27,9 @@ class Entrypoint(SubgraphXEntrypoint):
             explain_graph=True,
             reward_method='mc_shapley',
             get_max_nodes=(lambda data: int(data.x.size(0) * 0.1) + 1),
-            n_rollout=10
+            n_rollout=10,
+            plt_legend=None,
+            node_color_setter=None,
         )
 
         model = GCN_3l_BN(model_level='graph', dim_node=1, dim_hidden=60, num_classes=2)

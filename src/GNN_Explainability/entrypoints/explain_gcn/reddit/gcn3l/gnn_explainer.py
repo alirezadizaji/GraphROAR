@@ -30,6 +30,8 @@ class Entrypoint(GNNExplainerEntrypoint):
             mask_features=True,
             coff_edge_size=0.0,
             sparsity=0.0,
+            plt_legend=None,
+            node_color_setter=None,
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             coff_node_feat_size=0.0)
         

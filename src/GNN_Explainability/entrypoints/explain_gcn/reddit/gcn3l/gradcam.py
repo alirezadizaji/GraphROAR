@@ -28,6 +28,8 @@ class Entrypoint(GradCAMEntrypoint):
             num_instances_to_visualize=20,
             sparsity=0.0,
             explain_graph=True,
+            plt_legend=None,
+            node_color_setter=None,
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
         )
         

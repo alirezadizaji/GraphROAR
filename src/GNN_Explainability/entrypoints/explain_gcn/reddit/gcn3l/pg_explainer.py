@@ -25,6 +25,8 @@ class Entrypoint(PGExplainerEntrypoint):
             num_instances_to_visualize=20,
             sparsity=0.0,
             explain_graph=True,
+            plt_legend=None,
+            node_color_setter=None,
         )
 
         model = GCN_3l_BN(model_level='graph', dim_node=1, dim_hidden=60, num_classes=2)

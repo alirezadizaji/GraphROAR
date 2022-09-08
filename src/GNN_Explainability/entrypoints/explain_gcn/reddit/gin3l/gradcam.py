@@ -29,7 +29,8 @@ class Entrypoint(GradCAMEntrypoint):
             sparsity=0.0,
             explain_graph=True,
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
-        )
+            plt_legend=None,
+            node_color_setter=None)
         
         model = GIN_3l(model_level='graph', dim_node=1, dim_hidden=60, num_classes=conf.num_classes)
         model.to(conf.device)
