@@ -26,7 +26,8 @@ class Entrypoint(PGExplainerEntrypoint):
             sparsity=0.0,
             explain_graph=True,
             plt_legend=None,
-            node_color_setter=None)
+            node_color_setter=None,
+            explainer_load_dir='../results/191_pgexplainer_REDDIT-BINARY/weights/model.pt')
 
         model = GIN_3l(model_level='graph', dim_node=1, dim_hidden=60, num_classes=conf.num_classes)
         model.to(conf.device)
@@ -40,3 +41,9 @@ class Entrypoint(PGExplainerEntrypoint):
                 sample_bias=conf.sample_bias)
         
         super(Entrypoint, self).__init__(conf, model, explainer)
+    
+    def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        k = int(edge_mask.numel() * 0.5)
+        edge_index = edge_index[:, edge_mask.topk(k)[1]]
+
+        return edge_index

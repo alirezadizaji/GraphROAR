@@ -40,3 +40,9 @@ class Entrypoint(GradCAMEntrypoint):
         explainer = GradCAM(model, explain_graph=conf.explain_graph)
 
         super(Entrypoint, self).__init__(conf, model, explainer)
+    
+    def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        k = int(edge_mask.numel() * 0.5)
+        edge_index = edge_index[:, edge_mask.topk(k)[1]]
+
+        return edge_index
