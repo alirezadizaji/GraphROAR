@@ -8,6 +8,7 @@ import torch
 from ...main import MainEntrypoint
 from .....utils.decorators.func_counter import counter
 from .....utils.visualization import visualization
+from .....utils.symmetric_edge_mask import symmetric_edges 
 
 if TYPE_CHECKING:
     from .....config import ExplainConfig
@@ -21,6 +22,7 @@ class ExplainerEntrypoint(MainEntrypoint, ABC):
 
     
     def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        edge_mask = symmetric_edges(edge_index, edge_mask)
         edge_index = edge_index[:, edge_mask >= 0.5]
         return edge_index
 
