@@ -1,4 +1,4 @@
-from .base_dataset import GraphClsDataset
+from .graph_cls_dataset import GraphClsDataset
 from ..enums import Dataset
 
 

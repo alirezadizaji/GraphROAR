@@ -44,5 +44,6 @@ class InstanceX(ExplainerEntrypoint, Generic[TExp], ABC):
                     save_dir = os.path.join(self.conf.edge_mask_save_dir, f"{data.name[0]}.npy")
                     np.save(save_dir, edge_mask.cpu().numpy())
                 
-                self.visualize_sample(data, edge_mask)
+                if loader.dataset.take_for_visualization(data.name[0]):
+                    self.visualize_sample(data, edge_mask)
                 

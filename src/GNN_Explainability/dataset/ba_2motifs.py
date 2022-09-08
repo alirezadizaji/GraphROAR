@@ -1,13 +1,13 @@
 from typing import Dict, List
 
 import torch
-from torch.utils.data import Dataset
 from torch_geometric.data import Data
 
+from .base_dataset import BaseDataset
 from ..enums.data_spec import DataSpec
 
 
-class BA2MotifsDataset(Dataset):
+class BA2MotifsDataset(BaseDataset):
     def __init__(self, dataspec: DataSpec):
         """
         Args:
