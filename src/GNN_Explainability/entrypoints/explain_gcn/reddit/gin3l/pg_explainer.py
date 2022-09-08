@@ -4,7 +4,6 @@ from dig.xgraph.method import PGExplainer
 from dig.xgraph.models import *
 import torch
 
-from .gnn_explainer import color_setter, legend
 from .....config import PGExplainerConfig, TrainingConfig
 from .....enums import *
 from ....core import PGExplainerEntrypoint
@@ -18,7 +17,7 @@ class Entrypoint(PGExplainerEntrypoint):
             dataset_name=Dataset.REDDIT_BINARY,
             device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
-            training_config=TrainingConfig(30, OptimType.ADAM, lr=3e-3, batch_size=1),
+            training_config=TrainingConfig(15, OptimType.ADAM, lr=3e-3, batch_size=1),
             num_classes=2,
             save_visualization=True,
             visualize_explainer_perf=True,

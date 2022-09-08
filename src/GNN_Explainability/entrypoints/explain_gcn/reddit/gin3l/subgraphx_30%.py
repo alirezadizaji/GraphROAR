@@ -3,7 +3,6 @@ import os
 from dig.xgraph.models import *
 import torch
 
-from .gnn_explainer import color_setter, legend
 from .....config import SubgraphXConfig, TrainingConfig
 from .....entrypoints.core.explanation.subgraphx import SubgraphXEntrypoint
 

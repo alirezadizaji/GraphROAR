@@ -10,7 +10,6 @@ from torch_geometric.utils import remove_self_loops
 
 from ....enums import *
 from ...core.explanation.core.main import ExplainerEntrypoint
-from .utils import compatible_edge_mask
 
 if TYPE_CHECKING:
     from ....config import PGExplainerConfig
@@ -71,7 +70,9 @@ class PGExplainerEntrypoint(ExplainerEntrypoint):
                 edge_mask_new = torch.full((data.edge_index.size(1), ), fill_value=-torch.inf, dtype=torch.float32)
                 edge_mask_new = edge_mask_new.to(edge_mask.device)
                 edge_mask_new[mask] = edge_mask
-                self.visualize_sample(data, edge_mask_new)
+    
+                if loader.dataset.take_for_visualization(data.name[0]):
+                    self.visualize_sample(data, edge_mask_new)
 
                 edge_mask_new[~mask] = 1.0
                 if conf.edge_mask_save_dir is not None:
