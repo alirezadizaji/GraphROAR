@@ -28,7 +28,7 @@ class Entrypoint(PGExplainerEntrypoint):
             explain_graph=True,
             plt_legend=None,
             node_color_setter=None,
-        )
+            explainer_load_dir='../results/183_pgexplainer_REDDIT-BINARY/weights/model.pt')        
 
         model = GCN_3l_BN(model_level='graph', dim_node=1, dim_hidden=60, num_classes=2)
         model.to(conf.device)
