@@ -1,12 +1,14 @@
 from dataclasses import dataclass
 import os
-from typing import Callable, List, Optional, Tuple
+from typing import Callable, List, Tuple
 from typing_extensions import Protocol
 
 import numpy as np
 import torch
 from torch import nn
 from torch_geometric.data import Batch
+
+from .symmetric_edge_mask import symmetric_edges
 
 
 class EdgeEliminatorInitializer(Protocol):
@@ -44,11 +46,7 @@ def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool,
 
             edge_mask = edge_index.new_tensor(edge_mask, dtype=torch.float)
             if symmetric:
-                num_nodes = edge_index.unique().numel()
-                edge_mask_asym = torch.sparse_coo_tensor(edge_index, 
-                        edge_mask, (num_nodes, num_nodes)).to_dense()
-                edge_mask_sym = (edge_mask_asym + edge_mask_asym.T) / 2
-                edge_mask = edge_mask_sym[edge_index[0], edge_index[1]]
+                edge_mask = symmetric_edges(edge_index, edge_mask)
         
             k = int(edge_mask.numel() * ratio)
             if symmetric and k % 2 == 1:

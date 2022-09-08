@@ -4,6 +4,7 @@ from dig.xgraph.method import PGExplainer
 from dig.xgraph.models import *
 import torch
 
+from .....utils.symmetric_edge_mask import symmetric_edges
 from .....config import PGExplainerConfig, TrainingConfig
 from .....enums import *
 from ....core import PGExplainerEntrypoint
@@ -43,6 +44,7 @@ class Entrypoint(PGExplainerEntrypoint):
         super(Entrypoint, self).__init__(conf, model, explainer)
     
     def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        edge_mask = symmetric_edges(edge_index, edge_mask)
         k = int(edge_mask.numel() * 0.5)
         edge_index = edge_index[:, edge_mask.topk(k)[1]]
 
