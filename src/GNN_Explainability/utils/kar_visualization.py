@@ -66,13 +66,13 @@ if __name__ == "__main__":
     pgexplainer = [50, 63.5, 80, 82, 93, 94, 90.5]
 
     # REDDIT-BINARY GIN3l (skipped during evaluation)
-    gnnexplainer = [50, 88, 88.5, 86, 84, 93, 90.5]
-    gradcam = [50, 89, 91, 91.5, 91.5, 92.5, 90.5]
-    random = [50, 71, 83, 91, 93, 93.5, 90.5]
+    gnnexplainer = [50, 50, 56, 69, 73.5, 86, 90.5]
+    gradcam = [50, 50, 54.5, 71, 79, 85, 90.5]
+    random = [50, 50, 55, 68, 72, 91, 90.5]
     # subgraphx = [69, 65, 70, 75, 75, 80, 90.5]
-    pgexplainer = [50, 63.5, 80, 82, 93, 94, 90.5]
+    pgexplainer = [50, 50, 67.5, 70, 72, 75.5, 90.5]
 
-    plt.title('KAR performance on REDDIT-GIN3l')
+    plt.title('KAR performance on REDDIT-GIN3l (not applied in evaluation)')
     plt.xlabel("Edge Keep (KAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)
