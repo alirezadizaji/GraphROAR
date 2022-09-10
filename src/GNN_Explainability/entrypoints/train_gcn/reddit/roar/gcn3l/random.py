@@ -15,10 +15,10 @@ class Entrypoint(ROAREntrypoint):
             try_num=212,
             try_name='roar_random_gcn3l',
             dataset_name=Dataset.REDDIT_BINARY,
-            training_config=TrainingConfig(500, OptimType.ADAM, batch_size=32, early_stop=100),
-            device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
+            training_config=TrainingConfig(500, OptimType.ADAM, batch_size=256, early_stop=100),
+            device=torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
-            edge_masks_load_dir=os.path.join('..', 'data', Dataset.REDDIT_BINARY, 'explanation', 'gcn3l', 'random'),
+            edge_masks_load_dir=os.path.join('..', 'data', Dataset.REDDIT_BINARY, 'explanation', 'gcn3l', 'random2'),
             edge_mask_random_weighting=True, # random roar
             roar_ratios=[0.1, 0.3, 0.5, 0.7, 0.9],
         )
