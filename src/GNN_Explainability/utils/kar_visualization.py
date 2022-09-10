@@ -45,34 +45,34 @@ if __name__ == "__main__":
     # pgexplainer = [65, 70, 80, 80, 80, 80, 100]
 
     # REDDIT-BINARY GCN3l
-    # gnnexplainer = [69, 82, 84, 90.5, 90, 93, 95]
-    # gradcam = [69, 88, 90, 95, 94.5, 94, 95]
-    # random = [69, 71, 80.5, 85.5, 90.5, 94.5, 95]
-    # # subgraphx = [69, 65, 70, 75, 75, 80, 95]
-    # pgexplainer = [69, 74.5, 72, 83, 85, 92, 95]
+    gnnexplainer = [69, 82, 84, 90.5, 90, 93, 95]
+    gradcam = [69, 88, 90, 95, 94.5, 94, 95]
+    random = [69, 70.5, 80.25, 83.5, 90.25, 93.75, 95]
+    # subgraphx = [69, 65, 70, 75, 75, 80, 95]
+    pgexplainer = [69, 74.5, 72, 83, 85, 92, 95]
 
     # REDDIT-BINARY GCN3l (skipped during evaluation)
-    gnnexplainer = [69, 68.5, 58, 65, 85.5, 93, 95]
-    gradcam = [69, 71, 70, 71.5, 83.5, 91, 95]
-    random = [69, 71, 80.5, 85.5, 90.5, 94.5, 95]
-    # subgraphx = [69, 65, 70, 75, 75, 80, 95]
-    pgexplainer = [69, 71.5, 69, 72.5, 70, 92.5, 95]
+    # gnnexplainer = [69, 68.5, 58, 65, 85.5, 93, 95]
+    # gradcam = [69, 71, 70, 71.5, 83.5, 91, 95]
+    # random = [69, 69.75, 64.5, 76.5, 83.25, 92.5, 95]
+    # # subgraphx = [69, 65, 70, 75, 75, 80, 95]
+    # pgexplainer = [69, 71.5, 69, 72.5, 70, 92.5, 95]
     
     # REDDIT-BINARY GIN3l
-    gnnexplainer = [50, 88, 88.5, 86, 84, 93, 90.5]
-    gradcam = [50, 89, 91, 91.5, 91.5, 92.5, 90.5]
-    random = [50, 71, 83, 91, 93, 93.5, 90.5]
-    # subgraphx = [69, 65, 70, 75, 75, 80, 90.5]
-    pgexplainer = [50, 63.5, 80, 82, 93, 94, 90.5]
+    # gnnexplainer = [50, 88, 88.5, 86, 84, 93, 90.5]
+    # gradcam = [50, 89, 91, 91.5, 91.5, 92.5, 90.5]
+    # random = [50, 70.5, 77.75, 91.5, 93.25, 94.25, 90.5]
+    # # subgraphx = [69, 65, 70, 75, 75, 80, 90.5]
+    # pgexplainer = [50, 63.5, 80, 82, 93, 94, 90.5]
 
     # REDDIT-BINARY GIN3l (skipped during evaluation)
-    gnnexplainer = [50, 50, 56, 69, 73.5, 86, 90.5]
-    gradcam = [50, 50, 54.5, 71, 79, 85, 90.5]
-    random = [50, 50, 55, 68, 72, 91, 90.5]
-    # subgraphx = [69, 65, 70, 75, 75, 80, 90.5]
-    pgexplainer = [50, 50, 67.5, 70, 72, 75.5, 90.5]
+    # gnnexplainer = [50, 50, 56, 69, 73.5, 86, 90.5]
+    # gradcam = [50, 50, 54.5, 71, 79, 85, 90.5]
+    # random = [50, 50, 54.25, 65.75, 71.5, 81.5, 90.5]
+    # # subgraphx = [69, 65, 70, 75, 75, 80, 90.5]
+    # pgexplainer = [50, 50, 67.5, 70, 72, 75.5, 90.5]
 
-    plt.title('KAR performance on REDDIT-GIN3l (not applied in evaluation)')
+    plt.title('KAR performance on REDDIT-GCN3l')
     plt.xlabel("Edge Keep (KAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)
