@@ -15,6 +15,7 @@ from .....entrypoints.core import GradCAMEntrypoint
 
 from .....config import ExplainConfig
 from .....enums import *
+from .....utils.symmetric_edge_mask import symmetric_edges
 
 
 class Entrypoint(GradCAMEntrypoint):

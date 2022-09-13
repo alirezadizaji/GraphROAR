@@ -8,6 +8,7 @@ import torch
 from .....config import PGExplainerConfig, TrainingConfig
 from .....enums import *
 from ....core import PGExplainerEntrypoint
+from .....utils.symmetric_edge_mask import symmetric_edges
 
 
 class Entrypoint(PGExplainerEntrypoint):
