@@ -34,7 +34,7 @@ class Entrypoint(SubgraphXEntrypoint):
             n_rollout=10,
         )
 
-        model = GIN_3l(model_level='graph', dim_node=1, dim_hidden=20, num_classes=2)
+        model = GIN_3l(model_level='graph', dim_node=1, dim_hidden=20, num_classes=3)
         model.load_state_dict(torch.load('../results/230_gin3l_BA3Motifs/weights/89', map_location=conf.device))
 
         # explainer will be initiated during explaining an instance
