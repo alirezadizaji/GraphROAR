@@ -104,8 +104,10 @@ class GraphClsDataset(BaseDataset):
             self._read_raw_file()
         edge_index, node_to_graph_ind, node_labels_in_once, y = self._get_processed_files()
 
-        # all negative labels might be either of 0 or -1 so label all of them to 0
-        y = (y == 1).long()
+        # order labels
+        unique_labels = torch.sort(torch.unique(y))[0]
+        for i, label in enumerate(unique_labels.cpu().numpy()):
+            y[y == label] = i
 
         num_unique_nodes = torch.unique(node_labels_in_once).numel()
         src = edge_index[0]
