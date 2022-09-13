@@ -20,26 +20,26 @@ from .....enums import *
 class Entrypoint(GradCAMEntrypoint):
     def __init__(self):
         conf = ExplainConfig(
-            try_num=4,
+            try_num=240,
             try_name='gradcam',
-            dataset_name=Dataset.BA2Motifs,
+            dataset_name=Dataset.BA3Motifs,
             training_config=TrainingConfig(300, OptimType.ADAM),
-            save_log_in_file=False,
-            num_classes=2,
-            save_visualization=False,
-            visualize_explainer_perf=False,
-            edge_mask_save_dir=os.path.join('..', 'data', 'ba_2motifs', 'explanation', 'gradcam'),
-            num_instances_to_visualize=10,
+            save_log_in_file=True,
+            num_classes=3,
+            save_visualization=True,
+            visualize_explainer_perf=True,
+            edge_mask_save_dir=os.path.join('..', 'data', Dataset.BA3Motifs, 'explanation', 'gin3l', 'gradcam'),
+            num_instances_to_visualize=20,
             sparsity=0.0,
-node_color_setter=None,
-plt_legend=None,
+            node_color_setter=None,
+            plt_legend=None,
             explain_graph=True,
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
         )
         
-        model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)
+        model = GIN_3l(model_level='graph', dim_node=1, dim_hidden=20, num_classes=3)
         model.to(conf.device)
-        model.load_state_dict(torch.load('../checkpoints/ba2motifs_gin_3l.pt', map_location=conf.device))
+        model.load_state_dict(torch.load('../results/230_gin3l_BA3Motifs/weights/89', map_location=conf.device))
 
         explainer = GradCAM(model, explain_graph=conf.explain_graph)
 

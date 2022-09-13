@@ -25,7 +25,7 @@ class Entrypoint(GradCAMEntrypoint):
             dataset_name=Dataset.BA3Motifs,
             training_config=TrainingConfig(300, OptimType.ADAM),
             save_log_in_file=True,
-            num_classes=2,
+            num_classes=3,
             save_visualization=True,
             visualize_explainer_perf=True,
             edge_mask_save_dir=os.path.join('..', 'data', Dataset.BA3Motifs, 'explanation', 'gcn3l', 'gradcam'),
@@ -37,9 +37,9 @@ class Entrypoint(GradCAMEntrypoint):
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
         )
         
-        model = GCN_3l_BN(model_level='graph', dim_node=10, dim_hidden=20, num_classes=3)
+        model = GCN_3l_BN(model_level='graph', dim_node=1, dim_hidden=20, num_classes=3)
         model.to(conf.device)
-        model.load_state_dict(torch.load('../results/1_gcn3l_BA2Motifs/weights/16', map_location=conf.device))
+        model.load_state_dict(torch.load('../results/229_gcn3l_BA3Motifs/weights/61', map_location=conf.device))
 
         explainer = GradCAM(model, explain_graph=conf.explain_graph)
 

@@ -39,9 +39,9 @@ class Entrypoint(GNNExplainerEntrypoint):
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             coff_node_feat_size=0.0)
         
-        model = GCN_3l_BN(model_level='graph', dim_node=10, dim_hidden=20, num_classes=conf.num_classes)
+        model = GCN_3l_BN(model_level='graph', dim_node=1, dim_hidden=20, num_classes=conf.num_classes)
         model.to(conf.device)
-        model.load_state_dict(torch.load('../results/1_gcn3l_BA2Motifs/weights/16', map_location=conf.device))
+        model.load_state_dict(torch.load('../results/229_gcn3l_BA3Motifs/weights/61', map_location=conf.device))
         
         explainer = GNNExplainer(model, epochs=conf.training_config.num_epochs,
                  lr=conf.training_config.lr, explain_graph=conf.explain_graph, 
