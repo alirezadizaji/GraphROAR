@@ -17,7 +17,7 @@ class Entrypoint(ROAREntrypoint):
             dataset_name=Dataset.BA3Motifs,
             training_config=TrainingConfig(100, OptimType.ADAM),
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
-            save_log_in_file=False,
+            save_log_in_file=True,
             edge_masks_load_dir=f'../data/{Dataset.BA3Motifs}/explanation/gin3l/gnnexplainer',
             eliminate_top_most_edges=False,
             roar_ratios=[0.1, 0.3, 0.5, 0.7, 0.9],
