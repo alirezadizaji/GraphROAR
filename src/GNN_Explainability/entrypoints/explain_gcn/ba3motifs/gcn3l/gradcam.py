@@ -15,6 +15,7 @@ from .....entrypoints.core import GradCAMEntrypoint
 
 from .....config import ExplainConfig
 from .....enums import *
+from .....utils.symmetric_edge_mask import symmetric_edges
 
 
 class Entrypoint(GradCAMEntrypoint):
@@ -44,3 +45,10 @@ class Entrypoint(GradCAMEntrypoint):
         explainer = GradCAM(model, explain_graph=conf.explain_graph)
 
         super(Entrypoint, self).__init__(conf, model, explainer)
+    
+    def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        edge_mask = symmetric_edges(edge_index, edge_mask)
+        k = 12
+        edge_index = edge_index[:, edge_mask.topk(k)[1]]
+
+        return edge_index

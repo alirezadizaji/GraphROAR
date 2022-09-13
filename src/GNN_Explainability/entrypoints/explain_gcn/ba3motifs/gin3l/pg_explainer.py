@@ -41,3 +41,10 @@ class Entrypoint(PGExplainerEntrypoint):
                 sample_bias=conf.sample_bias)
         
         super(Entrypoint, self).__init__(conf, model, explainer)
+
+    def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        edge_mask = symmetric_edges(edge_index, edge_mask)
+        k = 12
+        edge_index = edge_index[:, edge_mask.topk(k)[1]]
+
+        return edge_index

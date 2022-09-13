@@ -15,6 +15,7 @@ from .....entrypoints.core import GNNExplainerEntrypoint
 
 from .....config import GNNExplainerConfig
 from .....enums import *
+from .....utils.symmetric_edge_mask import symmetric_edges
 
 
 class Entrypoint(GNNExplainerEntrypoint):
@@ -23,7 +24,7 @@ class Entrypoint(GNNExplainerEntrypoint):
             try_num=231,
             try_name='gnnexplainer_gcn3l',
             dataset_name=Dataset.BA3Motifs,
-            training_config=TrainingConfig(300, OptimType.ADAM, 0.01, batch_size=1),
+            training_config=TrainingConfig(500, OptimType.ADAM, 0.01, batch_size=1),
             save_log_in_file=True,
             num_classes=3,
             save_visualization=True,
@@ -48,3 +49,10 @@ class Entrypoint(GNNExplainerEntrypoint):
                  coff_edge_size=conf.coff_edge_size, coff_node_feat_size=conf.coff_node_feat_size)
 
         super().__init__(conf, model, explainer)
+    
+    def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        edge_mask = symmetric_edges(edge_index, edge_mask)
+        k = 12
+        edge_index = edge_index[:, edge_mask.topk(k)[1]]
+
+        return edge_index

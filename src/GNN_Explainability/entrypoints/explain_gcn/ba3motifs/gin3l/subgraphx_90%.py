@@ -31,7 +31,7 @@ class Entrypoint(SubgraphXEntrypoint):
             explain_graph=True,
             reward_method='mc_shapley',
             get_max_nodes=(lambda data: int(data.edge_index.size(1)/2 * 0.9) + 1),
-            n_rollout=20,
+            n_rollout=10,
         )
 
         model = GIN_3l(model_level='graph', dim_node=1, dim_hidden=20, num_classes=3)
@@ -40,3 +40,10 @@ class Entrypoint(SubgraphXEntrypoint):
         # explainer will be initiated during explaining an instance
         explainer = None
         super().__init__(conf, model, explainer)
+
+    def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        edge_mask = symmetric_edges(edge_index, edge_mask)
+        k = 12
+        edge_index = edge_index[:, edge_mask.topk(k)[1]]
+
+        return edge_index

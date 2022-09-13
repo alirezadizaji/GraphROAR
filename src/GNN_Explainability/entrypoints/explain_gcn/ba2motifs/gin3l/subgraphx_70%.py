@@ -31,7 +31,7 @@ class Entrypoint(SubgraphXEntrypoint):
             explain_graph=True,
             reward_method='mc_shapley',
             get_max_nodes=(lambda data: int(data.edge_index.size(1)/2 * 0.7) + 1),
-            n_rollout=10
+            n_rollout=10,
         )
 
         model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)

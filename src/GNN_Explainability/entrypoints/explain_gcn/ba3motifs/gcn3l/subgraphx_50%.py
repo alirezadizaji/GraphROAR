@@ -9,6 +9,7 @@ from .....config import SubgraphXConfig, TrainingConfig
 from .....entrypoints.core.explanation.subgraphx import SubgraphXEntrypoint
 
 from .....enums import *
+from .....utils.symmetric_edge_mask import symmetric_edges
 
 
 class Entrypoint(SubgraphXEntrypoint):
@@ -18,7 +19,7 @@ class Entrypoint(SubgraphXEntrypoint):
             try_name='subgraphx_gcn3l',
             dataset_name=Dataset.BA3Motifs,
             training_config=TrainingConfig(100, OptimType.ADAM, batch_size=1),
-            device=torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
+            device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
             num_classes=3,
             save_visualization=True,
@@ -31,7 +32,7 @@ class Entrypoint(SubgraphXEntrypoint):
             explain_graph=True,
             reward_method='mc_shapley',
             get_max_nodes=(lambda data: int(data.edge_index.size(1)/2 * 0.5) + 1),
-            n_rollout=20,
+            n_rollout=10,
         )
 
         model = GCN_3l_BN(model_level='graph', dim_node=1, dim_hidden=20, num_classes=3)
@@ -40,3 +41,10 @@ class Entrypoint(SubgraphXEntrypoint):
         # explainer will be initiated during explaining an instance
         explainer = None
         super().__init__(conf, model, explainer)
+
+    def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        edge_mask = symmetric_edges(edge_index, edge_mask)
+        k = 12
+        edge_index = edge_index[:, edge_mask.topk(k)[1]]
+
+        return edge_index
