@@ -54,11 +54,17 @@ class GraphClsDataset(BaseDataset):
                 .squeeze()
                 .long())
 
-        path_4 = os.path.join(base_path, raw_folder_name, f"{datasetname}_node_labels.txt") 
-        if os.path.exists(path_4):
-            node_labels_in_once = (torch.from_numpy(np.loadtxt(path_4, delimiter=','))
-                    .squeeze()
-                    .long())
+        node_attr_path = os.path.join(base_path, raw_folder_name, f"{datasetname}_node_attributes.txt") 
+        if os.path.exists(node_attr_path):
+            node_attrs = (torch.from_numpy(np.loadtxt(node_attr_path, delimiter=','))
+                    .squeeze())
+        else:
+            node_attrs = None
+
+        node_label_path = os.path.join(base_path, raw_folder_name, f"{datasetname}_node_labels.txt") 
+        if os.path.exists(node_label_path):
+            node_labels_in_once = (torch.from_numpy(np.loadtxt(node_label_path, delimiter=','))
+                    .squeeze())
         else:
             # All nodes are unique and therefore have identical features
             node_labels_in_once = torch.zeros_like(node_to_graph_ind)
@@ -66,6 +72,8 @@ class GraphClsDataset(BaseDataset):
         processed_name = self.processed_name
         os.makedirs(os.path.join(base_path, processed_name), exist_ok=True)
         # save processed files
+        if node_attrs is not None:
+            torch.save(node_attrs, os.path.join(base_path, processed_name, 'node_attr.pt'))
         torch.save(edge_index, os.path.join(base_path, processed_name, 'edge_index.pt'))
         torch.save(node_to_graph_ind, os.path.join(base_path, processed_name, 'node_to_graph_ind.pt'))
         torch.save(node_labels_in_once, os.path.join(base_path, processed_name, 'node_labels_in_once.pt'))
@@ -82,12 +90,17 @@ class GraphClsDataset(BaseDataset):
         processed_name = self.processed_name
         base_path = os.path.join("..", "data", self.dataset_name)
         
+        node_attr_path = os.path.join(base_path, processed_name, 'node_attr.pt')
+        if os.path.exists(node_attr_path):
+            node_attrs = torch.load(node_attr_path)
+        else:
+            node_attrs = None
         edge_index = torch.load(os.path.join(base_path, processed_name, 'edge_index.pt'))
         node_to_graph_ind = torch.load(os.path.join(base_path, processed_name, 'node_to_graph_ind.pt'))
         node_labels_in_once = torch.load(os.path.join(base_path, processed_name, 'node_labels_in_once.pt'))
         y = torch.load(os.path.join(base_path, processed_name, 'y.pt'))
 
-        return edge_index, node_to_graph_ind, node_labels_in_once, y
+        return edge_index, node_to_graph_ind, node_attrs, node_labels_in_once, y
 
 
     def __init__(self, dataspec: DataSpec):
@@ -102,7 +115,7 @@ class GraphClsDataset(BaseDataset):
         path = os.path.join("..", "data", self.dataset_name, self.processed_name)
         if not os.path.exists(path):
             self._read_raw_file()
-        edge_index, node_to_graph_ind, node_labels_in_once, y = self._get_processed_files()
+        edge_index, node_to_graph_ind, node_attrs, node_labels_in_once, y = self._get_processed_files()
 
         # order labels
         unique_labels = torch.sort(torch.unique(y))[0]
@@ -133,8 +146,14 @@ class GraphClsDataset(BaseDataset):
             nodes_mapping[nodes_index] = new_nodes_index
             es = nodes_mapping[es.flatten()].view(2, -1)
 
-            x = torch.zeros(num_nodes, num_unique_nodes)
-            x[new_nodes_index, node_labels_in_once[nodes_index]] = 1
+            # set attributes of nodes
+            if node_attrs is not None:
+                x = node_attrs[nodes_index]
+            else:
+                x = torch.zeros(num_nodes, num_unique_nodes)
+                x[new_nodes_index, node_labels_in_once[nodes_index]] = 1
+            x = x.float()
+
             graph = Data(x=x, edge_index=es, y=y[i])
             graph.name = str(i)
             self.graphs.append(graph)

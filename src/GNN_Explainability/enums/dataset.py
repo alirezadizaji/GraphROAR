@@ -3,3 +3,4 @@ class Dataset:
     MUTAG = "MUTAG"
     REDDIT_BINARY = "REDDIT-BINARY"
     BA3Motifs = "BA3Motifs"
+    ENZYME = "ENZYMES"
