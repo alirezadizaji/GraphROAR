@@ -17,6 +17,6 @@ class Entrypoint(TrainEntrypoint):
             save_log_in_file=True,
         )
         
-        model = GIN_3l(model_level='graph', dim_node=18, dim_hidden=60, num_classes=6)
+        model = GIN_3l(model_level='graph', dim_node=18, dim_hidden=80, num_classes=6)
                 
         super(Entrypoint, self).__init__(conf, model)
