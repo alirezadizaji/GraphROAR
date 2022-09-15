@@ -70,16 +70,19 @@ def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool,
             
             # If true then eliminate nodes whose connected edges are totally eliminated.
             if eliminate_node:
-                B = g.x.size(0)
-                node_indices, _ = torch.sort(torch.unique(edge_index), descending=False)
-                indices_to_indices = {k: v for k, v in 
-                        zip(node_indices.cpu().numpy(), range(B))
-                }
-                node_mask = torch.zeros(B).bool()
-                remained: torch.Tensor = torch.unique(masked_edges)
-                real_indices = list(map(lambda k: indices_to_indices[k.item()], remained))
-                node_mask[real_indices] = True
-                g.x = g.x[node_mask]
+                # If all edges are removed, then (just to enable training) instead of node eliminating, make all of them the same
+                if masked_edges.numel() == 0:
+                    g.x = torch.zeros_like(g.x)
+                else:
+                    B = g.x.size(0)
+                    node_indices, _ = torch.sort(torch.unique(edge_index), descending=False)
+                    indices_to_indices = {k: v for k, v in 
+                            zip(node_indices.cpu().numpy(), range(B))}
+                    node_mask = torch.zeros(B).bool()
+                    remained: torch.Tensor = torch.unique(masked_edges)
+                    real_indices = list(map(lambda k: indices_to_indices[k.item()], remained))
+                    node_mask[real_indices] = True
+                    g.x = g.x[node_mask]
 
             g.edge_index = masked_edges
 
