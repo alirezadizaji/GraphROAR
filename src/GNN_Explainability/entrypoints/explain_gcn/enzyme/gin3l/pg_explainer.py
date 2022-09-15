@@ -35,7 +35,7 @@ class Entrypoint(PGExplainerEntrypoint):
         model.to(conf.device)
         model.load_state_dict(torch.load('../results/284_gin3l_ENZYMES/weights/404', map_location=conf.device))
  
-        explainer = PGExplainer(model, in_channels=120, 
+        explainer = PGExplainer(model, in_channels=160, 
                 device=conf.device, explain_graph=conf.explain_graph,
                 epochs=conf.training_config.num_epochs, 
                 lr=conf.training_config.lr, coff_size=conf.coff_size,
