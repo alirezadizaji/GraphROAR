@@ -24,6 +24,11 @@ def global_seed(seed: int):
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
 
+def run_main(entrypoint: 'MainEntrypoint') -> None:
+    print(f"%%% RUNNING SEED {Constants.GLOBAL_SEED} %%%", flush=True)
+    print(f"********** CONFIG ***************\n{entrypoint.conf}\n*************", flush=True)
+    entrypoint.run()
+
 if __name__ == "__main__":
     # seeds for running
     # BA-2Motifs: 12345
@@ -37,7 +42,6 @@ if __name__ == "__main__":
     entrypoint: 'MainEntrypoint' = getattr(script, 'Entrypoint')()
 
     if entrypoint.conf.save_log_in_file:
-        entrypoint.run = stdout_stderr_setter(entrypoint.conf.save_dir)(entrypoint.run)
+        run_main = stdout_stderr_setter(entrypoint.conf.save_dir)(run_main)
+    run_main(entrypoint)
 
-    print(f"%%% RUNNING SEED {Constants.GLOBAL_SEED} %%%", flush=True)
-    entrypoint.run()

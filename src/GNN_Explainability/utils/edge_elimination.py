@@ -85,8 +85,10 @@ def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool,
                     node_indices, _ = torch.sort(torch.unique(masked_edges))
                     mapping = torch.full((node_indices.max().item() + 1,), fill_value=torch.inf)
                     mapping[node_indices] = torch.arange(node_indices.numel()).float()
+                    
                     masked_edges = torch.stack([mapping[row], mapping[col]], dim=0).long()
-
+                    masked_edges = masked_edges.to(g.edge_index.device)
+                    
             g.edge_index = masked_edges
 
 
