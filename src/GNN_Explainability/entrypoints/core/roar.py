@@ -62,7 +62,8 @@ class ROAREntrypoint(TrainEntrypoint):
                     EdgeEliminatorArgs(conf.edge_masks_load_dir,
                         self.roar_ratio,
                         conf.edge_mask_symmetric,
-                        conf.eliminate_top_most_edges),
+                        conf.eliminate_top_most_edges,
+                        conf.eliminate_nodes_too),
                     skip_during_eval=conf.skip_during_evaluation))
         
         yield None

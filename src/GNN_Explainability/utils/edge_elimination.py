@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import os
+from platform import node
 from typing import Callable, List, Tuple
 from typing_extensions import Protocol
 
@@ -21,6 +22,7 @@ class EdgeEliminatorArgs:
     ratio: float
     symmetric: bool = False
     eliminate_top_most: bool = True
+    eliminate_node: bool = False
 
     @property
     def item(self):
@@ -29,11 +31,12 @@ class EdgeEliminatorArgs:
             ratio=self.ratio,
             symmetric=self.symmetric,
             eliminate_top_most=self.eliminate_top_most,
+            eliminate_node=self.eliminate_node
         )
 
 
 def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool,
-        eliminate_top_most: bool) -> Callable[[Batch], Batch]:
+        eliminate_top_most: bool, eliminate_node: bool) -> Callable[[Batch], Batch]:
     
     def _edge_eliminator(data: Batch):
         graphs = data.to_data_list()
@@ -63,7 +66,23 @@ def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool,
                 mask = torch.zeros_like(edge_mask).bool()
                 mask[inds] = True
 
-            g.edge_index = edge_index[:, mask]
+            masked_edges = edge_index[:, mask] 
+            
+            # If true then eliminate nodes whose connected edges are totally eliminated.
+            if eliminate_node:
+                B = g.x.size(0)
+                node_indices, _ = torch.sort(torch.unique(edge_index), descending=False)
+                indices_to_indices = {k: v for k, v in 
+                        zip(node_indices.cpu().numpy(), range(B))
+                }
+                node_mask = torch.zeros(B).bool()
+                remained: torch.Tensor = torch.unique(masked_edges)
+                real_indices = list(map(lambda k: indices_to_indices[k.item()], remained))
+                node_mask[real_indices] = True
+                g.x = g.x[node_mask]
+
+            g.edge_index = masked_edges
+
 
         data: Batch = Batch.from_data_list(graphs)
         return data

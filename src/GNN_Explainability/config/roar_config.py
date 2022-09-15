@@ -21,4 +21,7 @@ class ROARConfig(BaseConfig):
     skip_during_evaluation: bool = False
     """ If True then skip ROAR during evaluation (validation and test phases), O.W. apply it on them too """
     
+    eliminate_nodes_too: bool = False
+    """ If True then eliminate nodes whose connected edges are eliminated totally. """
+    
     roar_ratios: List[float] = field(default_factory=list)

@@ -24,7 +24,8 @@ class Entrypoint(ROAREntrypoint):
             save_log_in_file=True,
             edge_masks_load_dir=f'../data/{Dataset.ENZYME}/explanation/gcn3l/subgraphx_30%',
             roar_ratios=[0.3],
-            eliminate_top_most_edges=False
+            eliminate_top_most_edges=False,
+            eliminate_nodes_too=True,
         )
 
         model = GCN_3l_BN(model_level='graph', dim_node=18, dim_hidden=60, num_classes=6)
