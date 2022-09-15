@@ -75,14 +75,17 @@ def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool,
                     g.x = torch.zeros_like(g.x)
                 else:
                     B = g.x.size(0)
-                    node_indices, _ = torch.sort(torch.unique(edge_index), descending=False)
-                    indices_to_indices = {k: v for k, v in 
-                            zip(node_indices.cpu().numpy(), range(B))}
                     node_mask = torch.zeros(B).bool()
                     remained: torch.Tensor = torch.unique(masked_edges)
-                    real_indices = list(map(lambda k: indices_to_indices[k.item()], remained))
-                    node_mask[real_indices] = True
+                    node_mask[remained] = True
                     g.x = g.x[node_mask]
+
+                    # let's nodes indices start from zero
+                    row, col = masked_edges
+                    node_indices, _ = torch.sort(torch.unique(masked_edges))
+                    mapping = torch.full((node_indices.max().item() + 1,), fill_value=torch.inf)
+                    mapping[node_indices] = torch.arange(node_indices.numel()).float()
+                    masked_edges = torch.stack([mapping[row], mapping[col]], dim=0).long()
 
             g.edge_index = masked_edges
 
