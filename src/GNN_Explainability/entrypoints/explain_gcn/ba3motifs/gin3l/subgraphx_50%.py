@@ -30,7 +30,7 @@ class Entrypoint(SubgraphXEntrypoint):
             plt_legend=None,
             explain_graph=True,
             reward_method='mc_shapley',
-            get_max_nodes=(lambda data: int(data.edge_index.size(1)/2 * 0.5) + 1),
+            get_max_nodes=(lambda data: int(data.x.size(0) * 0.5) + 1),
             n_rollout=10,
         )
 
