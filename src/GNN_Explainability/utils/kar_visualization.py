@@ -8,6 +8,13 @@ if __name__ == "__main__":
     # random = [50, 53, 51, 52, 58, 67, 100]
     # subgraphx = [50, 50, 50, 96, 100, 100, 100]
     # pgexplainer = [50, 65, 93, 100, 98, 100, 100]
+    
+    ## BA-2Motifs GIN3l (node elimination)
+    gnnexplainer = [50, 60, 61, 62, 76, 92, 100]
+    gradcam = [50, 97, 100, 100, 100, 100, 100]
+    random = [50, 50, 50, 50, 53, 65, 100]
+    subgraphx = [50, 76, 100, 99, 100, 100, 100]
+    pgexplainer = [50, 91, 99, 100, 100, 100, 100]
 
     ## BA-2Motifs GCN3l
     # gnnexplainer = [50, 50, 61, 68, 67, 81, 100]
@@ -15,6 +22,13 @@ if __name__ == "__main__":
     # random = [50, 55, 55, 57, 70, 90, 100]
     # subgraphx = [50, 86, 95, 94, 100, 99, 100]
     # pgexplainer = [50, 67, 97, 100, 100, 100, 100]
+
+    ## BA-2Motifs GCN3l (node elimination)
+    # gnnexplainer = [50, 51, 63, 71, 65, 70, 100]
+    # gradcam = [50, 95, 99, 100, 100, 100, 100]
+    # random = [50, 52, 59, 62, 61, 67, 100]
+    # subgraphx = [50, 86, 94, 98, 100, 99, 100]
+    # pgexplainer = [50, 66, 100, 95, 100, 100, 100]
 
     ## MUTAG GCN3l
     # gnnexplainer = [85, 85, 90, 90, 90, 85, 90]
@@ -79,6 +93,13 @@ if __name__ == "__main__":
     # subgraphx = [33, 61.33, 75.33, 88.66, 86.66, 72.66, 98.6]
     # pgexplainer = [33, 64, 63.33, 47.33, 62.66, 80.66, 98.6]
 
+    # BA3Motifs GCN3l (node elimination)
+    # gnnexplainer = [33, 42, 47.33, 48, 50.67, 75.33, 98.6]
+    # gradcam = [33, 74.67, 92.67, 90.67, 94.67, 96.67, 98.6]
+    # random = [33, 48, 52, 43.33, 48.67, 78.67, 98.6]
+    # subgraphx = [33, 83.33, 71.33, 82.67, 87.33, 82.67, 98.6]
+    # pgexplainer = [33, 59.33, 54.67, 44.67, 68.67, 78.67, 98.6]
+
     # # BA3Motifs GCN3l (skipped during evaluation)
     # gnnexplainer = [33, 33.33, 33.33, 36, 45.33, 82.66, 98.6]
     # gradcam = [33, 46, 49.33, 33.33, 81.33, 94.66, 98.6]
@@ -93,14 +114,49 @@ if __name__ == "__main__":
     # subgraphx = [33, 76.67, 80.67, 85.33, 84.67, 65.33, 95.33]
     # pgexplainer = [33, 67.33, 66, 33.33, 86, 33.33, 95.33]
 
-    # BA3Motifs GIN3l (skip during evaluation)
-    gnnexplainer = [33, 33.33, 35.33, 48, 54, 95.3, 95.33]
-    gradcam = [33, 33.33, 35.33, 44, 61.33, 95, 95.33]
-    random = [33, 33.33, 33.33, 39.33, 36.66, 40.66, 95.33]
-    subgraphx = [33, 76.67, 80.67, 85.33, 84.67, 65.33, 95.33]
-    pgexplainer = [33, 33.33, 33.33, 40, 34, 44, 95.33]
+    # BA3Motifs GIN3l (node elimination)
+    # gnnexplainer = [33, 54.67, 59.33, 44.67, 48, 70.67, 95.33]
+    # gradcam = [33, 94, 84, 93.33, 91.33, 96, 95.33]
+    # random = [33, 52, 41.33, 38, 40.67, 34, 95.33]
+    # subgraphx = [33, 66, 64.67, 86, 71.33, 88.67, 95.33]
+    # pgexplainer = [33, 44, 48.67, 54.67, 88.67, 80, 95.33]
 
-    plt.title('KAR performance on BA3Motifs-GIN3l (not applied during evaluation)')
+    # BA3Motifs GIN3l (skip during evaluation)
+    # gnnexplainer = [33, 33.33, 35.33, 48, 54, 95.3, 95.33]
+    # gradcam = [33, 33.33, 35.33, 44, 61.33, 95, 95.33]
+    # random = [33, 33.33, 33.33, 39.33, 36.66, 40.66, 95.33]
+    # subgraphx = [33, 76.67, 80.67, 85.33, 84.67, 65.33, 95.33]
+    # pgexplainer = [33, 33.33, 33.33, 40, 34, 44, 95.33]
+
+    # # Enzyme GCN3l
+    # gnnexplainer = [75.67, 70, 66.67, 68.33, 70, 70, 75]
+    # gradcam = [75.67, 70, 71.66, 70, 66.67, 70, 75]
+    # random = [75.67, 58.33, 63.33, 70, 70, 75, 75]
+    # # subgraphx = [33, 76.67, 80.67, 85.33, 84.67, 65.33, 95.33]
+    # pgexplainer = [75.67, 71.66, 73.33, 70, 75, 73.33, 75]
+
+    # # Enzyme GCN3l (node elimination)
+    # gnnexplainer = [16.67, 56.67, 53.33, 63.33, 66.67, 71.67, 75]
+    # gradcam = [16.67, 66.67, 71.66, 71.66, 70, 70, 75]
+    # random = [16.67, 51.67, 55, 68.33, 70, 70, 75]
+    # # subgraphx = [33, 76.67, 80.67, 85.33, 84.67, 65.33, 95.33]
+    # pgexplainer = [16.67, 63.33, 65, 71.66, 71.66, 70, 75]
+
+    # Enzyme GIN3l
+    # gnnexplainer = [61.67, 55, 51.67, 48.33, 63.33, 66.66, 75]
+    # gradcam = [61.67, 65, 70, 66.67, 70, 71.67, 75]
+    # random = [61.67, 55, 63.33, 56.67, 61.67, 66.67, 75]
+    # # subgraphx = [33, 76.67, 80.67, 85.33, 84.67, 65.33, 95.33]
+    # pgexplainer = [61.67, 66.67, 71.67, 65, 61.67, 58.33, 75]
+
+    # Enzyme GIN3l (node elimination)
+    # gnnexplainer = [16.67, 46.67, 51.67, 56.67, 63.33, 65, 75]
+    # gradcam = [16.67, 61.67, 61.67, 65, 63.33, 70, 75]
+    # random = [16.67, 43.33, 56.67, 65, 65, 70, 75]
+    # # subgraphx = [33, 76.67, 80.67, 85.33, 84.67, 65.33, 95.33]
+    # pgexplainer = [16.67, 75, 70, 71.66, 71.66, 63.33, 75]
+
+    plt.title('KAR performance on BA2Motifs-GIN3l (node elimination)')
     plt.xlabel("Edge Keep (KAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)
