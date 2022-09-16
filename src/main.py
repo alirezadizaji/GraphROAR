@@ -34,6 +34,8 @@ if __name__ == "__main__":
     # BA-2Motifs: 12345
     # MUTAG: 3423
     # REDDIT-BINARY: 12345
+    # BA-3Motifs: 12345
+    # Enzyme: 12345
 
     Constants.GLOBAL_SEED = int(argv[1])
     

@@ -10,11 +10,11 @@ if __name__ == "__main__":
     # pgexplainer = [50, 65, 93, 100, 98, 100, 100]
     
     ## BA-2Motifs GIN3l (node elimination)
-    gnnexplainer = [50, 60, 61, 62, 76, 92, 100]
-    gradcam = [50, 97, 100, 100, 100, 100, 100]
-    random = [50, 50, 50, 50, 53, 65, 100]
-    subgraphx = [50, 76, 100, 99, 100, 100, 100]
-    pgexplainer = [50, 91, 99, 100, 100, 100, 100]
+    # gnnexplainer = [50, 60, 61, 62, 76, 92, 100]
+    # gradcam = [50, 97, 100, 100, 100, 100, 100]
+    # random = [50, 50, 50, 50, 53, 65, 100]
+    # subgraphx = [50, 76, 100, 99, 100, 100, 100]
+    # pgexplainer = [50, 91, 99, 100, 100, 100, 100]
 
     ## BA-2Motifs GCN3l
     # gnnexplainer = [50, 50, 61, 68, 67, 81, 100]
@@ -37,6 +37,13 @@ if __name__ == "__main__":
     # subgraphx = [85, 90, 90, 85, 90, 95, 90]
     # pgexplainer = [85, 85, 85, 80, 85, 90, 90]
 
+    # ## MUTAG GCN3l (node elimination)
+    # gnnexplainer = [65, 85, 80, 90, 85, 80, 90]
+    # gradcam = [65, 85, 90, 90, 90, 90, 90]
+    # random = [65, 75, 90, 90, 85, 85, 90]
+    # subgraphx = [65, 65, 85, 85, 90, 90, 90]
+    # pgexplainer = [65, 85, 80, 80, 85, 85, 90]
+
     ## MUTAG GCN3l (skip eval)
     # gnnexplainer = [85, 85, 80, 80, 80, 80, 90]
     # gradcam = [85, 80, 80, 80, 80, 80, 90]
@@ -50,6 +57,13 @@ if __name__ == "__main__":
     # random = [65, 85, 85, 88.5, 83.6, 88.5, 100]
     # subgraphx = [65, 90, 90, 85, 90, 95, 100]
     # pgexplainer = [65, 95, 85, 80, 75, 100, 100]
+
+    ## MUTAG GIN3l (node elimination)
+    gnnexplainer = [65, 70, 70, 80, 90, 80, 100]
+    gradcam = [65, 85, 95, 100, 95, 95, 100]
+    random = [65, 75, 80, 80, 85, 85, 100]
+    subgraphx = [65, 75, 95, 85, 90, 90, 100]
+    pgexplainer = [65, 85, 85, 90, 85, 95, 100]
 
     # MUTAG GIN3l (skip during evaluation)
     # gnnexplainer = [65, 65, 65, 80, 80, 80, 100]
@@ -156,7 +170,7 @@ if __name__ == "__main__":
     # # subgraphx = [33, 76.67, 80.67, 85.33, 84.67, 65.33, 95.33]
     # pgexplainer = [16.67, 75, 70, 71.66, 71.66, 63.33, 75]
 
-    plt.title('KAR performance on BA2Motifs-GIN3l (node elimination)')
+    plt.title('KAR performance on MUTAG-GIN3l (node elimination)')
     plt.xlabel("Edge Keep (KAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)
