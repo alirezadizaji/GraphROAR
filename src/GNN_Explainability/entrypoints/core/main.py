@@ -40,6 +40,8 @@ class MainEntrypoint(ABC):
             cls = BA3MotifsDataset
         elif self.conf.dataset_name == Dataset.ENZYME:
             cls = EnzymeDataset
+        elif self.conf.dataset_name == Dataset.IMDB_BIN:
+            cls = IMDBBinDataset
         else:
             raise NotImplementedError()
 

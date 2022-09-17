@@ -26,7 +26,7 @@ class Entrypoint(ROAREntrypoint):
             roar_ratios=[0.9],
             skip_during_evaluation=True,
             eliminate_top_most_edges=False,
-            eliminate_nodes_too=True,
+            
         )
 
         model = GCN_3l_BN(model_level='graph', dim_node=18, dim_hidden=60, num_classes=6)

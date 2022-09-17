@@ -3,3 +3,4 @@ from .ba_3motifs import BA3MotifsDataset
 from .mutag import MUTAGDataset
 from .reddit_binary import RedditDataset
 from .enzyme import EnzymeDataset
+from .imdb_binary import IMDBBinDataset

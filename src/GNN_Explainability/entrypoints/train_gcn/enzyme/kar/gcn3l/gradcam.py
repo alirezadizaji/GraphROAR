@@ -25,7 +25,7 @@ class Entrypoint(ROAREntrypoint):
             edge_masks_load_dir=f'../data/{Dataset.ENZYME}/explanation/gcn3l/gradcam',
             eliminate_top_most_edges=False,
             roar_ratios=[0.1, 0.3, 0.5, 0.7, 0.9],
-            eliminate_nodes_too=True,
+            
         )
 
         model = GCN_3l_BN(model_level='graph', dim_node=18, dim_hidden=60, num_classes=6)
