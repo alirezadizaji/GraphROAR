@@ -23,7 +23,7 @@ class Entrypoint(ROAREntrypoint):
             training_config=TrainingConfig(100, OptimType.ADAM),
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
-            edge_masks_load_dir=f'../data/{Dataset.BA3Motifs}/explanation/subgraphx_70%',
+            edge_masks_load_dir=f'../data/{Dataset.BA3Motifs}/explanation/gin3l/subgraphx_70%',
             roar_ratios=[0.7],
             skip_during_evaluation=True,
         )

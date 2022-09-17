@@ -20,7 +20,7 @@ class Entrypoint(SubgraphXEntrypoint):
             training_config=TrainingConfig(100, OptimType.ADAM, batch_size=1),
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
-            num_classes=6,
+            num_classes=2,
             save_visualization=True,
             visualize_explainer_perf=True,
             num_instances_to_visualize=20,

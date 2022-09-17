@@ -21,9 +21,9 @@ class Entrypoint(ROAREntrypoint):
             try_name='roar_subgraphx_0.5_gin3l',
             dataset_name=Dataset.BA3Motifs,
             training_config=TrainingConfig(100, OptimType.ADAM),
-            device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
+            device=torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
-            edge_masks_load_dir=f'../data/{Dataset.BA3Motifs}/explanation/subgraphx_50%',
+            edge_masks_load_dir=f'../data/{Dataset.BA3Motifs}/explanation/gin3l/subgraphx_50%',
             roar_ratios=[0.5],
             skip_during_evaluation=True,
         )

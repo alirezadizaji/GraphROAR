@@ -60,11 +60,11 @@ if __name__ == "__main__":
     # pgexplainer = [100, 85, 95, 70, 75, 80, 65]
 
     # MUTAG-GIN3l (node elimination)
-    gnnexplainer = [90, 90, 90, 75, 75, 75, 65]
-    gradcam = [90, 90, 85, 95, 95, 95, 65]
-    random = [90, 80, 80, 80, 80, 75, 65]
-    subgraphx = [90, 80, 85, 85, 85, 80, 65]
-    pgexplainer = [90, 90, 75, 85, 90, 80, 65]
+    # gnnexplainer = [90, 90, 90, 75, 75, 75, 65]
+    # gradcam = [90, 90, 85, 95, 95, 95, 65]
+    # random = [90, 80, 80, 80, 80, 75, 65]
+    # subgraphx = [90, 80, 85, 85, 85, 80, 65]
+    # pgexplainer = [90, 90, 75, 85, 90, 80, 65]
 
     # MUTAG-GIN3l (skip eval)
     # gnnexplainer = [100, 85, 80, 70, 75, 85, 65]
@@ -102,7 +102,21 @@ if __name__ == "__main__":
     # # subgraphx = [90.5, 65, 70, 75, 75, 80, 50]
     # pgexplainer = [90.5, 72, 67.5, 60.5, 52.5, 51, 50]
 
-    plt.title('ROAR performance on MUTAG-GIN3l (node elimination)')
+    # BA3Motifs GCN3l
+    # gnnexplainer = [98.6, 66.67, 52, 46, 41.33, 48.67, 33]
+    # gradcam = [98.6, 80, 84, 79.33, 82.67, 62, 33]
+    # random = [98.6, 66, 54.67, 42.67, 38.67, 40.67, 33]
+    # subgraphx = [98.6, 76, 68, 76.67, 78.67, 76, 33]
+    # pgexplainer = [98.6, 96.67, 84, 50.67, 52.5, 51, 33]
+
+    # # BA3Motifs GCN3l (skipped during evaluation)
+    # gnnexplainer = [98.6, 93.33, 76, 56, 42.67, 33.33, 33]
+    # gradcam = [98.6, 65.33, 66, 48.67, 35.33, 36, 33]
+    # random = [98.6, 84.67, 74, 58.67, 50.67, 38, 33]
+    # subgraphx = [98.6, 66.67, 70.67, 42, 44, 35.33, 33]
+    # pgexplainer = [98.6, 99.33, 94.67, 52, 38, 39.33, 33]
+
+    plt.title('ROAR performance on BA3Motifs-GCN3l (not applied during evaluation)')
     plt.xlabel("Edge Keep (ROAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)
