@@ -36,6 +36,12 @@ class InstanceX(ExplainerEntrypoint, Generic[TExp], ABC):
                         raise Exception('data object must have name attribute.')
                 print(f"graph {data.name[0]}, label {data.y.item()}", flush=True)
 
+                if self.conf.edge_mask_save_dir is not None:
+                    save_dir = os.path.join(self.conf.edge_mask_save_dir, f"{data.name[0]}.npy")
+                    if os.path.exists(save_dir):
+                        print(f'NOTE: {data.name[0]} has been generated before.')
+                        continue
+                    
                 out_x = self.explain_instance(data)
                 edge_mask = self.get_edge_mask(out_x, data)
 
