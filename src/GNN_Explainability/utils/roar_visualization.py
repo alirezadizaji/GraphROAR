@@ -116,7 +116,22 @@ if __name__ == "__main__":
     # subgraphx = [98.6, 66.67, 70.67, 42, 44, 35.33, 33]
     # pgexplainer = [98.6, 99.33, 94.67, 52, 38, 39.33, 33]
 
-    plt.title('ROAR performance on BA3Motifs-GCN3l (not applied during evaluation)')
+    # BA3Motifs GIN3l
+    # gnnexplainer = [95.33, 90, 96.67, 65.33, 68, 86.67, 33]
+    # gradcam = [95.33, 90.67, 92, 75.33, 72, 73.33, 33]
+    # random = [95.33, 66, 54.67, 42.67, 38.67, 40.67, 33]
+    # subgraphx = [95.33, 81.33, 88, 80.67, 87.33, 72.67, 33]
+    # pgexplainer = [95.33, 96, 92, 68, 65.33, 63.33, 33]
+
+    # # BA3Motifs GIN3l (skipped during evaluation)
+    gnnexplainer = [95.33, 82, 36, 46, 45.33, 42.67, 33]
+    gradcam = [95.33, 34.67, 33.33, 33.33, 33.33, 37.33, 33]
+    random = [95.33, 40, 34, 34, 34, 39.33, 33]
+    subgraphx = [95.33, 38.67, 37.33, 33.33, 34.67, 33.33, 33]
+    pgexplainer = [95.33, 98.67, 92.67, 54.67, 34.67, 38.67, 33]
+
+
+    plt.title('ROAR performance on BA3Motifs-GIN3l (not applied during evaluation)')
     plt.xlabel("Edge Keep (ROAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)
