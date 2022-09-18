@@ -23,7 +23,7 @@ class Entrypoint(PGExplainerEntrypoint):
             num_classes=2,
             save_visualization=True,
             visualize_explainer_perf=True,
-            edge_mask_save_dir=os.path.join('..', 'data', Dataset.ENZYME, 'explanation', 'gcn3l', 'pgexplainer'),
+            edge_mask_save_dir=os.path.join('..', 'data', Dataset.IMDB_BIN, 'explanation', 'gcn3l', 'pgexplainer'),
             num_instances_to_visualize=20,
             sparsity=0.0,
             explain_graph=True,
