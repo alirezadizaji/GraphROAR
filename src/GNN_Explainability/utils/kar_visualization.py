@@ -164,13 +164,55 @@ if __name__ == "__main__":
     # pgexplainer = [61.67, 66.67, 71.67, 65, 61.67, 58.33, 75]
 
     # Enzyme GIN3l (node elimination)
-    gnnexplainer = [16.67, 46.67, 51.67, 56.67, 63.33, 65, 75]
-    gradcam = [16.67, 61.67, 61.67, 65, 63.33, 70, 75]
-    random = [16.67, 43.33, 56.67, 65, 65, 70, 75]
-    subgraphx = [16.67, 56.67, 60, 66.67, 60, 66.67, 75]
-    pgexplainer = [16.67, 75, 70, 71.66, 71.66, 63.33, 75]
+    # gnnexplainer = [16.67, 46.67, 51.67, 56.67, 63.33, 65, 75]
+    # gradcam = [16.67, 61.67, 61.67, 65, 63.33, 70, 75]
+    # random = [16.67, 43.33, 56.67, 65, 65, 70, 75]
+    # subgraphx = [16.67, 56.67, 60, 66.67, 60, 66.67, 75]
+    # pgexplainer = [16.67, 75, 70, 71.66, 71.66, 63.33, 75]
 
-    plt.title('KAR performance on Enzyme-GIN3l (Node elimination)')
+    # IMDB-BINARY GCN3l
+    # gnnexplainer = [50, 68, 72, 73, 68, 76, 75]
+    # gradcam = [50, 77, 74, 77, 74, 73, 75]
+    # random = [50, 69, 68, 67, 66, 72, 75]
+    # subgraphx = [50, 76, 75, 73, 71, 71, 75]
+    # pgexplainer = [50, 71, 70, 67, 75, 68, 75]
+
+    # # IMDB-BINARY GCN3l (node elimination)
+    # gnnexplainer = [50, 64, 70, 69, 74, 75, 75]
+    # gradcam = [50, 75, 77, 73, 74, 72, 75]
+    # random = [50, 65, 63, 65, 64, 73, 75]
+    # subgraphx = [50, 78, 73, 71, 71, 74, 75]
+    # pgexplainer = [50, 74, 69, 71, 71, 71, 75]
+
+    # IMDB-BINARY GCN3l (skipped during evaluation)
+    # gnnexplainer = [50, 60, 69, 65, 67, 71, 75]
+    # gradcam = [50, 59, 59, 57, 61, 72, 75]
+    # random = [50, 56, 55, 63, 64, 69, 75]
+    # subgraphx = [50, 71, 55, 71, 70, 73, 75]
+    # pgexplainer = [50, 66, 60, 59, 58, 73, 75]
+
+    # IMDB-BINARY GIN3l
+    # gnnexplainer = [50, 78, 78, 76, 78, 79, 80]
+    # gradcam = [50, 76, 80, 78, 79, 79, 80]
+    # random = [50, 79, 80, 82, 82, 79, 80]
+    # subgraphx = [50, 79, 82, 81, 84, 81, 80]
+    # pgexplainer = [50, 79, 84, 83, 81, 81, 80]
+
+    # IMDB-BINARY GIN3l (node elimination)
+    # gnnexplainer = [50, 79, 79, 81, 81, 75, 80]
+    # gradcam = [50, 76, 76, 77, 81, 79, 80]
+    # random = [50, 65, 74, 81, 80, 78, 80]
+    # subgraphx = [50, 73, 75, 80, 83, 80, 80]
+    # pgexplainer = [50, 68, 69, 78, 76, 79, 80]
+
+    # IMDB-BINARY GIN3l (node elimination)
+    gnnexplainer = [50, 50, 50, 53, 71, 77, 80]
+    gradcam = [50, 50, 53, 55, 60, 76, 80]
+    random = [50, 50, 50, 50, 66, 76, 80]
+    subgraphx = [50, 50, 50, 58, 70, 78, 80]
+    pgexplainer = [50, 50, 50, 53, 62, 75, 80]
+
+    plt.title('KAR performance on IMDB_BIN-GIN3l (not applied during evaluation)')
     plt.xlabel("Edge Keep (KAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)

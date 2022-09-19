@@ -116,7 +116,8 @@ class GraphClsDataset(BaseDataset):
         if not os.path.exists(path):
             self._read_raw_file()
         edge_index, node_to_graph_ind, node_attrs, node_labels_in_once, y = self._get_processed_files()
-
+        node_labels_in_once = node_labels_in_once.long()
+        
         # order labels
         unique_labels = torch.sort(torch.unique(y))[0]
         for i, label in enumerate(unique_labels.cpu().numpy()):
