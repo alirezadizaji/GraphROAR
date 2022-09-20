@@ -52,7 +52,7 @@ class Entrypoint(GNNExplainerEntrypoint):
 
     def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
         edge_mask = symmetric_edges(edge_index, edge_mask)
-        k = (edge_mask.numel() * 0.5)
+        k = int(edge_mask.numel() * 0.5)
         edge_index = edge_index[:, edge_mask.topk(k)[1]]
 
         return edge_index
