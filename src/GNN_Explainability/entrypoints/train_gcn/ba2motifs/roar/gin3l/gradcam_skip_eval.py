@@ -21,7 +21,7 @@ class Entrypoint(ROAREntrypoint):
             dataset_name=Dataset.BA2Motifs,
             training_config=TrainingConfig(100, OptimType.ADAM),
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
-            save_log_in_file=False,
+            save_log_in_file=Trues,
             edge_masks_load_dir='../data/ba_2motifs/explanation/gradcam',
             roar_ratios=[0.1, 0.3, 0.5, 0.7, 0.9],
             skip_during_evaluation=True,

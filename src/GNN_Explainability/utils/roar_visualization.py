@@ -17,6 +17,13 @@ if __name__ == "__main__":
     # subgraphx = [100, 90, 97, 97, 90, 97, 50]
     # pgexplainer = [100, 100, 100, 100, 100, 63, 50]
 
+    # BA2Motifs-GIN3l (both)
+    # gnnexplainer = [100, 100, 100, 100, 100, 99, 50]
+    # gradcam = [100, 56, 50, 51, 50, 50, 50]
+    # random = [100, 100, 100, 100, 99, 99, 50]
+    # subgraphx = [100, 72, 51, 84, 69, 50, 50]
+    # pgexplainer = [100, 96, 88, 86, 86, 50, 50]
+
     # BA2Motifs-GCN3l
     # gnnexplainer = [100, 90, 70, 61, 57, 52, 50]
     # gradcam = [100, 99, 99, 98, 95, 93, 50]
@@ -31,6 +38,13 @@ if __name__ == "__main__":
     # subgraphx = [100, 69, 80, 78, 92, 100, 50]
     # pgexplainer = [100, 83, 68, 64, 64, 61, 50]
     
+    # BA2Motifs-GCN3l (both)
+    # gnnexplainer = [100, 86, 92, 77, 72, 71, 50]
+    # gradcam = [100, 60, 69, 80, 67, 62.5, 50]
+    # random = [100, 98.33, 89.33, 72.33, 70.19, 70.33, 50]
+    # subgraphx = [100, 65, 67, 68, 60, 66, 50]
+    # pgexplainer = [100, 69, 71, 51, 62, 63, 50]
+
     # MUTAG-GCN3l
     # gnnexplainer = [90, 90, 90, 85, 90, 85, 85]
     # gradcam = [90, 90, 85, 85, 90, 90, 85]
@@ -116,6 +130,13 @@ if __name__ == "__main__":
     # subgraphx = [98.6, 66.67, 70.67, 42, 44, 35.33, 33]
     # pgexplainer = [98.6, 99.33, 94.67, 52, 38, 39.33, 33]
 
+    # BA3Motifs GCN3l (both)
+    gnnexplainer = [98.6, 78.67, 83.33, 50.67, 48.67, 40.67, 33]
+    gradcam = [98.6, 56.67, 56, 36, 35.33, 35.33, 33]
+    random = [98.6, 81.33, 83.33, 74.67, 55.33, 38.66, 33]
+    subgraphx = [98.6, 66, 80.67, 50, 41.33, 37.33, 33]
+    pgexplainer = [98.6, 96.67, 98.67, 66, 58, 39.33, 33]
+    
     # BA3Motifs GIN3l
     # gnnexplainer = [95.33, 90, 96.67, 65.33, 68, 86.67, 33]
     # gradcam = [95.33, 90.67, 92, 75.33, 72, 73.33, 33]
@@ -124,14 +145,21 @@ if __name__ == "__main__":
     # pgexplainer = [95.33, 96, 92, 68, 65.33, 63.33, 33]
 
     # # BA3Motifs GIN3l (skipped during evaluation)
-    gnnexplainer = [95.33, 82, 36, 46, 45.33, 42.67, 33]
-    gradcam = [95.33, 34.67, 33.33, 33.33, 33.33, 37.33, 33]
-    random = [95.33, 40, 34, 34, 34, 39.33, 33]
-    subgraphx = [95.33, 38.67, 37.33, 33.33, 34.67, 33.33, 33]
-    pgexplainer = [95.33, 98.67, 92.67, 54.67, 34.67, 38.67, 33]
+    # gnnexplainer = [95.33, 82, 36, 46, 45.33, 42.67, 33]
+    # gradcam = [95.33, 34.67, 33.33, 33.33, 33.33, 37.33, 33]
+    # random = [95.33, 40, 34, 34, 34, 39.33, 33]
+    # subgraphx = [95.33, 38.67, 37.33, 33.33, 34.67, 33.33, 33]
+    # pgexplainer = [95.33, 98.67, 92.67, 54.67, 34.67, 38.67, 33]
+
+    # # BA3Motifs GIN3l (both)
+    # gnnexplainer = [95.33, 89.33, 50, 34.67, 33.33, 52, 33]
+    # gradcam = [95.33, 33.33, 33.33, 34, 33.33, 33.33, 33]
+    # random = [95.33, 74, 68.67, 34, 34.33, 33.33, 33]
+    # subgraphx = [95.33, 38.67, 34.67, 33.33, 34, 33.33, 33]
+    # pgexplainer = [95.33, 98.67, 92.67, 89.33, 39.33, 68, 33]
 
 
-    plt.title('ROAR performance on BA3Motifs-GIN3l (not applied during evaluation)')
+    plt.title('ROAR performance on BA3Motifs-GIN3l (both)')
     plt.xlabel("Edge Keep (ROAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)
