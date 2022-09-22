@@ -65,6 +65,13 @@ if __name__ == "__main__":
     # subgraphx = [85, 65, 80, 80, 80, 90, 90]
     # pgexplainer = [85, 75, 70, 85, 85, 90, 90]
     
+    # MUTAG GCN3l (both)
+    gnnexplainer = [65, 80, 85, 90, 84, 90, 90]
+    gradcam = [65, 80, 85, 80, 90, 90, 90]
+    random = [65, 75, 82.5, 82.5, 82.5, 85, 90]
+    subgraphx = [65, 70, 80, 80, 75, 80, 90]
+    pgexplainer = [65, 65, 75, 80, 85, 90, 90]
+
     ## MUTAG GIN3l
     # gnnexplainer = [65, 75, 80, 80, 85, 95, 100]
     # gradcam = [65, 90, 100, 100, 95, 100, 100]
@@ -85,6 +92,13 @@ if __name__ == "__main__":
     # random = [65, 67.5, 70, 82.5, 82.5, 80, 100]
     # subgraphx = [65, 65, 70, 75, 75, 80, 100]
     # pgexplainer = [65, 70, 80, 80, 80, 80, 100]
+
+    # MUTAG GIN3l (node elimination)
+    gnnexplainer = [65, 65, 75, 90, 90, 90, 100]
+    gradcam = [65, 75, 85, 85, 80, 80, 100]
+    random = [65, 65, 73, 79, 78, 80, 100]
+    subgraphx = [65, 65, 75, 75, 70, 80, 100]
+    pgexplainer = [65, 70, 80, 90, 90, 90, 100]
 
     # REDDIT-BINARY GCN3l
     # gnnexplainer = [69, 82, 84, 90.5, 90, 93, 95]
@@ -136,11 +150,11 @@ if __name__ == "__main__":
     # pgexplainer = [33, 43.33, 40, 42, 56, 80, 98.6]
 
     # BA3Motifs GCN3l (both)
-    gnnexplainer = [33, 39.33, 38.67, 50.67, 66, 96, 98.6]
-    gradcam = [33, 40.67, 44, 70, 90, 97.33, 98.6]
-    random = [33, 43.33, 44.67, 51.33, 62.67, 94.67, 98.6]
-    subgraphx = [33, 34, 53.33, 72.67, 71.33, 80.67, 98.6]
-    pgexplainer = [33, 42.67, 36, 38.67, 55.33, 78.67, 98.6]
+    # gnnexplainer = [33, 39.33, 38.67, 50.67, 66, 96, 98.6]
+    # gradcam = [33, 40.67, 44, 70, 90, 97.33, 98.6]
+    # random = [33, 43.33, 44.67, 51.33, 62.67, 94.67, 98.6]
+    # subgraphx = [33, 34, 53.33, 72.67, 71.33, 80.67, 98.6]
+    # pgexplainer = [33, 42.67, 36, 38.67, 55.33, 78.67, 98.6]
     
     # BA3Motifs GIN3l
     # gnnexplainer = [33, 76, 72, 44.66, 51.33, 50, 95.33]
@@ -240,7 +254,7 @@ if __name__ == "__main__":
     # subgraphx = [50, 50, 50, 58, 70, 78, 80]
     # pgexplainer = [50, 50, 50, 53, 62, 75, 80]
 
-    plt.title('KAR performance on BA3Motifs-GCN3l (both)')
+    plt.title('KAR performance on MUTAG-GIN3l (both)')
     plt.xlabel("Edge Keep (KAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)

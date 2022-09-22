@@ -66,6 +66,13 @@ if __name__ == "__main__":
     # subgraphx = [90, 90, 85, 85, 70, 70, 85]
     # pgexplainer = [90, 90, 90, 90, 90, 90, 85]
 
+    # MUTAG-GCN3l (both)
+    # gnnexplainer = [90, 90, 90, 90, 90, 85, 65]
+    # gradcam = [90, 85, 85, 70, 65, 65, 65]
+    # random = [90, 90, 85, 90, 89.5, 85, 65]
+    # subgraphx = [90, 90, 85, 80, 85, 65, 65]
+    # pgexplainer = [90, 85, 90, 80, 75, 75, 65]
+
     # MUTAG-GIN3l
     # gnnexplainer = [100, 95, 90, 85, 80, 85, 65]
     # gradcam = [100, 90, 100, 100, 95, 95, 65]
@@ -74,11 +81,11 @@ if __name__ == "__main__":
     # pgexplainer = [100, 85, 95, 70, 75, 80, 65]
 
     # MUTAG-GIN3l (node elimination)
-    # gnnexplainer = [90, 90, 90, 75, 75, 75, 65]
-    # gradcam = [90, 90, 85, 95, 95, 95, 65]
-    # random = [90, 80, 80, 80, 80, 75, 65]
-    # subgraphx = [90, 80, 85, 85, 85, 80, 65]
-    # pgexplainer = [90, 90, 75, 85, 90, 80, 65]
+    # gnnexplainer = [100, 90, 90, 75, 75, 75, 65]
+    # gradcam = [100, 90, 85, 95, 95, 95, 65]
+    # random = [100, 80, 80, 80, 80, 75, 65]
+    # subgraphx = [100, 80, 85, 85, 85, 80, 65]
+    # pgexplainer = [100, 90, 75, 85, 90, 80, 65]
 
     # MUTAG-GIN3l (skip eval)
     # gnnexplainer = [100, 85, 80, 70, 75, 85, 65]
@@ -86,6 +93,13 @@ if __name__ == "__main__":
     # random = [100, 87.5, 85, 80, 77.5, 82.5, 65]
     # subgraphx = [100, 80, 80, 80, 75, 65, 65]
     # pgexplainer = [100, 80, 85, 75, 75, 75, 65]
+
+    # MUTAG-GIN3l (both)
+    gnnexplainer = [100, 80, 85, 85, 85, 80, 65]
+    gradcam = [100, 80, 80, 80, 75, 75, 65]
+    random = [100, 85, 85, 90, 85, 90, 65]
+    subgraphx = [100, 80.4, 80, 80.4, 74.6, 65.4, 65]
+    pgexplainer = [100, 90, 90, 75, 75, 75, 65]
 
     # REDDIT-BINARY GCN3l
     # gnnexplainer = [95, 90.5, 87, 86.5, 80, 78.5, 69]
@@ -159,7 +173,7 @@ if __name__ == "__main__":
     # pgexplainer = [95.33, 98.67, 92.67, 89.33, 39.33, 68, 33]
 
 
-    plt.title('ROAR performance on BA3Motifs-GIN3l (both)')
+    plt.title('ROAR performance on MUTAG-GIN3l (both)')
     plt.xlabel("Edge Keep (ROAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)
