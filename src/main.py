@@ -36,6 +36,7 @@ if __name__ == "__main__":
     # REDDIT-BINARY: 12345
     # BA-3Motifs: 12345
     # Enzyme: 12345
+    # IMDB: 12345
 
     Constants.GLOBAL_SEED = int(argv[1])
     
