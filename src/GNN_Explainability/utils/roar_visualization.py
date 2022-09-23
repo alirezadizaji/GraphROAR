@@ -39,11 +39,11 @@ if __name__ == "__main__":
     # pgexplainer = [100, 83, 68, 64, 64, 61, 50]
     
     # BA2Motifs-GCN3l (both)
-    # gnnexplainer = [100, 86, 92, 77, 72, 71, 50]
-    # gradcam = [100, 60, 69, 80, 67, 62.5, 50]
-    # random = [100, 98.33, 89.33, 72.33, 70.19, 70.33, 50]
-    # subgraphx = [100, 65, 67, 68, 60, 66, 50]
-    # pgexplainer = [100, 69, 71, 51, 62, 63, 50]
+    gnnexplainer = [100, 86, 92, 77, 72, 71, 50]
+    gradcam = [100, 80, 83, 76.5, 65, 58, 50]
+    random = [100, 98.33, 89.33, 72.33, 70.19, 70.33, 50]
+    subgraphx = [100, 65, 67, 68, 60, 66, 50]
+    pgexplainer = [100, 69, 71, 51, 62, 63, 50]
 
     # MUTAG-GCN3l
     # gnnexplainer = [90, 90, 90, 85, 90, 85, 85]
@@ -95,11 +95,11 @@ if __name__ == "__main__":
     # pgexplainer = [100, 80, 85, 75, 75, 75, 65]
 
     # MUTAG-GIN3l (both)
-    gnnexplainer = [100, 80, 85, 85, 85, 80, 65]
-    gradcam = [100, 80, 80, 80, 75, 75, 65]
-    random = [100, 85, 85, 90, 85, 90, 65]
-    subgraphx = [100, 80.4, 80, 80.4, 74.6, 65.4, 65]
-    pgexplainer = [100, 90, 90, 75, 75, 75, 65]
+    # gnnexplainer = [100, 80, 85, 85, 85, 80, 65]
+    # gradcam = [100, 80, 80, 80, 75, 75, 65]
+    # random = [100, 85, 85, 90, 85, 90, 65]
+    # subgraphx = [100, 80.4, 80, 80.4, 74.6, 65.4, 65]
+    # pgexplainer = [100, 90, 90, 75, 75, 75, 65]
 
     # REDDIT-BINARY GCN3l
     # gnnexplainer = [95, 90.5, 87, 86.5, 80, 78.5, 69]
@@ -173,7 +173,7 @@ if __name__ == "__main__":
     # pgexplainer = [95.33, 98.67, 92.67, 89.33, 39.33, 68, 33]
 
 
-    plt.title('ROAR performance on MUTAG-GIN3l (both)')
+    plt.title('ROAR performance on BA2Motifs-GCN3l (both)')
     plt.xlabel("Edge Keep (ROAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)
