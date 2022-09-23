@@ -20,7 +20,7 @@ class Entrypoint(ROAREntrypoint):
             try_name='roar_random_gin3l_skip_eval',
             dataset_name=Dataset.IMDB_BIN,
             training_config=TrainingConfig(500, OptimType.ADAM, early_stop=100),
-            device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
+            device=torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
             edge_masks_load_dir=f'../data/{Dataset.IMDB_BIN}/explanation/gin3l/random2',
             edge_mask_random_weighting=True, # random roar
