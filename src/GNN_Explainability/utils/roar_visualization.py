@@ -172,8 +172,35 @@ if __name__ == "__main__":
     # subgraphx = [95.33, 38.67, 34.67, 33.33, 34, 33.33, 33]
     # pgexplainer = [95.33, 98.67, 92.67, 89.33, 39.33, 68, 33]
 
+    # IMDB-BINARY GCN3l (both)
+    # gnnexplainer = [75, 67, 68, 63, 60, 64, 50]
+    # gradcam = [75, 66, 64, 60, 54, 58, 50]
+    # random = [75, 68, 70, 66, 65, 67, 50]
+    # subgraphx = [75, 67, 63, 58, 58, 57.5, 50]
+    # pgexplainer = [75, 71, 67, 66, 66, 62, 50]
 
-    plt.title('ROAR performance on BA2Motifs-GCN3l (both)')
+    # IMDB_Binary GIN3l (both)
+    # gnnexplainer = [80, 78, 61, 49, 37, 55, 50]
+    # gradcam = [80, 77, 62, 50, 37, 49.5, 50]
+    # random = [80, 77.5, 63, 47, 43.5, 52, 50]
+    # subgraphx = [80, 76, 65, 53, 50, 50, 50]
+    # pgexplainer = [80, 78, 62, 56, 54, 68, 50]
+
+    # Enzyme GCN3l (both)
+    # gnnexplainer = [75, 67, 66.67, 63.33, 63.33, 61.67, 16.67]
+    # gradcam = [75, 71.67, 70, 65, 61.67, 36.67, 16.67]
+    # random = [75, 72, 70.5, 70, 66.67, 63.33, 16.67]
+    # subgraphx = [75, 66.67, 61.67, 43.33, 40, 38.33, 16.67]
+    # pgexplainer = [75, 66.9, 63.33, 66.67, 56.67, 48.33, 16.67]
+
+    # Enzyme GIN3l (both)
+    gnnexplainer = [75, 70, 70, 65, 65, 48.33, 16.67]
+    gradcam = [75, 58.33, 56.67, 50, 46.67, 41.67, 16.67]
+    random = [75, 71.67, 66.67, 63.33, 56.67, 48.33, 16.67]
+    subgraphx = [75, 66.67, 51.67, 45, 33.33, 36.67, 16.67]
+    pgexplainer = [75, 60, 58.33, 51.67, 50, 35, 16.67]
+
+    plt.title('ROAR performance on Enzyme-GIN3l (both)')
     plt.xlabel("Edge Keep (ROAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)
