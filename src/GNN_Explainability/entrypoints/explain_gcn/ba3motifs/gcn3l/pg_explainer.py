@@ -19,7 +19,7 @@ class Entrypoint(PGExplainerEntrypoint):
             dataset_name=Dataset.BA3Motifs,
             device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
-            training_config=TrainingConfig(30, OptimType.ADAM, lr=3e-3, batch_size=1),
+            training_config=TrainingConfig(100, OptimType.ADAM, lr=3e-3, batch_size=1),
             num_classes=3,
             save_visualization=True,
             visualize_explainer_perf=True,
