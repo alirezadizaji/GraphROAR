@@ -1,5 +1,5 @@
 # GraphROAR
-At the moment, several explainer methods have been developed to perceive the functionality of graph neural networks. In this repo, we propose a retraining approach to measure and compare these explainer methods by either keeping (GraphKAR) or removing (GraphROAR) most informative edges and thereafter check their impact using retraining steps.
+At the moment, several explainer methods have been developed to perceive the functionality of graph neural networks. In this repo, we propose a new retraining approach to measure and compare these explainer methods by either keeping (GraphKAR) or removing (GraphROAR) most informative edges and thereafter check their impact using retraining steps.
 ### Contents:
   - [Overview](#overview)
     - [Baseline](#baseline)
@@ -40,7 +40,7 @@ data/
         raw/
             ...
 ```
-For each dataset, the probability edge weights provided by each explainer during running the second group will be saved in the `data/[dataset]/explanation` folder.
+For each dataset, the probability edge weights provided by each explainer during second stage will be saved in the `data/[dataset]/explanation` folder.
 
 ## Configuration
 Running configurations are located in `src/GNN_Explainability/config/`. [Baseline](#baseline) configuration is located at `base_config.py`, [Explainers](#explanation) at `explanation/` and [Retraining](#retraining) at `roar_config.py`; To know in details about the attributes within each one, checkout the documentation provided below of each attribute. 
