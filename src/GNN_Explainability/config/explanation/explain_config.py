@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Optional, Dict, Any, List
 
-from GNN_Explainability.utils.visualization import NodeColor
+from ...utils.visualization import NodeColor
 
 from ..base_config import BaseConfig
 if TYPE_CHECKING:

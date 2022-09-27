@@ -9,7 +9,7 @@ from dig.xgraph.models import *
 import numpy as np
 import torch
 
-from GNN_Explainability.config.base_config import TrainingConfig
+from .....config.base_config import TrainingConfig
 
 from .....entrypoints.core import GradCAMEntrypoint
 
