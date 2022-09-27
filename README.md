@@ -43,7 +43,7 @@ data/
 For each dataset, the probability edge weights provided by each explainer during second stage will be saved in the `data/[dataset]/explanation` folder.
 
 ## Configuration
-Running configurations are located in `src/GNN_Explainability/config/`. [Baseline](#baseline) configuration is located at `base_config.py`, [Explainers](#explanation) at `explanation/` and [Retraining](#retraining) at `roar_config.py`; To know in details about the attributes within each one, checkout the documentation provided below of each attribute. 
+Running configurations are located in `src/GNN_Explainability/config/`. The general configuration, including [baseline](#baseline)stage, is located at `base_config.py`, [explanation](#explanation) at `explanation/` and [retraining](#retraining) at `roar_config.py`; To know in details about the attributes within each one, checkout the documentation provided below of each attribute. 
 
 ## Run
 In order to run each of the three groups mentioned in [overview](#overview), first change your directory to `src/`, then enter this command: `python main.py [seed number] [pattern of one of these three groups]`. For instance, in order to run GraphKAR on GradCAM explanation using GCN3l network and BA-2Motifs dataset, this command is required: `python main.py 12345 train_gcn.ba2motifs.kar.gcn3l.gradcam`. All seed numbers we used are listed in `src/main.py`.  
