@@ -19,7 +19,7 @@ The explainers will provide edge weightings per instance for retraining experime
 Now to measure and compare explainer methods, probability edge weightings provided by these explainers are used to either keep (GraphKAR) or remove (GraphROAR) most informative edges and thereafter check their impact using the retraining step. Their relative addresses follow this pattern `train_gcn.[dataset].[kar or roar].[gcn3l or gin3l].[explainer]`.
 
 ## Data
-At first, within the root directory of this repo, create a `data` folder. then download BA-2Motifs from [here](https://drive.google.com/file/d/134We2cb2PjoY1b6-k8KLmfviM0M4CEkT/view?usp=sharing), BA-3Motifs from [here](https://drive.google.com/drive/folders/1ZGrosPKm85phN54tSGl7-lmQFx-w4NTd?usp=sharing), and the rest from [TUDataset](https://drive.google.com/file/d/134We2cb2PjoY1b6-k8KLmfviM0M4CEkT/view?usp=sharing). Except for BA-2Motifs, the folder hierarchy of the rest are identical; which should be the same with the following:
+At first, within the root directory of this repo, create a `data` folder. then download BA-2Motifs from [here](https://drive.google.com/file/d/134We2cb2PjoY1b6-k8KLmfviM0M4CEkT/view?usp=sharing), BA-3Motifs from [here](https://drive.google.com/drive/folders/1ZGrosPKm85phN54tSGl7-lmQFx-w4NTd?usp=sharing), and the rest from [TUDataset](https://chrsmrrs.github.io/datasets/). Except for BA-2Motifs, the folder hierarchy of the rest are identical; which should be the same with the following:
 ```
 data/
     ba_2motifs/
