@@ -1,6 +1,6 @@
 # GraphROAR
 At the moment, several explainer methods have been developed to perceive the functionality of graph neural networks. In this repo, we propose a new retraining approach to measure and compare these explainer methods by either keeping (GraphKAR) or removing (GraphROAR) most informative edges and thereafter checking their impact using retraining steps.
-### Contents:
+## Contents:
   - [Overview](#overview)
     - [Baseline](#baseline)
     - [Explanation](#explanation)
