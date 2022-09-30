@@ -65,6 +65,9 @@ class GraphClsDataset(BaseDataset):
         if os.path.exists(node_label_path):
             node_labels_in_once = (torch.from_numpy(np.loadtxt(node_label_path, delimiter=','))
                     .squeeze())
+
+            # node labels must start from zero
+            node_labels_in_once = node_labels_in_once - node_labels_in_once.min()
         else:
             # All nodes are unique and therefore have identical features
             node_labels_in_once = torch.zeros_like(node_to_graph_ind)
