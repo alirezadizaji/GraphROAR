@@ -43,7 +43,7 @@ def color_setter(x):
 
 legend = {Color.BLACK: "Void", 
     Color.MAROON: "Building",
-    Color.GREEN: "Grass",
+    Color.GREEN_V2: "Grass",
     Color.OlIVE: "Tree",
     Color.NAVY: "Cow", 
     Color.RED_V2: "Aeroplane",
