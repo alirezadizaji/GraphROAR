@@ -8,6 +8,7 @@ from dig.xgraph.models import *
 import torch
 
 from ..gin3l.gnn_explainer import color_setter, legend
+from .....utils.symmetric_edge_mask import symmetric_edges
 
 from .....entrypoints.core import GradCAMEntrypoint
 
@@ -42,3 +43,10 @@ class Entrypoint(GradCAMEntrypoint):
         explainer = GradCAM(model, explain_graph=conf.explain_graph)
 
         super(Entrypoint, self).__init__(conf, model, explainer)
+
+    def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        edge_mask = symmetric_edges(edge_index, edge_mask)
+        k = int(edge_mask.numel() * 0.3)
+        edge_index = edge_index[:, edge_mask.topk(k)[1]]
+
+        return edge_index

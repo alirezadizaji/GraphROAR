@@ -11,6 +11,7 @@ import torch
 from .....config.base_config import TrainingConfig
 
 from .....entrypoints.core import GNNExplainerEntrypoint
+from .....utils.symmetric_edge_mask import symmetric_edges
 
 from ..gin3l.gnn_explainer import color_setter, legend
 from .....config import GNNExplainerConfig
@@ -47,3 +48,10 @@ class Entrypoint(GNNExplainerEntrypoint):
                  coff_edge_size=conf.coff_edge_size, coff_node_feat_size=conf.coff_node_feat_size)
 
         super().__init__(conf, model, explainer)
+    
+    def _select_explainable_edges(self, edge_index: torch.Tensor, edge_mask: torch.Tensor) -> torch.Tensor:
+        edge_mask = symmetric_edges(edge_index, edge_mask)
+        k = int(edge_mask.numel() * 0.3)
+        edge_index = edge_index[:, edge_mask.topk(k)[1]]
+
+        return edge_index
