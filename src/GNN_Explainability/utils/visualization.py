@@ -48,10 +48,10 @@ def visualization(data: Data,
     # set legend
     if legend is not None:
         if not isinstance(node_colors, list):
-            node_colors_ = [node_colors]
+            node_colors = [node_colors]
 
         # exclude legends not exist in the plot
-        legend = dict(filter(lambda x: x[0] in node_colors_, legend.items()))
+        legend = dict(filter(lambda x: x[0] in node_colors, legend.items()))
         
         for color, label in legend.items():
             plt.scatter([],[], c=color, label=label)
