@@ -22,21 +22,21 @@ def color_setter(x):
         return Color.BLACK
     elif i == 1: # Building
         return Color.MAROON
-    elif i == 1: # Grass
+    elif i == 2: # Grass
         return Color.GREEN_V2
-    elif i == 1: # Tree
+    elif i == 3: # Tree
         return Color.OlIVE
-    elif i == 1: # Cow
+    elif i == 4: # Cow
         return Color.NAVY
-    elif i == 1: # Aeroplane
+    elif i == 5: # Aeroplane
         return Color.RED_V2
-    elif i == 1: # Sky
+    elif i == 6: # Sky
         return Color.GREY
-    elif i == 1: # Face
+    elif i == 7: # Face
         return Color.DARK_YELLOW
-    elif i == 1: # Car
+    elif i == 8: # Car
         return Color.PURPLE
-    elif i == 1: # Bicycle
+    elif i == 9: # Bicycle
         return Color.PINK_V2
 
 
