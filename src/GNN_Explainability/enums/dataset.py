@@ -5,3 +5,4 @@ class Dataset:
     BA3Motifs = "BA3Motifs"
     ENZYME = "ENZYMES"
     IMDB_BIN = "IMDB-BINARY"
+    MSRC9 = "MSRC9"

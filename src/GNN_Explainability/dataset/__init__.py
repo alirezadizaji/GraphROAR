@@ -4,3 +4,4 @@ from .mutag import MUTAGDataset
 from .reddit_binary import RedditDataset
 from .enzyme import EnzymeDataset
 from .imdb_binary import IMDBBinDataset
+from .msrc9 import MSRC9Dataset
