@@ -15,7 +15,7 @@ class Entrypoint(PGExplainerEntrypoint):
     def __init__(self):
         conf = PGExplainerConfig(
             try_num=473,
-            try_name='pgexplainer_gin3l',
+            try_name='pgexplainer_gcn3l',
             dataset_name=Dataset.MSRC9,
             device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
