@@ -17,7 +17,7 @@ class Entrypoint(SubgraphXEntrypoint):
             try_name='subgraphx',
             dataset_name=Dataset.MSRC9,
             training_config=TrainingConfig(100, OptimType.ADAM, batch_size=1),
-            device=torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
+            device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
             num_classes=8,
             save_visualization=True,
@@ -30,7 +30,7 @@ class Entrypoint(SubgraphXEntrypoint):
             explain_graph=True,
             reward_method='mc_shapley',
             get_max_nodes=(lambda data: int(data.x.size(0) * 0.1) + 1),
-            n_rollout=20,
+            n_rollout=15,
         )
 
         model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=20, num_classes=8)
