@@ -29,9 +29,9 @@ def color_setter(x):
     elif i == 4: # Cow
         return Color.NAVY
     elif i == 5: # Sky
-        return Color.RED_V2
-    elif i == 6: # Aeroplane
         return Color.GREY
+    elif i == 6: # Aeroplane
+        return Color.RED_V2
     elif i == 7: # Face
         return Color.DARK_YELLOW
     elif i == 8: # Car
@@ -46,8 +46,8 @@ legend = {Color.BLACK: "Void",
     Color.GREEN_V2: "Grass",
     Color.OlIVE: "Tree",
     Color.NAVY: "Cow", 
-    Color.RED_V2: "Sky",
-    Color.GREY: "Aeroplane",
+    Color.RED_V2: "Aeroplane",
+    Color.GREY: "Sky",
     Color.DARK_YELLOW: "Face",
     Color.PURPLE: "Car",
     Color.PINK_V2: "Bicycle"}
