@@ -39,11 +39,11 @@ if __name__ == "__main__":
     # pgexplainer = [100, 83, 68, 64, 64, 61, 50]
     
     # BA2Motifs-GCN3l (both)
-    gnnexplainer = [100, 86, 92, 77, 72, 71, 50]
-    gradcam = [100, 80, 83, 76.5, 65, 58, 50]
-    random = [100, 98.33, 89.33, 72.33, 70.19, 70.33, 50]
-    subgraphx = [100, 65, 67, 68, 60, 66, 50]
-    pgexplainer = [100, 69, 71, 51, 62, 63, 50]
+    # gnnexplainer = [100, 86, 92, 77, 72, 71, 50]
+    # gradcam = [100, 80, 83, 76.5, 65, 58, 50]
+    # random = [100, 98.33, 89.33, 72.33, 70.19, 70.33, 50]
+    # subgraphx = [100, 65, 67, 68, 60, 66, 50]
+    # pgexplainer = [100, 69, 71, 51, 62, 63, 50]
 
     # MUTAG-GCN3l
     # gnnexplainer = [90, 90, 90, 85, 90, 85, 85]
@@ -114,7 +114,13 @@ if __name__ == "__main__":
     # random = [95, 93.25, 91.25, 87, 84.5, 73.75, 69]
     # # subgraphx = [95, 65, 70, 75, 75, 80, 69]
     # pgexplainer = [95, 90.5, 83.5, 84.5, 77, 71, 69]
-    
+
+    # REDDIT-BINARY GCN3l (both)
+    gnnexplainer = [95, 90, 88.5, 86.5, 73, 56.5, 50]
+    gradcam = [95, 89.5, 86.5, 68.5, 70.5, 70, 50]
+    random = [95, 92.5, 91.5, 91, 87.5, 65.5, 50]
+    # subgraphx = [95, 65, 70, 75, 75, 80, 50]
+    pgexplainer = [95, 91.5, 92.5, 91.5, 85.5, 82, 50]
 
     # REDDIT-BINARY GIN3l
     # gnnexplainer = [90.5, 89.5, 91.5, 85, 82, 80.5, 50]
@@ -129,6 +135,13 @@ if __name__ == "__main__":
     # random = [90.5, 83.5, 78.75, 69.5, 61.5, 55.75, 50]
     # # subgraphx = [90.5, 65, 70, 75, 75, 80, 50]
     # pgexplainer = [90.5, 72, 67.5, 60.5, 52.5, 51, 50]
+
+    # REDDIT-BINARY GIN3l (both)
+    gnnexplainer = [90.5, 72, 85.5, 83, 74.5, 50.5, 50]
+    gradcam = [90.5, 70.5, 72, 70.5, 67.5, 71.5, 50]
+    random = [90.5, 86.5, 81, 71, 59.5, 51.5, 50]
+    # subgraphx = [90.5, 65, 70, 75, 75, 80, 50]
+    pgexplainer = [90.5, 87, 69, 69.5, 70, 69, 50]
 
     # BA3Motifs GCN3l
     # gnnexplainer = [98.6, 66.67, 52, 46, 41.33, 48.67, 33]
@@ -194,13 +207,27 @@ if __name__ == "__main__":
     # pgexplainer = [75, 66.9, 63.33, 66.67, 56.67, 48.33, 16.67]
 
     # Enzyme GIN3l (both)
-    gnnexplainer = [75, 70, 70, 65, 65, 48.33, 16.67]
-    gradcam = [75, 58.33, 56.67, 50, 46.67, 41.67, 16.67]
-    random = [75, 71.67, 66.67, 63.33, 56.67, 48.33, 16.67]
-    subgraphx = [75, 66.67, 51.67, 45, 33.33, 36.67, 16.67]
-    pgexplainer = [75, 60, 58.33, 51.67, 50, 35, 16.67]
+    # gnnexplainer = [75, 70, 70, 65, 65, 48.33, 16.67]
+    # gradcam = [75, 58.33, 56.67, 50, 46.67, 41.67, 16.67]
+    # random = [75, 71.67, 66.67, 63.33, 56.67, 48.33, 16.67]
+    # subgraphx = [75, 66.67, 51.67, 45, 33.33, 36.67, 16.67]
+    # pgexplainer = [75, 60, 58.33, 51.67, 50, 35, 16.67]
 
-    plt.title('ROAR performance on Enzyme-GIN3l (both)')
+    # MSRC9 GCN3l (both)
+    # gnnexplainer = [92, 97, 96, 96, 100, 100, 16]
+    # gradcam = [92, 96, 96, 96, 96, 88, 16]
+    # random = [92, 98, 96, 100, 96, 100, 16]
+    # subgraphx = [92, 89, 97, 96, 96, 97, 16]
+    # pgexplainer = [92, 95, 97, 96, 96, 96, 16]
+
+    # MSRC9 GIN3l (both)
+    # gnnexplainer = [100, 96, 100, 96, 84, 84, 12]
+    # gradcam = [100, 96, 96, 95, 96, 84, 12]
+    # random = [100, 97, 97, 96, 96, 96, 12]
+    # subgraphx = [100, 100, 100, 100, 100, 84, 12]
+    # pgexplainer = [100, 96, 100, 100, 96, 92, 12]
+
+    plt.title('ROAR performance on REDDIT_BINARY-GIN3l (both)')
     plt.xlabel("Edge Keep (ROAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)
@@ -212,12 +239,12 @@ if __name__ == "__main__":
     plt.plot(x, random)
     plt.scatter(x, random)
 
-    plt.plot(x, subgraphx)
-    plt.scatter(x, subgraphx)
+    # plt.plot(x, subgraphx)
+    # plt.scatter(x, subgraphx)
     
-    plt.plot(x, pgexplainer)
-    plt.scatter(x, pgexplainer)
+    plt.plot(x, pgexplainer, color='#9467BD')
+    plt.scatter(x, pgexplainer, color='#9467BD')
 
-    plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'SubgraphX', 'PGExplainer'])
-    # plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'PGExplainer'])
+    # plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'SubgraphX', 'PGExplainer'])
+    plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'PGExplainer'])
     plt.show()
