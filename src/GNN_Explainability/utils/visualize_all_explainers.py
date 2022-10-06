@@ -11,6 +11,8 @@ import numpy as np
 import torch
 from torch_geometric.data import DataLoader
 
+from GNN_Explainability.dataset.mutag import MUTAGDataset
+
 from ..entrypoints.core.main import get_dataset_cls
 from ..enums.data_spec import DataSpec
 from .symmetric_edge_mask import symmetric_edges
@@ -27,13 +29,25 @@ def get_parser() -> Namespace:
     parser.add_argument('-W', '--width', type=int, default=3, help='width of a subplot')
     parser.add_argument('-H', '--height', type=int, default=2.5, help='height of a subplot')
     parser.add_argument('-V', '--save-dir', type=str, help='root directory to save visualizations.')
+    parser.add_argument('-I', '--node-size', type=int, default=10, help='node size to be depicted.')
     args = parser.parse_args()
     return args
+
+def get_color_setter_and_legend(cls):
+    if cls == MUTAGDataset:
+        from ..entrypoints.explain_gcn.mutag.gin3l.gnn_explainer import color_setter, legend
+    else:
+        color_setter = None
+        legend = None
+    
+    return color_setter, legend
 
 def visualize(args: Namespace) -> None:
     os.makedirs(args.save_dir, exist_ok=True)
 
     cls = get_dataset_cls(args.dataset)
+    color_setter, legend = get_color_setter_and_legend(cls)
+
     train_set = cls(DataSpec.TRAIN)
     val_set = cls(DataSpec.VAL)
     test_set = cls(DataSpec.TEST)
@@ -100,8 +114,10 @@ def visualize(args: Namespace) -> None:
                 new_pos = visualization(g, 
                     title='', 
                     pos=pos, 
-                    node_size=5, 
+                    node_size=args.node_size, 
                     edge_width=1, 
+                    node_color_setter=color_setter,
+                    legend=legend,
                     draw_node_labels=False, 
                     plot=False)
 
@@ -115,7 +131,7 @@ def visualize(args: Namespace) -> None:
                 if pos is None:
                     pos = new_pos
 
-        save_dir = os.path.join(args.save_dir, f"{name}.png")
+        save_dir = os.path.join(args.save_dir, f"{name}_{graph.y.item()}.png")
         plt.savefig(save_dir, bbox_inches='tight')
         print(f'DONE: {name} saved at {save_dir}.', flush=True)
 
