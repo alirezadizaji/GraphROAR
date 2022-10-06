@@ -18,7 +18,11 @@ def visualization(data: Data,
         pos: Optional[Dict[int, List[int]]] = None,
         save_dir: Optional[str] = None,
         node_color_setter: Optional[NodeColor] = None,
-        legend: Optional[Dict[Color, str]] = None):
+        legend: Optional[Dict[Color, str]] = None,
+        node_size: int = 300,
+        edge_width: int = 6,
+        draw_node_labels: bool = True,
+        plot: bool = True):
     
     graph = to_networkx(data)
     
@@ -34,14 +38,14 @@ def visualization(data: Data,
     if pos is None:
         pos = nx.kamada_kawai_layout(graph)
     nx.draw_networkx_nodes(graph, pos,
-        node_size=300, node_color=node_colors)
-
-    nx.draw_networkx_edges(graph, pos, width=3, arrows=False)
+        node_size=node_size, node_color=node_colors)
 
     nx.draw_networkx_edges(graph, pos,
-        width=6,
+        width=edge_width,
         arrows=False)
-    nx.draw_networkx_labels(graph, pos)
+
+    if draw_node_labels:
+        nx.draw_networkx_labels(graph, pos)
     
     plt.title(title)
 
@@ -57,11 +61,12 @@ def visualization(data: Data,
             plt.scatter([],[], c=color, label=label)
         plt.legend()
     
-    # save plot if neccessary
-    if save_dir is not None:
-        save_dir = os.path.join(save_dir, title)
-        plt.savefig(save_dir, dpi=600)
-    else:
-        plt.show()
+    if plot:
+        # save plot if neccessary
+        if save_dir is not None:
+            save_dir = os.path.join(save_dir, title)
+            plt.savefig(save_dir, dpi=600)
+        else:
+            plt.show()
 
     return pos

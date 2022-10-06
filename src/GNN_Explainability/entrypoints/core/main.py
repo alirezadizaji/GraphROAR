@@ -13,6 +13,26 @@ if TYPE_CHECKING:
     from dig.xgraph.models import GNNBasic
     from torch.optim import Optimizer
 
+def get_dataset_cls(dataset: Dataset):
+    if dataset == Dataset.BA2Motifs:
+            cls = BA2MotifsDataset
+    elif dataset == Dataset.MUTAG:
+        cls = MUTAGDataset
+    elif dataset == Dataset.REDDIT_BINARY:
+        cls = RedditDataset
+    elif dataset == Dataset.BA3Motifs:
+        cls = BA3MotifsDataset
+    elif dataset == Dataset.ENZYME:
+        cls = EnzymeDataset
+    elif dataset == Dataset.IMDB_BIN:
+        cls = IMDBBinDataset
+    elif dataset == Dataset.MSRC9:
+        cls = MSRC9Dataset
+    else:
+        raise NotImplementedError()
+    
+    return cls
+
 class MainEntrypoint(ABC):
     def __init__(self, conf: 'BaseConfig', model: 'GNNBasic') -> None:
         self.conf = conf
@@ -30,23 +50,7 @@ class MainEntrypoint(ABC):
         os.makedirs(self.conf.save_dir, exist_ok=True)
         
     def get_loaders(self) -> Tuple['DataLoader', 'DataLoader', 'DataLoader']:
-        if self.conf.dataset_name == Dataset.BA2Motifs:
-            cls = BA2MotifsDataset
-        elif self.conf.dataset_name == Dataset.MUTAG:
-            cls = MUTAGDataset
-        elif self.conf.dataset_name == Dataset.REDDIT_BINARY:
-            cls = RedditDataset
-        elif self.conf.dataset_name == Dataset.BA3Motifs:
-            cls = BA3MotifsDataset
-        elif self.conf.dataset_name == Dataset.ENZYME:
-            cls = EnzymeDataset
-        elif self.conf.dataset_name == Dataset.IMDB_BIN:
-            cls = IMDBBinDataset
-        elif self.conf.dataset_name == Dataset.MSRC9:
-            cls = MSRC9Dataset
-        else:
-            raise NotImplementedError()
-
+        cls = get_dataset_cls(self.conf.dataset_name)
         train_set = cls(DataSpec.TRAIN)
         val_set = cls(DataSpec.VAL)
         test_set = cls(DataSpec.TEST)
