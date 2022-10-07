@@ -76,6 +76,8 @@ def visualize(args: Namespace) -> None:
         n_row, n_col = len(args.explainer), len(args.ratio) + 1
         w_size, h_size = n_col * args.width, n_row * args.height
         fig = plt.figure(figsize=(w_size, h_size))
+        subplot_legend = legend
+
         graph = graphs[name]
         
         # just to keep all positions of the graphs the same
@@ -123,12 +125,12 @@ def visualize(args: Namespace) -> None:
                     node_size=args.node_size, 
                     edge_width=1, 
                     node_color_setter=color_setter,
-                    legend=legend,
+                    legend=subplot_legend,
                     draw_node_labels=False, 
                     plot=False)
 
                 if args.show_legend_once and col_ix == 0 and row_ix == 0:
-                    legend = None
+                    subplot_legend = None
                     
                 if row_ix == 0:
                     title = "org" if r == 1.0 else f"{int(r*100)}%"
