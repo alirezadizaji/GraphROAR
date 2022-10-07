@@ -31,6 +31,7 @@ def get_parser() -> Namespace:
     parser.add_argument('-V', '--save-dir', type=str, help='root directory to save visualizations.')
     parser.add_argument('-I', '--node-size', type=int, default=10, help='node size to be depicted.')
     parser.add_argument('-M', '--max-nodes', type=int, default=50, help='maximum number of nodes a graph could have to be considered as a candidate for visualization.')
+    parser.add_argument('-O', '--show-legend-once', action='store_true', help='If given then the legend will appear only on graph `org` subplot.')
     args = parser.parse_args()
     return args
 
@@ -101,6 +102,7 @@ def visualize(args: Namespace) -> None:
 
                 ix = row_ix * n_col + col_ix + 1
 
+                # first column is only for original graph
                 if col_ix == 0 and row_ix > 0:
                     continue
 
@@ -125,6 +127,9 @@ def visualize(args: Namespace) -> None:
                     draw_node_labels=False, 
                     plot=False)
 
+                if args.show_legend_once and col_ix == 0 and row_ix == 0:
+                    legend = None
+                    
                 if row_ix == 0:
                     title = "org" if r == 1.0 else f"{int(r*100)}%"
                     plt.title(title, fontsize=10)
