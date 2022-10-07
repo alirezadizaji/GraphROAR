@@ -23,7 +23,7 @@ def get_parser() -> Namespace:
     parser.add_argument('-D', '--dataset', type=str, help='dataset name to visualize')
     parser.add_argument('-E', '--edge-mask-dir', type=str, help='edge mask directory to get probability weightings from')
     parser.add_argument('-R', '--ratio', type=float, nargs='+', default=[0.1, 0.3, 0.5, 0.7, 0.9], help='ratios to visualize (must be between 0.0 and 1.0)')
-    parser.add_argument('-G', '--explainer', type=str, nargs='+', default=['gnnexplainer', 'gradcam', 'pgexplainer', 'subgraphx'], help='explainers to visualize')
+    parser.add_argument('-X', '--explainer', type=str, nargs='+', default=['gnnexplainer', 'gradcam', 'pgexplainer', 'subgraphx'], help='explainers to visualize')
     parser.add_argument('-N', '--num-samples', type=int, default=20, help='number of (randomly selected) samples to visualize.')
     parser.add_argument('-S', '--symetric', action='store_true', help='If passed then edge weights must be symmetric.')
     parser.add_argument('-W', '--width', type=int, default=3, help='width of a subplot')
