@@ -11,8 +11,8 @@ import numpy as np
 import torch
 from torch_geometric.data import DataLoader
 
-from GNN_Explainability.dataset.mutag import MUTAGDataset
-
+from ..dataset.mutag import MUTAGDataset
+from ..dataset.reddit_binary import RedditDataset
 from ..entrypoints.core.main import get_dataset_cls
 from ..enums.data_spec import DataSpec
 from .symmetric_edge_mask import symmetric_edges
@@ -30,6 +30,7 @@ def get_parser() -> Namespace:
     parser.add_argument('-H', '--height', type=int, default=2.5, help='height of a subplot')
     parser.add_argument('-V', '--save-dir', type=str, help='root directory to save visualizations.')
     parser.add_argument('-I', '--node-size', type=int, default=10, help='node size to be depicted.')
+    parser.add_argument('-M', '--max-nodes', type=int, default=50, help='maximum number of nodes a graph could have to be considered as a candidate for visualization.')
     args = parser.parse_args()
     return args
 
@@ -60,6 +61,9 @@ def visualize(args: Namespace) -> None:
     for loader in [train, val, test]:
         for data in loader:
             data = data[0]
+            # graphs with more than a threshold number of nodes could not be clearly visualized as the plot becomes untidy.
+            if data.x.size(0) > args.max_nodes:
+                continue
             graphs[data.name[0]] = data
     
     samples_names = sample(graphs.keys(), args.num_samples)
