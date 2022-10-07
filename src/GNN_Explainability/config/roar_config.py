@@ -24,5 +24,8 @@ class ROARConfig(BaseConfig):
     eliminate_nodes_too: bool = False
     """ If True then eliminate nodes whose all connected edges have been removed. """
     
+    prob_to_replace_instead_of_remove: Optional[float] = None
+    """ A probability threshold to randomly replace some edges instead of removing them. If not given, then do not apply replacement."""
+    
     roar_ratios: List[float] = field(default_factory=list)
     """ ratios (from 0.0 to 1.0) to perform retraining steps """
