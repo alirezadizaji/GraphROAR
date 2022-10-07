@@ -63,7 +63,8 @@ class ROAREntrypoint(TrainEntrypoint):
                         self.roar_ratio,
                         conf.edge_mask_symmetric,
                         conf.eliminate_top_most_edges,
-                        conf.eliminate_nodes_too),
+                        conf.eliminate_nodes_too,
+                        conf.prob_to_replace_instead_of_remove),
                     skip_during_eval=conf.skip_during_evaluation))
         
         yield None
