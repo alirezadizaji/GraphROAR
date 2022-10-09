@@ -37,7 +37,7 @@ class Entrypoint(GNNExplainerEntrypoint):
         
         model = GCN_3l_BN(model_level='graph', dim_node=1, dim_hidden=60, num_classes=conf.num_classes)
         model.to(conf.device)
-        model.load_state_dict(torch.load('../results/179_gcn3l_REDDIT-BINARY/weights/450', map_location=conf.device))
+        model.load_state_dict(torch.load('../results/179_gcn3l_REDDIT-BINARY/weights/166', map_location=conf.device))
         
         explainer = GNNExplainer(model, epochs=conf.training_config.num_epochs,
                  lr=conf.training_config.lr, explain_graph=conf.explain_graph, 

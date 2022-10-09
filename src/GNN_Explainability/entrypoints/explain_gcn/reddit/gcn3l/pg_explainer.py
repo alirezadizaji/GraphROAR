@@ -16,9 +16,9 @@ class Entrypoint(PGExplainerEntrypoint):
             try_num=183,
             try_name='pgexplainer',
             dataset_name=Dataset.REDDIT_BINARY,
-            device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu'),
+            device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
-            training_config=TrainingConfig(15, OptimType.ADAM, lr=3e-3, batch_size=1),
+            training_config=TrainingConfig(50, OptimType.ADAM, lr=3e-3, batch_size=1),
             num_classes=2,
             save_visualization=True,
             visualize_explainer_perf=True,
@@ -27,12 +27,10 @@ class Entrypoint(PGExplainerEntrypoint):
             sparsity=0.0,
             explain_graph=True,
             plt_legend=None,
-            node_color_setter=None,
-            explainer_load_dir='../results/183_pgexplainer_REDDIT-BINARY/weights/model.pt')        
-
+            node_color_setter=None)
         model = GCN_3l_BN(model_level='graph', dim_node=1, dim_hidden=60, num_classes=2)
         model.to(conf.device)
-        model.load_state_dict(torch.load('../results/179_gcn3l_REDDIT-BINARY/weights/450', map_location=conf.device))
+        model.load_state_dict(torch.load('../results/179_gcn3l_REDDIT-BINARY/weights/166', map_location=conf.device))
  
         explainer = PGExplainer(model, in_channels=120, 
                 device=conf.device, explain_graph=conf.explain_graph,

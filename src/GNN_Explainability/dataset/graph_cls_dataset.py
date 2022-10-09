@@ -3,6 +3,7 @@ from random import shuffle
 from typing import TYPE_CHECKING, List, Tuple
 
 import numpy as np
+import pandas as pd
 import torch
 from torch.utils.data import Dataset
 from torch_geometric.data import Data
@@ -33,12 +34,17 @@ class GraphClsDataset(BaseDataset):
 
         base_path = os.path.join("..", "data", datasetname)
         
-        edge_index = (torch.from_numpy(
-                np.loadtxt(
+        edge_index = np.loadtxt(
                     os.path.join(base_path, raw_folder_name, f"{datasetname}_A.txt"), 
-                    delimiter=','))
-                .t()
-                .long())
+                    delimiter=',')
+        # drop duplicate edges (Exists in REDDIT-BINARY and IMDB-BINARY)
+        num1 = edge_index.shape[0]
+        df = pd.DataFrame(data=edge_index)
+        df = df.drop_duplicates()
+        edge_index = df.to_numpy().T
+        edge_index = torch.from_numpy(edge_index).long()
+        num2 = edge_index.size(1)
+        print(f"{num1} out of {num2} edges remained after edge duplicate removal.", flush=True)
 
         node_to_graph_ind = (torch.from_numpy(
                 np.loadtxt(

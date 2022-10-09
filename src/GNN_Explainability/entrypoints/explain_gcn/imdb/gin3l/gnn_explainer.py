@@ -42,7 +42,7 @@ class Entrypoint(GNNExplainerEntrypoint):
         
         model = GIN_3l(model_level='graph', dim_node=1, dim_hidden=20, num_classes=conf.num_classes)
         model.to(conf.device)
-        model.load_state_dict(torch.load('../results/338_gin3l_IMDB-BINARY/weights/68', map_location=conf.device))
+        model.load_state_dict(torch.load('../results/338_gin3l_IMDB-BINARY/weights/90', map_location=conf.device))
         
         explainer = GNNExplainer(model, epochs=conf.training_config.num_epochs,
                  lr=conf.training_config.lr, explain_graph=conf.explain_graph, 
