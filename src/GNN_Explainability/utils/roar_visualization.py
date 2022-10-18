@@ -116,11 +116,11 @@ if __name__ == "__main__":
     # pgexplainer = [95, 90.5, 83.5, 84.5, 77, 71, 69]
 
     # REDDIT-BINARY GCN3l (both)
-    gnnexplainer = [95, 90, 88.5, 86.5, 73, 56.5, 50]
-    gradcam = [95, 89.5, 86.5, 68.5, 70.5, 70, 50]
-    random = [95, 92.5, 91.5, 91, 87.5, 65.5, 50]
-    # subgraphx = [95, 65, 70, 75, 75, 80, 50]
-    pgexplainer = [95, 91.5, 92.5, 91.5, 85.5, 82, 50]
+    gnnexplainer = [93.5, 91, 93.5, 91, 84, 73, 50]
+    gradcam = [93.5,90, 89, 85.5, 79.5, 72.5, 50]
+    random = [93.5, 94.5, 93, 88, 81, 62.5, 50]
+    # subgraphx = [93.5, 65, 70, 75, 75, 80, 50]
+    pgexplainer = [93.5, 93.5, 94.5, 93, 87.5, 52, 50]
 
     # REDDIT-BINARY GIN3l
     # gnnexplainer = [90.5, 89.5, 91.5, 85, 82, 80.5, 50]
@@ -137,11 +137,11 @@ if __name__ == "__main__":
     # pgexplainer = [90.5, 72, 67.5, 60.5, 52.5, 51, 50]
 
     # REDDIT-BINARY GIN3l (both)
-    gnnexplainer = [90.5, 72, 85.5, 83, 74.5, 50.5, 50]
-    gradcam = [90.5, 70.5, 72, 70.5, 67.5, 71.5, 50]
-    random = [90.5, 86.5, 81, 71, 59.5, 51.5, 50]
-    # subgraphx = [90.5, 65, 70, 75, 75, 80, 50]
-    pgexplainer = [90.5, 87, 69, 69.5, 70, 69, 50]
+    # gnnexplainer = [93.5, 90, 90, 78.5, 62.5, 57.5, 50]
+    # gradcam = [93.5, 77.5, 72, 68.5, 74, 74.5, 50]
+    # random = [93.5, 93, 87, 72, 64.5, 60.5, 50]
+    # # subgraphx = [93.5, 65, 70, 75, 75, 80, 50]
+    # pgexplainer = [93.5, 93.5, 90, 83, 68, 63, 50]
 
     # BA3Motifs GCN3l
     # gnnexplainer = [98.6, 66.67, 52, 46, 41.33, 48.67, 33]
@@ -186,18 +186,18 @@ if __name__ == "__main__":
     # pgexplainer = [95.33, 98.67, 92.67, 89.33, 39.33, 68, 33]
 
     # IMDB-BINARY GCN3l (both)
-    # gnnexplainer = [75, 67, 68, 63, 60, 64, 50]
-    # gradcam = [75, 66, 64, 60, 54, 58, 50]
-    # random = [75, 68, 70, 66, 65, 67, 50]
-    # subgraphx = [75, 67, 63, 58, 58, 57.5, 50]
-    # pgexplainer = [75, 71, 67, 66, 66, 62, 50]
+    # gnnexplainer = [72, 67, 60, 64, 61, 67, 50]
+    # gradcam = [72, 70, 66, 67, 62, 65, 50]
+    # random = [72, 72, 68, 68, 71, 62, 50]
+    # subgraphx = [72, 65, 65, 65, 67, 66, 50]
+    # pgexplainer = [72, 71, 67, 69, 70, 66, 50]
 
     # IMDB_Binary GIN3l (both)
-    # gnnexplainer = [80, 78, 61, 49, 37, 55, 50]
-    # gradcam = [80, 77, 62, 50, 37, 49.5, 50]
-    # random = [80, 77.5, 63, 47, 43.5, 52, 50]
-    # subgraphx = [80, 76, 65, 53, 50, 50, 50]
-    # pgexplainer = [80, 78, 62, 56, 54, 68, 50]
+    # gnnexplainer = [80, 75, 60, 49, 37, 54, 50]
+    # gradcam = [80, 76, 62, 61, 50, 40, 50]
+    # random = [80, 79, 64, 63, 65, 58, 50]
+    # subgraphx = [80, 78, 66, 58, 50, 50, 50]
+    # pgexplainer = [80, 77, 59, 53, 46, 45, 50]
 
     # Enzyme GCN3l (both)
     # gnnexplainer = [75, 67, 66.67, 63.33, 63.33, 61.67, 16.67]
@@ -227,7 +227,7 @@ if __name__ == "__main__":
     # subgraphx = [100, 100, 100, 100, 100, 84, 12]
     # pgexplainer = [100, 96, 100, 100, 96, 92, 12]
 
-    plt.title('ROAR performance on REDDIT_BINARY-GIN3l (both)')
+    plt.title('ROAR performance on REDDIT_BINARY-GCN3l (both)')
     plt.xlabel("Edge Keep (ROAR %)")
     plt.ylabel("Val Acc (%)")
     plt.plot(x, gnnexplainer)
