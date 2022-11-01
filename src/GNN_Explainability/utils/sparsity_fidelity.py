@@ -44,7 +44,7 @@ if __name__ == "__main__":
     
     sparsities = np.array([0.0, 0.1, 0.3, 0.5, 0.7, 1.0])
     fidelities = np.zeros_like(sparsities, dtype=np.float32)
-    method = 'subgraphx_90%'
+    method = 'gnnexplainer'
     for data in val:
         data = data[0]
         data = data.to('cuda:0')
@@ -108,4 +108,4 @@ if __name__ == "__main__":
             #     print(p1.item(), p2.item(), c.item(), g.y.item(), g.edge_index.shape)
         
     fidelities /= N 
-    print(fidelities)
+    print(f"Keep: {args.keep}, Normalized: {args.normalize}\n{fidelities}", flush=True)
