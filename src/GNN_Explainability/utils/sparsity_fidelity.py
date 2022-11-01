@@ -1,4 +1,4 @@
-from copy import deepcopy
+from argparse import ArgumentParser
 
 from dig.xgraph.models import *
 import numpy as np
@@ -10,8 +10,17 @@ from GNN_Explainability.entrypoints.core.main import get_dataset_cls
 from GNN_Explainability.enums import Dataset, DataSpec
 from GNN_Explainability.utils.symmetric_edge_mask import symmetric_edges
 
+def get_args():
+    parser = ArgumentParser()
+    parser.add_argument('-K', '--keep', action='store_true', help='If given then keep most informative parts.')
+    parser.add_argument('-N', '--normalize', action='store_true', help='If given then normalize.')
+    args = parser.parse_args()
+    return args
+
 
 if __name__ == "__main__":
+    args = get_args()
+
     cls = get_dataset_cls(Dataset.BA3Motifs)
     
     train_set = cls(DataSpec.TRAIN)
@@ -57,8 +66,14 @@ if __name__ == "__main__":
             # print(k)
 
             _, indices = mask.topk(k)
-            masskk = torch.ones_like(g.edge_index[0]).bool()
-            masskk[indices] = False
+
+            if args.keep:
+                masskk = torch.zeros_like(g.edge_index[0]).bool()
+                masskk[indices] = True
+            else:
+                masskk = torch.ones_like(g.edge_index[0]).bool()
+                masskk[indices] = False
+
             g.edge_index = g.edge_index[:, masskk]
             
             B = g.x.size(0)
@@ -84,7 +99,11 @@ if __name__ == "__main__":
             # out = F.softmax(out)
             p2 = outt[c]
             # print(sparsity, g.edge_index.shape, g.x.shape, p1.item(), p2.item(), g.y.item(), c.item())
-            fidelities[ix] += p1.item() - p2.item()
+            diff = p1.item() - p2.item()
+            if args.normalize:
+                diff = diff / p1.item()
+
+            fidelities[ix] += diff
             # if g.y.item() == 1:
             #     print(p1.item(), p2.item(), c.item(), g.y.item(), g.edge_index.shape)
         
