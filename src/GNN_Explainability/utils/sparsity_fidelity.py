@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+import random
 
 from dig.xgraph.models import *
 import numpy as np
@@ -9,17 +10,19 @@ from torch_geometric.data import Batch, DataLoader
 from GNN_Explainability.entrypoints.core.main import get_dataset_cls
 from GNN_Explainability.enums import Dataset, DataSpec
 from GNN_Explainability.utils.symmetric_edge_mask import symmetric_edges
+from main import global_seed
 
 def get_args():
     parser = ArgumentParser()
+    parser.add_argument('-G', '--globale', type=int, default=12345, help='seed.')
     parser.add_argument('-K', '--keep', action='store_true', help='If given then keep most informative parts.')
     parser.add_argument('-N', '--normalize', action='store_true', help='If given then normalize.')
     args = parser.parse_args()
     return args
 
-
 if __name__ == "__main__":
     args = get_args()
+    global_seed(args.globale)
 
     cls = get_dataset_cls(Dataset.BA3Motifs)
     
@@ -42,7 +45,7 @@ if __name__ == "__main__":
     fidelity = 0.0
     update_N = True
     
-    sparsities = np.array([0.0, 0.1, 0.3, 0.5, 0.7, 1.0])
+    sparsities = np.array([0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1.0])
     fidelities = np.zeros_like(sparsities, dtype=np.float32)
     method = 'gnnexplainer'
     for data in val:
