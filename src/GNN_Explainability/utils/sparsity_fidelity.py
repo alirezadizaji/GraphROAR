@@ -39,7 +39,7 @@ if __name__ == "__main__":
     # model.load_state_dict(torch.load('../results/1_gcn3l_BA2Motifs/weights/16', map_location='cuda:0'))
     # model.load_state_dict(torch.load('../results/12_gin3l_MUTAG/weights/176', map_location='cuda:0'))
     model.load_state_dict(torch.load('../results/229_gcn3l_BA3Motifs/weights/61', map_location='cuda:0'))
-    model.eval()
+    model = model.eval()
 
     N = 0
     fidelity = 0.0
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     
     sparsities = np.array([0.0, 0.1, 0.3, 0.5, 0.7, 0.9, 1.0])
     fidelities = np.zeros_like(sparsities, dtype=np.float32)
-    method = 'gnnexplainer'
+    method = 'subgraphx_90%'
     for data in val:
         data = data[0]
         data = data.to('cuda:0')
@@ -56,7 +56,6 @@ if __name__ == "__main__":
         mask = torch.from_numpy(np.load(pth))
         mask = symmetric_edges(data.edge_index, mask)
         out = model(data=data).squeeze().sigmoid()
-        # out = F.softmax(out)
         c = out.argmax()
         p1 = out[c]
         
@@ -65,8 +64,7 @@ if __name__ == "__main__":
         for ix, sparsity in enumerate(sparsities):
             g = data.clone()
 
-            k = int((1 - sparsity) * num_edges)
-            # print(k)
+            k = int((sparsity) * num_edges)
 
             _, indices = mask.topk(k)
 
@@ -99,7 +97,6 @@ if __name__ == "__main__":
             # delattr(g, 'batch')
             # g: Batch = Batch.from_data_list([g])
             outt = model(data=g).squeeze().sigmoid()
-            # out = F.softmax(out)
             p2 = outt[c]
             # print(sparsity, g.edge_index.shape, g.x.shape, p1.item(), p2.item(), g.y.item(), c.item())
             diff = p1.item() - p2.item()
@@ -111,4 +108,6 @@ if __name__ == "__main__":
             #     print(p1.item(), p2.item(), c.item(), g.y.item(), g.edge_index.shape)
         
     fidelities /= N 
-    print(f"Keep: {args.keep}, Normalized: {args.normalize}\n{fidelities}", flush=True)
+    print(f"Keep: {args.keep}, Normalized: {args.normalize}", flush=True)
+    res = np.vectorize(lambda x: round(x*100, 4))(fidelities)
+    print(",".join([str(r) for r in res]))
