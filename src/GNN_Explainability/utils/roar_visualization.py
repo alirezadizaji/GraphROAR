@@ -18,11 +18,11 @@ if __name__ == "__main__":
     # pgexplainer = [100, 100, 100, 100, 100, 63, 50]
 
     # BA2Motifs-GIN3l (both)
-    # gnnexplainer = [100, 100, 100, 100, 100, 99, 50]
-    # gradcam = [100, 56, 50, 51, 50, 50, 50]
-    # random = [100, 100, 100, 100, 99, 99, 50]
-    # subgraphx = [100, 72, 51, 84, 69, 50, 50]
-    # pgexplainer = [100, 96, 88, 86, 86, 50, 50]
+    gnnexplainer = [100, 100, 100, 100, 100, 99, 50]
+    gradcam = [100, 56, 50, 51, 50, 50, 50]
+    random = [100, 100, 100, 100, 99, 99, 50]
+    subgraphx = [100, 72, 51, 84, 69, 50, 50]
+    pgexplainer = [100, 96, 88, 86, 86, 50, 50]
 
     # BA2Motifs-GCN3l
     # gnnexplainer = [100, 90, 70, 61, 57, 52, 50]
@@ -116,11 +116,11 @@ if __name__ == "__main__":
     # pgexplainer = [95, 90.5, 83.5, 84.5, 77, 71, 69]
 
     # REDDIT-BINARY GCN3l (both)
-    gnnexplainer = [93.5, 91, 93.5, 91, 84, 73, 50]
-    gradcam = [93.5,90, 89, 85.5, 79.5, 72.5, 50]
-    random = [93.5, 94.5, 93, 88, 81, 62.5, 50]
-    # subgraphx = [93.5, 65, 70, 75, 75, 80, 50]
-    pgexplainer = [93.5, 93.5, 94.5, 93, 87.5, 52, 50]
+    # gnnexplainer = [93.5, 91, 93.5, 91, 84, 73, 50]
+    # gradcam = [93.5,90, 89, 85.5, 79.5, 72.5, 50]
+    # random = [93.5, 94.5, 93, 88, 81, 62.5, 50]
+    # # subgraphx = [93.5, 65, 70, 75, 75, 80, 50]
+    # pgexplainer = [93.5, 93.5, 94.5, 93, 87.5, 52, 50]
 
     # REDDIT-BINARY GIN3l
     # gnnexplainer = [90.5, 89.5, 91.5, 85, 82, 80.5, 50]
@@ -228,8 +228,9 @@ if __name__ == "__main__":
     # pgexplainer = [100, 96, 100, 100, 96, 92, 12]
 
     # plt.title('ROAR performance on  BA2Motifs-GCN3l (both)')
-    plt.xlabel("Edge Keep (ROAR %)")
-    plt.ylabel("Acc (%)")
+    plt.figure(figsize=(5.6, 3.5))
+    plt.xlabel("Edge Remove (ROAR%)",fontsize=11)
+    plt.ylabel("Acc (%)", fontsize=11)
     plt.plot(x, gnnexplainer)
     plt.scatter(x, gnnexplainer)
     
@@ -245,6 +246,9 @@ if __name__ == "__main__":
     plt.plot(x, pgexplainer, color='#9467BD')
     plt.scatter(x, pgexplainer, color='#9467BD')
 
-    plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'SubgraphX', 'PGExplainer'])
-    # plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'PGExplainer'])
-    plt.show()
+    plt.rcParams.update({'font.size': 11})
+    plt.xticks(fontsize=11) 
+    plt.yticks(fontsize=11)
+    # plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'SubgraphX', 'PGExplainer'])
+    plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'PGExplainer'])
+    plt.savefig('/home/alireza/Desktop/roar_both.png', bbox_inches='tight', dpi=300)

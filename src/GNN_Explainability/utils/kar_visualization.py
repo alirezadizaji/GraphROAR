@@ -131,11 +131,11 @@ if __name__ == "__main__":
     # pgexplainer = [50, 67.5, 83, 93, 95, 94.5, 93.5]
     
     # REDDIT-BINARY GIN3l
-    gnnexplainer = [50, 90.5, 92.5, 93.5, 94, 94, 93.5]
-    gradcam = [50, 90, 93.5, 93, 94.5, 94, 93.5]
-    random = [50, 70.5, 87, 90.5, 91, 93, 93.5]
-    # subgraphx = [69, 65, 70, 75, 75, 80, 93.5]
-    pgexplainer = [50, 78, 80.5, 88.5, 93, 94.5, 93.5]
+    # gnnexplainer = [50, 90.5, 92.5, 93.5, 94, 94, 93.5]
+    # gradcam = [50, 90, 93.5, 93, 94.5, 94, 93.5]
+    # random = [50, 70.5, 87, 90.5, 91, 93, 93.5]
+    # # subgraphx = [69, 65, 70, 75, 75, 80, 93.5]
+    # pgexplainer = [50, 78, 80.5, 88.5, 93, 94.5, 93.5]
 
     # REDDIT-BINARY GIN3l (node elimination)
     # gnnexplainer = [50, 89.5, 92, 93.5, 94, 94, 93.5]
@@ -306,11 +306,11 @@ if __name__ == "__main__":
     # pgexplainer = [50, 50, 50, 53, 62, 75, 80]
 
     # IMDB-BINARY GIN3l (both)
-    # gnnexplainer = [50, 50, 50, 51, 62, 75, 80]
-    # gradcam = [50, 51, 51, 60, 73, 79, 80]
-    # random = [50, 49, 50, 50, 60, 78, 80]
-    # subgraphx = [50, 57, 50, 59, 66, 79, 80]
-    # pgexplainer = [50, 60, 46, 51, 69, 77, 80]
+    gnnexplainer = [50, 50, 50, 51, 62, 75, 80]
+    gradcam = [50, 51, 51, 60, 73, 79, 80]
+    random = [50, 49, 50, 50, 60, 78, 80]
+    subgraphx = [50, 57, 50, 59, 66, 79, 80]
+    pgexplainer = [50, 60, 46, 51, 69, 77, 80]
 
     # # MSRC9 GCN3l (both)
     # gnnexplainer = [16, 80, 96, 96, 100, 100, 92]
@@ -339,8 +339,8 @@ if __name__ == "__main__":
     plt.plot(x, random)
     plt.scatter(x, random)
 
-    # plt.plot(x, subgraphx)
-    # plt.scatter(x, subgraphx)
+    plt.plot(x, subgraphx)
+    plt.scatter(x, subgraphx)
     
     plt.plot(x, pgexplainer, color='#9467BD')
     plt.scatter(x, pgexplainer, color='#9467BD')
@@ -348,11 +348,11 @@ if __name__ == "__main__":
     # plt.plot(x, gradcam_gcn3l, color='darkblue')
     # plt.scatter(x, gradcam_gcn3l, color='darkblue')
     
-    # plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'SubgraphX', 'PGExplainer', 'GradCAM (GCN3l)'])
-    plt.rcParams.update({'font.size': 10})
+    # plt.legend(['GradCAM', 'GradCAM (GCN3l)'])
+    plt.rcParams.update({'font.size': 11})
     plt.xticks(fontsize=11) 
     plt.yticks(fontsize=11) 
     # plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'SubgraphX', 'PGExplainer'])
     plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'PGExplainer'])
     # plt.savefig('/home/alireza/Desktop/img.png', dpi=300)
-    plt.savefig('/home/alireza/Desktop/kar_pure.png', bbox_inches='tight', dpi=300)
+    plt.savefig('/home/alireza/Desktop/kar_both.png', bbox_inches='tight', dpi=300)
