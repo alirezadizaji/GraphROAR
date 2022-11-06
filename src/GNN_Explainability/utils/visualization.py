@@ -22,7 +22,8 @@ def visualization(data: Data,
         node_size: int = 300,
         edge_width: int = 6,
         draw_node_labels: bool = True,
-        plot: bool = True):
+        plot: bool = True,
+        edges_color: Optional[List[Color]] = None):
     
     graph = to_networkx(data)
     
@@ -42,7 +43,8 @@ def visualization(data: Data,
 
     nx.draw_networkx_edges(graph, pos,
         width=edge_width,
-        arrows=False)
+        arrows=False,
+        edge_color=edges_color or 'k')
 
     if draw_node_labels:
         nx.draw_networkx_labels(graph, pos)
