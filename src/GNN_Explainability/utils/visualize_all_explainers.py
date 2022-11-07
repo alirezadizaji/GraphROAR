@@ -74,11 +74,8 @@ def visualize(args: Namespace) -> None:
     else:
         samples_names = sample(graphs.keys(), args.num_samples)
 
-    # also visualize the whole graph
-    args.ratio = [1.0] + args.ratio
-
     for name in samples_names:
-        n_row, n_col = len(args.explainer), len(args.ratio) + 1
+        n_row, n_col = len(args.explainer), len(args.ratio)
         w_size, h_size = n_col * args.width, n_row * args.height
         fig = plt.figure(figsize=(w_size, h_size))
         subplot_legend = legend
@@ -110,8 +107,8 @@ def visualize(args: Namespace) -> None:
                 ix = row_ix * n_col + col_ix + 1
 
                 # first column is only for original graph
-                if col_ix == 0 and row_ix > 0:
-                    continue
+                # if col_ix == 0 and row_ix > 0:
+                #     continue
 
                 fig.add_subplot(n_row, n_col, ix)
 
@@ -147,7 +144,7 @@ def visualize(args: Namespace) -> None:
                     title = "org" if r == 1.0 else f"{int(r*100)}%"
                     plt.title(title, fontsize=20)
 
-                if col_ix == 1:
+                if col_ix == 0:
                     plt.ylabel(explainer, fontsize=20)
 
                 if pos is None:
