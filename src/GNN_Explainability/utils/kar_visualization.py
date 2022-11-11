@@ -26,11 +26,11 @@ if __name__ == "__main__":
     # gradcam_gcn3l = [50, 51, 74, 94, 100, 100, 100]
 
     ## BA-2Motifs GCN3l
-    # gnnexplainer = [50, 50, 61, 68, 67, 81, 100]
-    # gradcam = [50, 95, 99, 100, 100, 100, 100]
-    # random = [50, 55, 55, 57, 70, 90, 100]
-    # subgraphx = [50, 86, 95, 94, 100, 99, 100]
-    # pgexplainer = [50, 67, 97, 100, 100, 100, 100]
+    gnnexplainer = [50, 50, 61, 68, 67, 81, 100]
+    gradcam = [50, 95, 99, 100, 100, 100, 100]
+    random = [50, 55, 55, 57, 70, 90, 100]
+    subgraphx = [50, 86, 95, 94, 100, 99, 100]
+    pgexplainer = [50, 67, 97, 100, 100, 100, 100]
 
     ## BA-2Motifs GCN3l (skip evaluation)
     # gnnexplainer = [50, 50, 50, 50, 65, 97, 100]
@@ -306,11 +306,11 @@ if __name__ == "__main__":
     # pgexplainer = [50, 50, 50, 53, 62, 75, 80]
 
     # IMDB-BINARY GIN3l (both)
-    gnnexplainer = [50, 50, 50, 51, 62, 75, 80]
-    gradcam = [50, 51, 51, 60, 73, 79, 80]
-    random = [50, 49, 50, 50, 60, 78, 80]
-    subgraphx = [50, 57, 50, 59, 66, 79, 80]
-    pgexplainer = [50, 60, 46, 51, 69, 77, 80]
+    # gnnexplainer = [50, 50, 50, 51, 62, 75, 80]
+    # gradcam = [50, 51, 51, 60, 73, 79, 80]
+    # random = [50, 49, 50, 50, 60, 78, 80]
+    # subgraphx = [50, 57, 50, 59, 66, 79, 80]
+    # pgexplainer = [50, 60, 46, 51, 69, 77, 80]
 
     # # MSRC9 GCN3l (both)
     # gnnexplainer = [16, 80, 96, 96, 100, 100, 92]
@@ -327,32 +327,36 @@ if __name__ == "__main__":
     # pgexplainer = [12, 88, 95, 96, 96, 96, 100]
 
     # plt.title('KAR performance on REDDIT_BINARY-GIN3l')
-    plt.figure(figsize=(5.6, 3.5))
-    plt.xlabel("Edge Keep (KAR%)",fontsize=11)
-    plt.ylabel("Acc (%)", fontsize=11)
-    plt.plot(x, gnnexplainer)
-    plt.scatter(x, gnnexplainer)
-    
-    plt.plot(x, gradcam)
-    plt.scatter(x, gradcam)
-    
-    plt.plot(x, random)
-    plt.scatter(x, random)
+    plt.margins(x=0)
+    plt.figure(figsize=(4, 4))
+    plt.xlabel("Edge Keep (KAR%)",fontsize=13)
+    # plt.ylabel("Acc (%)", fontsize=11)
+    plt.plot(x, random, color="#00B434")
+    plt.scatter(x, random, color="#00B434")
+        
+    plt.plot(x, gradcam, color="#ff8000")
+    plt.scatter(x, gradcam, color="#ff8000")
 
-    plt.plot(x, subgraphx)
-    plt.scatter(x, subgraphx)
-    
-    plt.plot(x, pgexplainer, color='#9467BD')
-    plt.scatter(x, pgexplainer, color='#9467BD')
+    plt.plot(x, gnnexplainer, color="#3361B6")
+    plt.scatter(x, gnnexplainer, color="#3361B6")
+
+    plt.plot(x, pgexplainer, color="#9A2ABD")
+    plt.scatter(x, pgexplainer, color="#9A2ABD")
+
+    plt.plot(x, subgraphx, color='#DB0000')
+    plt.scatter(x, subgraphx, color='#DB0000')
 
     # plt.plot(x, gradcam_gcn3l, color='darkblue')
     # plt.scatter(x, gradcam_gcn3l, color='darkblue')
     
     # plt.legend(['GradCAM', 'GradCAM (GCN3l)'])
-    plt.rcParams.update({'font.size': 11})
-    plt.xticks(fontsize=11) 
-    plt.yticks(fontsize=11) 
-    # plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'SubgraphX', 'PGExplainer'])
-    plt.legend(['GNNExplainer', 'GradCAM', 'Random', 'PGExplainer'])
+    plt.rcParams.update({'font.size': 9})
+
+    plt.xticks(fontsize=12) 
+    plt.yticks(fontsize=12) 
+    plt.legend(['Random', 'GradCAM', 'GNNExplainer', 'PGExplainer', 'SubgraphX'])
+    # plt.legend(['Random', 'GradCAM', 'PGExplainer', 'GNNExplainer'])
     # plt.savefig('/home/alireza/Desktop/img.png', dpi=300)
-    plt.savefig('/home/alireza/Desktop/kar_both.png', bbox_inches='tight', dpi=300)
+
+    # plt.margins(0,0)
+    plt.savefig('/home/alireza/Desktop/kar_pure.png', bbox_inches='tight', dpi=300, pad_inches = 0)
