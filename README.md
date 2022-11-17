@@ -12,7 +12,7 @@ At the moment, several explainer methods have been developed to perceive the fun
 ## Overview
 All running entry points are located at `src/GNN_Explainability/entrypoints/` and In general, there are three groups of running:
 ### Baseline
-This includes training graph neural networks, basically graph convolution and graph inception networks, to be later perceived by explainers. Their relative addresses follow this pattern `train_gcn.[dataset].base.[gcn3l or gin3l]`.
+This includes training graph neural networks, basically graph convolutions, to be later perceived by explainers. Their relative addresses follow this pattern `train_gcn.[dataset].base.[gcn3l or gin3l]`.
 ### Explanation
 The explainers will provide edge weightings per instance for retraining experiments. Despite others, SubgraphX does not provide probability edge weightings. Instead, we introduced a trick in which for each of five percentages proposed in retraining stage (10, 30, 50, 70, and 90), a separate set of binary edge masks is stored. their relative addresses follow this pattern: `explain_gcn.[dataset].[gcn3l or gin3l].[explainer]`.
 ### Retraining
