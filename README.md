@@ -1,5 +1,8 @@
 # GraphROAR
-[This is image](imgs/teaser.png)
+<p align="center">
+    <img src="imgs/teaser.png" alt="Teaser" height="400"/>
+  <br/>
+</p>
 At the moment, several evaluation metrics have been proposed to assess the faithfulness of state-of-the-art explanation methods for graph neural networks. During this project, we challenged these metrics and instead propose a novel benchmark to fairly compare the faithfulness of these explainers by executing lots of experiments on different datasets and in different settings on our method. More precisely, we formulated the retraining by either keeping (GraphKAR) or removing (GraphROAR) the most informative edges provided by each explainer and thereafter checking their impact using retraining steps.
 ## Contents:
   - [Overview](#overview)
