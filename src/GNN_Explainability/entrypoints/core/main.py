@@ -26,8 +26,6 @@ def get_dataset_cls(dataset: Dataset):
         cls = EnzymeDataset
     elif dataset == Dataset.IMDB_BIN:
         cls = IMDBBinDataset
-    elif dataset == Dataset.MSRC9:
-        cls = MSRC9Dataset
     else:
         raise NotImplementedError()
     

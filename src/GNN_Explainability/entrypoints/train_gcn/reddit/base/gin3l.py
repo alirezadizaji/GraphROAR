@@ -5,6 +5,7 @@ import torch
 from .....config import BaseConfig, TrainingConfig
 from .....enums import *
 from ....core import TrainEntrypoint
+from .....utils.forward_time_tracker import ForwardTimer
 
 class Entrypoint(TrainEntrypoint):
     def __init__(self):
@@ -18,5 +19,7 @@ class Entrypoint(TrainEntrypoint):
         )
         
         model = GIN_3l(model_level='graph', dim_node=1, dim_hidden=60, num_classes=2)
+        
+        ForwardTimer(track_one_iter=True).set_model(model, 'GIN3l')
                 
         super(Entrypoint, self).__init__(conf, model)
