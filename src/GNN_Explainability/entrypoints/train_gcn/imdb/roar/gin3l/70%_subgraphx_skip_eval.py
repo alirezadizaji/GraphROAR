@@ -10,10 +10,10 @@ from torch_geometric.data import DataLoader, Batch
 
 from ......config import RetrainingConfig, TrainingConfig
 from ......enums import *
-from .....core import ROAREntrypoint
+from .....core import RetrainingEntrypoint
 
 
-class Entrypoint(ROAREntrypoint):
+class Entrypoint(RetrainingEntrypoint):
     
     def __init__(self):
         conf = RetrainingConfig(
