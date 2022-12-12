@@ -8,7 +8,7 @@ from torch.optim import Adam
 from torch_geometric.data import DataLoader, Batch
 
 
-from ......config import ROARConfig, TrainingConfig
+from ......config import RetrainingConfig, TrainingConfig
 from ......enums import *
 from .....core import ROAREntrypoint
 
@@ -16,7 +16,7 @@ from .....core import ROAREntrypoint
 class Entrypoint(ROAREntrypoint):
     
     def __init__(self):
-        conf = ROARConfig(
+        conf = RetrainingConfig(
             try_num=33,
             try_name='roar_subgraphx_0.5_gin3l',
             dataset_name=Dataset.BA2Motifs,
@@ -24,7 +24,7 @@ class Entrypoint(ROAREntrypoint):
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
             edge_masks_load_dir='../data/ba_2motifs/explanation/subgraphx_50%',
-            roar_ratios=[0.5],
+            retraining_ratiosios=[0.5],
         )
 
         model = GIN_3l(model_level='graph', dim_node=10, dim_hidden=300, num_classes=2)

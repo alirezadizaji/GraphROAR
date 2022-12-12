@@ -8,14 +8,14 @@ from torch.optim import Adam
 from torch_geometric.data import DataLoader, Batch
 
 
-from ......config import ROARConfig, TrainingConfig
+from ......config import RetrainingConfig, TrainingConfig
 from ......enums import *
 from .....core import ROAREntrypoint
 
 class Entrypoint(ROAREntrypoint):
     
     def __init__(self):
-        conf = ROARConfig(
+        conf = RetrainingConfig(
             try_num=261,
             try_name='kar_pgexplainer_gcn3l_skip_eval',
             dataset_name=Dataset.BA3Motifs,
@@ -24,7 +24,7 @@ class Entrypoint(ROAREntrypoint):
             save_log_in_file=True,
             edge_masks_load_dir=f'../data/{Dataset.BA3Motifs}/explanation/gcn3l/pgexplainer',
             eliminate_top_most_edges=False,
-            roar_ratios=[0.1, 0.3, 0.5, 0.7, 0.9],
+            retraining_ratiosios=[0.1, 0.3, 0.5, 0.7, 0.9],
             skip_during_evaluation=True,
         )
 

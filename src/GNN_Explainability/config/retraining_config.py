@@ -1,11 +1,10 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List
 
-from ..enums import dataset
 from .base_config import BaseConfig
 
 @dataclass
-class ROARConfig(BaseConfig):
+class RetrainingConfig(BaseConfig):
     edge_masks_load_dir: str
     """ the location where the probability edge weightings are going to be loaded from """
 
@@ -23,9 +22,6 @@ class ROARConfig(BaseConfig):
     
     eliminate_nodes_too: bool = False
     """ If True then eliminate nodes whose all connected edges have been removed. """
-    
-    prob_to_replace_instead_of_remove: Optional[float] = None
-    """ A probability threshold to randomly replace some edges instead of removing them. If not given, then do not apply replacement."""
-    
-    roar_ratios: List[float] = field(default_factory=list)
+        
+    retraining_ratios: List[float] = field(default_factory=list)
     """ ratios (from 0.0 to 1.0) to perform retraining steps """

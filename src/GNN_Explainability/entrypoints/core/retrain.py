@@ -11,14 +11,14 @@ from ...utils.edge_elimination import EdgeEliminatorArgs, edge_elimination_hook
 from ...utils.seed_changer import seed_changer
 
 if TYPE_CHECKING:
-    from ...config import ROARConfig
+    from ...config import RetrainingConfig
     from dig.xgraph.models import GNNBasic
     from torch_geometric.data import Batch
 
-class ROAREntrypoint(TrainEntrypoint):
-    def __init__(self, conf: 'ROARConfig', model: 'GNNBasic') -> None:
+class RetrainingEntrypoint(TrainEntrypoint):
+    def __init__(self, conf: 'RetrainingConfig', model: 'GNNBasic') -> None:
         model = GNNWrapper(model)
-        self.roar_ratio: float = None
+        self.retraining_ratio: float = None
         super().__init__(conf, model)
 
     def _model_forwarding(self, data: 'Batch') -> torch.Tensor:
@@ -29,7 +29,7 @@ class ROAREntrypoint(TrainEntrypoint):
         weight_save_path = super()._get_weight_save_path(epoch_num)
         dirname = os.path.dirname(weight_save_path)
         filename = os.path.basename(weight_save_path)
-        new_dirname = os.path.join(dirname, str(self.roar_ratio))
+        new_dirname = os.path.join(dirname, str(self.retraining_ratio))
         os.makedirs(new_dirname, exist_ok=True)
 
         weight_save_path = os.path.join(new_dirname, filename)
@@ -56,15 +56,14 @@ class ROAREntrypoint(TrainEntrypoint):
 
     @contextmanager
     def eliminate_edges(self):
-        conf: 'ROARConfig' = self.conf
+        conf: 'RetrainingConfig' = self.conf
         handle = self.model.register_forward_pre_hook(
                 edge_elimination_hook(
                     EdgeEliminatorArgs(conf.edge_masks_load_dir,
-                        self.roar_ratio,
+                        self.retraining_ratio,
                         conf.edge_mask_symmetric,
                         conf.eliminate_top_most_edges,
-                        conf.eliminate_nodes_too,
-                        conf.prob_to_replace_instead_of_remove),
+                        conf.eliminate_nodes_too),
                     skip_during_eval=conf.skip_during_evaluation))
         
         yield None
@@ -72,14 +71,14 @@ class ROAREntrypoint(TrainEntrypoint):
         handle.remove()
 
     def run(self):
-        conf: 'ROARConfig' = self.conf
+        conf: 'RetrainingConfig' = self.conf
 
         if conf.edge_mask_random_weighting:
             with seed_changer():
                 self._create_random_edge_mask()
 
-        for self.roar_ratio in conf.roar_ratios:
-            print(f"*** ROAR {self.roar_ratio*100}% ***", flush=True)
+        for self.retraining_ratio in conf.retraining_ratios:
+            print(f"*** Retraining {self.retraining_ratio*100}% ***", flush=True)
             with self.eliminate_edges():
                 super().run()
 

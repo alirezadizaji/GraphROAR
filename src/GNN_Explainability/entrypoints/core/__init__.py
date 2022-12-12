@@ -1,4 +1,4 @@
 from .main import MainEntrypoint
-from .roar import ROAREntrypoint
+from .retrain import RetrainingEntrypoint
 from .train import TrainEntrypoint
 from .explanation import *

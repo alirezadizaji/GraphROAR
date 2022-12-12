@@ -4,14 +4,14 @@ from dig.xgraph.models import *
 import torch
 
 
-from ......config import ROARConfig, TrainingConfig
+from ......config import RetrainingConfig, TrainingConfig
 from ......enums import *
 from .....core import ROAREntrypoint
 
 class Entrypoint(ROAREntrypoint):
     
     def __init__(self):
-        conf = ROARConfig(
+        conf = RetrainingConfig(
             try_num=149,
             try_name='kar_subgraphx_0.5_gcn3l_skip_eval',
             dataset_name=Dataset.MUTAG,
@@ -20,7 +20,7 @@ class Entrypoint(ROAREntrypoint):
             save_log_in_file=True,
             edge_masks_load_dir=os.path.join('..', 'data', 'MUTAG', 'explanation', 'gcn3l', 'subgraphx_50%'),
             eliminate_top_most_edges=False,
-            roar_ratios=[0.5],
+            retraining_ratiosios=[0.5],
             skip_during_evaluation=True,
         )
 

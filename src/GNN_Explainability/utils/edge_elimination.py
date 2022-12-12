@@ -23,7 +23,6 @@ class EdgeEliminatorArgs:
     symmetric: bool = False
     eliminate_top_most: bool = True
     eliminate_node: bool = False
-    prob_to_replace_instead_of_remove: Optional[float] = None
 
     @property
     def item(self):
@@ -33,13 +32,11 @@ class EdgeEliminatorArgs:
             symmetric=self.symmetric,
             eliminate_top_most=self.eliminate_top_most,
             eliminate_node=self.eliminate_node,
-            prob_to_replace_instead_of_remove=self.prob_to_replace_instead_of_remove,
         )
 
 
 def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool,
-        eliminate_top_most: bool, eliminate_node: bool, 
-        prob_to_replace_instead_of_remove: Optional[float]) -> Callable[[Batch], Batch]:
+        eliminate_top_most: bool, eliminate_node: bool) -> Callable[[Batch], Batch]:
     
     def _edge_eliminator(data: Batch):
         graphs = data.to_data_list()
@@ -70,18 +67,6 @@ def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool,
             else:
                 mask = torch.zeros_like(edge_mask).bool()
                 mask[inds] = True
-
-                # instead of remove, replace randomly
-                if prob_to_replace_instead_of_remove is not None:
-                    assert 0.0 <= prob_to_replace_instead_of_remove <= 1.0, f"given probability must be in range (0.0, 1.0); got {prob_to_replace_instead_of_remove} instead." 
-                    
-                    rand_weights = torch.rand(mask.numel())
-                    if symmetric:
-                        rand_weights = symmetric_edges(edge_index, rand_weights)
-                    
-                    mask_2nd = rand_weights >= prob_to_replace_instead_of_remove
-                    not_selected_edges = (mask == False)
-                    mask[not_selected_edges] = mask_2nd[not_selected_edges]
 
             masked_edges = edge_index[:, mask] 
             

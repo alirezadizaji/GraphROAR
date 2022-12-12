@@ -1,3 +1,3 @@
 from .base_config import BaseConfig, TrainingConfig
 from .explanation import *
-from .roar_config import ROARConfig
+from .retraining_config import RetrainingConfig

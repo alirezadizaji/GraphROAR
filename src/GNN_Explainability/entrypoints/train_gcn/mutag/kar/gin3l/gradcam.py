@@ -4,14 +4,14 @@ from dig.xgraph.models import *
 import torch
 
 
-from ......config import ROARConfig, TrainingConfig
+from ......config import RetrainingConfig, TrainingConfig
 from ......enums import *
 from .....core import ROAREntrypoint
 
 class Entrypoint(ROAREntrypoint):
     
     def __init__(self):
-        conf = ROARConfig(
+        conf = RetrainingConfig(
             try_num=25,
             try_name='kar_gradcam_gin3l',
             dataset_name=Dataset.MUTAG,
@@ -20,7 +20,7 @@ class Entrypoint(ROAREntrypoint):
             save_log_in_file=True,
             edge_masks_load_dir=os.path.join('..', 'data', 'MUTAG', 'explanation', 'gin3l', 'gradcam'),
             eliminate_top_most_edges=False,
-            roar_ratios=[0.1, 0.3, 0.5, 0.7, 0.9],
+            retraining_ratiosios=[0.1, 0.3, 0.5, 0.7, 0.9],
         )
 
         model = GIN_3l(model_level='graph', dim_node=7, dim_hidden=60, num_classes=2)

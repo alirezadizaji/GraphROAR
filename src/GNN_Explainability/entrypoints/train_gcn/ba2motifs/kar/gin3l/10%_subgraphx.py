@@ -7,14 +7,14 @@ from torch.nn import functional as F
 from torch.optim import Adam
 from torch_geometric.data import DataLoader, Batch
 
-from ......config import ROARConfig, TrainingConfig
+from ......config import RetrainingConfig, TrainingConfig
 from ......enums import *
 from .....core import ROAREntrypoint
 
 class Entrypoint(ROAREntrypoint):
     
     def __init__(self):
-        conf = ROARConfig(
+        conf = RetrainingConfig(
             try_num=27,
             try_name='kar_subgraphx_0.1_gin3l',
             dataset_name=Dataset.BA2Motifs,
@@ -22,7 +22,7 @@ class Entrypoint(ROAREntrypoint):
             device=torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             save_log_in_file=True,
             edge_masks_load_dir='../data/ba_2motifs/explanation/subgraphx_10%',
-            roar_ratios=[0.1],
+            retraining_ratiosios=[0.1],
             eliminate_top_most_edges=False,
         )
 

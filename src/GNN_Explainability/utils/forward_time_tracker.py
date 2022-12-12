@@ -28,7 +28,7 @@ class ForwardTimer:
             first iteration.
 
     """
-    def __init__(self, track_one_iter: bool = False) -> None:
+    def __init__(self, track_one_iter: bool = True) -> None:
         
         self._track_one_iter: bool = track_one_iter
         self._level_zero_tracked: bool = False
