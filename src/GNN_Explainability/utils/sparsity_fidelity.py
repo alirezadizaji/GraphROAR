@@ -26,6 +26,7 @@ def get_args():
     parser.add_argument('-X', '--edge-mask-dir', nargs="+", type=str, help='Directories, representing edge masks of methods.')
     parser.add_argument('-O', '--color', nargs="+", type=str, help='Colors to be depicted per method.')
     parser.add_argument('-S', '--save-dir', default="./s-f", type=str, help='Colors to be depicted per method.')
+    parser.add_argument('-T', '--node-alteration', default='node_elimination', choices=['feature', 'zero_feature', 'node_elimination'], type=str, help='Alteration to happen on the isolated nodes.')
     
     args = parser.parse_args()
     return args
@@ -120,21 +121,31 @@ if __name__ == "__main__":
                 
                 if g.edge_index.numel() == 0:
                     g.x = torch.zeros_like(g.x)
-                ## node indices must be reset
                 else:
                     B = g.x.size(0)
                     node_mask = torch.zeros(B).bool()
                     remained: torch.Tensor = torch.unique(g.edge_index)
                     node_mask[remained] = True
-                    g.x = g.x[node_mask]
-
-                    row, col = g.edge_index
-                    node_indices, _ = torch.sort(torch.unique(g.edge_index))
-                    mapping = torch.full((node_indices.max().item() + 1,), fill_value=torch.inf)
-                    mapping[node_indices] = torch.arange(node_indices.numel()).float()
                     
-                    masked_edges = torch.stack([mapping[row], mapping[col]], dim=0).long()
-                    g.edge_index = masked_edges.to(g.edge_index.device)
+                    ## node indices must be reset
+                    if args.node_alteration == 'node_elimination':
+                        g.x = g.x[node_mask]
+
+                        row, col = g.edge_index
+                        node_indices, _ = torch.sort(torch.unique(g.edge_index))
+                        mapping = torch.full((node_indices.max().item() + 1,), fill_value=torch.inf)
+                        mapping[node_indices] = torch.arange(node_indices.numel()).float()
+                        
+                        masked_edges = torch.stack([mapping[row], mapping[col]], dim=0).long()
+                        g.edge_index = masked_edges.to(g.edge_index.device)
+                        
+                    elif args.node_alteration == 'zero_feature':
+                        g.x[~node_mask] = 0.0
+
+                    elif args.node_alteration == 'feature':
+                        pass
+                    else:
+                        raise ValueError()
 
                 delattr(g, 'ptr')
                 delattr(g, 'batch')
@@ -188,8 +199,9 @@ if __name__ == "__main__":
     methods = list(fidelities.keys())
     plt.legend(methods)
 
-    os.makedirs(args.save_dir, exist_ok=True)
+    save_dir = os.path.join(args.save_dir, args.node_alteration)
+    os.makedirs(save_dir, exist_ok=True)
     c1 = "kar" if args.keep else "roar"
     c2 = "norm" if args.normalize else "abs"
     filename = f"{c1}_{c2}_sparsity_fidelity.png"
-    plt.savefig(os.path.join(args.save_dir, filename))
+    plt.savefig(os.path.join(save_dir, filename))
