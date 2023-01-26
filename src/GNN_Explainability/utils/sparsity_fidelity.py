@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 from importlib import import_module
 import os
+import random
 from typing import Dict, Tuple
 
 from dig.xgraph.models import *
@@ -13,7 +14,6 @@ from torch_geometric.data import Batch, DataLoader
 from ..entrypoints.core.main import get_dataset_cls
 from ..entrypoints.core.train import TrainEntrypoint
 from ..enums import Dataset, DataSpec
-from ...main import global_seed
 from .symmetric_edge_mask import symmetric_edges
 
 def get_args():
@@ -31,7 +31,12 @@ def get_args():
 
 if __name__ == "__main__":
     args = get_args()
-    global_seed(args.globale)
+
+    seed = args.globale
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
 
     script = import_module(args.entrypoint)
     entrypoint: 'TrainEntrypoint' = getattr(script, 'Entrypoint')()
@@ -67,7 +72,7 @@ if __name__ == "__main__":
         else:
             subgraphx_exist = True
             import re
-            p = re.findall(r'\d+', method)[0]
+            p = int(re.findall(r'\d+', method)[0])
             if p == 10:
                 start = 0.0
                 end = 0.1
@@ -79,8 +84,8 @@ if __name__ == "__main__":
                 start = end - 0.2
 
         num = (end - start) / 0.01
-        sparsities[method] = np.linspace(start, end, num=num)
-        fidelities[method] = np.zeros_like(sparsities, dtype=np.float32)
+        sparsities[method] = np.linspace(start, end, num=int(num))
+        fidelities[method] = np.zeros_like(sparsities[method], dtype=np.float32)
 
         for i, data in enumerate(val_loader):
             data: Batch = data[0]
@@ -140,7 +145,7 @@ if __name__ == "__main__":
                 if args.normalize:
                     diff = diff / p1.item()
 
-                fidelities[method, ix] += diff
+                fidelities[method][ix] += diff
         
         fidelities[method] /= num_samples 
         print(f"DONE!!! Method: {method}, Keep: {args.keep}, Normalized: {args.normalize}", flush=True)
@@ -149,7 +154,8 @@ if __name__ == "__main__":
     # Join subgraphx fidelities into a single fidelity
     if subgraphx_exist:
         subgraphx_info: Dict[float, Tuple[np.ndarray, np.ndarray]] = dict()
-        for k in fidelities.keys():
+        methods = list(fidelities.keys())
+        for k in methods:
             if "subgraphx" not in k:
                 continue
             
@@ -162,7 +168,7 @@ if __name__ == "__main__":
             del sparsities[k]
 
         subgraphx_info = dict(sorted(subgraphx_info.items()))
-        colors["subgraphx"] = "#DB0000"
+        colors["subgraphx"] = "DB0000"
         sparsities["subgraphx"] = np.concatenate([v[0] for v in subgraphx_info.values()])
         fidelities["subgraphx"] = np.concatenate([v[1] for v in subgraphx_info.values()])
 
@@ -180,4 +186,4 @@ if __name__ == "__main__":
     
     methods = list(fidelities.keys())
     plt.legend(methods)
-    plt.show()
+    plt.savefig("salam.png")
