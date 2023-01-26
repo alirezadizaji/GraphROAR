@@ -25,7 +25,7 @@ def get_args():
     parser.add_argument('-C', '--epoch-num', type=int, help='Epoch number to be loaded. Please checkout corresponding entrypoint.')
     parser.add_argument('-X', '--edge-mask-dir', nargs="+", type=str, help='Directories, representing edge masks of methods.')
     parser.add_argument('-O', '--color', nargs="+", type=str, help='Colors to be depicted per method.')
-    parser.add_argument('-S', '--save-dir', default="./s-f", type=str, help='Colors to be depicted per method.')
+    parser.add_argument('-S', '--save-dir', default="./", type=str, help='Colors to be depicted per method.')
     parser.add_argument('-T', '--node-alteration', default='node_elimination', choices=['feature', 'zero_feature', 'node_elimination'], type=str, help='Alteration to happen on the isolated nodes.')
     
     args = parser.parse_args()
@@ -193,8 +193,8 @@ if __name__ == "__main__":
 
     for method, fidelity in fidelities.items():
         sparsity = sparsities[method]
-        color = colors[method]
-        plt.plot(sparsity, fidelity)
+        color = f"#{colors[method]}"
+        plt.plot(sparsity, fidelity, color=color)
     
     methods = list(fidelities.keys())
     plt.legend(methods)
@@ -204,4 +204,6 @@ if __name__ == "__main__":
     c1 = "kar" if args.keep else "roar"
     c2 = "norm" if args.normalize else "abs"
     filename = f"{c1}_{c2}_sparsity_fidelity.png"
-    plt.savefig(os.path.join(save_dir, filename))
+    save_pth = os.path.join(save_dir, filename)
+    print(f"Saved in {save_pth}")
+    plt.savefig(save_pth)
