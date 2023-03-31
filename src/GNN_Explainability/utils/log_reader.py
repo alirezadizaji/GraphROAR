@@ -18,8 +18,8 @@ def get_args():
     parser.add_argument('-SX', '--subgraphx', type=str, default='subgraphx', help='subgraphx entry name.')
     parser.add_argument('-RN', '--random', type=str, default='random', help='Random entry name.')
     parser.add_argument('-N', '--count', type=int, help='Number of consoles to read.')
-    parser.add_argument('-H', '--high', type=int, default=100, help='High percentage to consider.')
-    parser.add_argument('-L', '--low', type=int, default=50, help='Low percentage to consider.')
+    parser.add_argument('-H', '--high', type=float, default=100, help='High percentage to consider.')
+    parser.add_argument('-L', '--low', type=float, default=50, help='Low percentage to consider.')
     
     args = parser.parse_args()
     return args
