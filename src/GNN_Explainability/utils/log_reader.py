@@ -40,7 +40,7 @@ def main():
                 script = import_module(f"GNN_Explainability.entrypoints.{args.dir}.{entry_name}")
                 entrypoint: 'MainEntrypoint' = getattr(script, 'Entrypoint')()
                 save_dir = entrypoint.conf.save_dir
-                dirs.set_default(X, [])
+                dirs.setdefault(X, [])
                 dirs[X].append(save_dir)
                 files = [f for f in os.listdir(save_dir) if os.path.isfile(os.path.join(save_dir, f)) and f.endswith("_o.log")]
                 files = list(sorted(files, reverse=True))
