@@ -28,9 +28,11 @@ def main():
     args = get_args()
     suffix = "_skip_eval" if args.type == "skip" else ""
     res = {}
+    dirs = {}
     print(f"@@@ Getting {args.dir} entries with {args.count} logs each for {args.type} running type @@@", flush=True)
     for X in ['gradcam', 'gnnexplainer', 'pgexplainer', 'subgraphx', 'random']:
         if X == 'subgraphx':
+            continue
             ps = [10, 30, 50, 70, 90]
             res.setdefault(X, [[] for _ in range(args.count)])
             for p in ps:
@@ -39,7 +41,8 @@ def main():
                 script = import_module(f"GNN_Explainability.entrypoints.{args.dir}.{entry_name}")
                 entrypoint: 'MainEntrypoint' = getattr(script, 'Entrypoint')()
                 save_dir = entrypoint.conf.save_dir
-                
+                dirs.set_default(X, [])
+                dirs[X].append(save_dir)
                 files = [f for f in os.listdir(save_dir) if os.path.isfile(os.path.join(save_dir, f)) and f.endswith("_o.log")]
                 files = list(sorted(files, reverse=True))
                 
@@ -61,7 +64,8 @@ def main():
             script = import_module(f"GNN_Explainability.entrypoints.{args.dir}.{entry_name}")
             entrypoint: 'MainEntrypoint' = getattr(script, 'Entrypoint')()
             save_dir = entrypoint.conf.save_dir
-            
+            dirs[X] = save_dir
+
             files = [f for f in os.listdir(save_dir) if os.path.isfile(os.path.join(save_dir, f)) and f.endswith("_o.log")]
             files = list(sorted(files, reverse=True))
             
@@ -91,7 +95,8 @@ def main():
             if len(l) != 7:
                 print(f"WARNING -> {k} {i}th")
 
-
+    print()
+    print(dirs)
 
 
 if __name__ == "__main__":
