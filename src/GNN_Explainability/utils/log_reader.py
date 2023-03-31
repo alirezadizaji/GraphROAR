@@ -32,7 +32,6 @@ def main():
     print(f"@@@ Getting {args.dir} entries with {args.count} logs each for {args.type} running type @@@", flush=True)
     for X in ['gradcam', 'gnnexplainer', 'pgexplainer', 'subgraphx', 'random']:
         if X == 'subgraphx':
-            continue
             ps = [10, 30, 50, 70, 90]
             res.setdefault(X, [[] for _ in range(args.count)])
             for p in ps:
