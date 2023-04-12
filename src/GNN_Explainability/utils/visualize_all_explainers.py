@@ -29,8 +29,8 @@ def get_parser() -> Namespace:
     parser.add_argument('-W', '--width', type=int, default=3, help='width of a subplot')
     parser.add_argument('-H', '--height', type=int, default=2.5, help='height of a subplot')
     parser.add_argument('-V', '--save-dir', type=str, help='root directory to save visualizations.')
-    parser.add_argument('-I', '--node-size', type=int, default=10, help='node size to be depicted.')
-    parser.add_argument('-M', '--max-nodes', type=int, default=50, help='maximum number of nodes a graph could have to be considered as a candidate for visualization.')
+    parser.add_argument('-I', '--node-size', type=int, default=15, help='node size to be depicted.')
+    parser.add_argument('-M', '--max-nodes', type=int, default=60, help='maximum number of nodes a graph could have to be considered as a candidate for visualization.')
     parser.add_argument('-O', '--show-legend-once', action='store_true', help='If given then the legend will appear only on graph `org` subplot.')
     parser.add_argument('-C', '--edge-color', type=str, default='#2E7D32', help='Edge color of explanation outputs.')
     parser.add_argument('-L', '--list-names', type=str, nargs='+', help='The list to be depicted on them only.')
@@ -69,11 +69,11 @@ def visualize(args: Namespace) -> None:
                 continue
             graphs[data.name[0]] = data
     
-    if hasattr(args, 'list_names'):
+    if args.list_names is not None:
         samples_names = args.list_names
     else:
         samples_names = sample(graphs.keys(), args.num_samples)
-
+    
     for name in samples_names:
         n_row, n_col = len(args.explainer), len(args.ratio)
         w_size, h_size = n_col * args.width, n_row * args.height
@@ -151,6 +151,7 @@ def visualize(args: Namespace) -> None:
                     pos = new_pos
 
         save_dir = os.path.join(args.save_dir, f"{name}_{graph.y.item()}.png")
+        plt.subplots_adjust(wspace=0, hspace=0)
         plt.savefig(save_dir, dpi=600, bbox_inches='tight')
         print(f'DONE: {name} saved at {save_dir}.', flush=True)
 
