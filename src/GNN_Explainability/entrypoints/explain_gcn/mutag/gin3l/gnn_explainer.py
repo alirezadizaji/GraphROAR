@@ -17,12 +17,14 @@ from .....enums import *
 
 def color_setter(x):
     i = torch.nonzero(x).item()
-    if i == 1:   # N
-        return Color.RED
+    if i == 0:
+        return Color.DEFAULT
+    elif i == 1:   # N
+        return Color.DARK_YELLOW
     elif i == 2: # O
         return Color.GREEN
 
-legend = {Color.GREEN: "O", Color.RED: "N"}
+legend = {Color.GREEN: "O", Color.DARK_YELLOW: "N", Color.DEFAULT: "C"}
 
 class Entrypoint(GNNExplainerEntrypoint):
     def __init__(self):

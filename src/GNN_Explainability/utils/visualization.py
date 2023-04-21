@@ -3,7 +3,8 @@ from typing import Dict, List, Optional, Tuple, Protocol
 
 import matplotlib.pyplot as plt
 import networkx as nx
-from torch import Tensor
+import numpy as np
+from torch import Tensor, nonzero
 from torch_geometric.data import Data
 from torch_geometric.utils import to_networkx
 
@@ -26,7 +27,14 @@ def visualization(data: Data,
         edges_color: Optional[List[Color]] = None):
     
     graph = to_networkx(data)
-    
+
+    # Networkx re-orders the edges :(, Therefore edge coloring must be re-ordered too.
+    e1 = Tensor(np.array(graph.edges())).unsqueeze(1)
+    e2 = data.edge_index.T.unsqueeze(0)
+    m = nonzero((e1[..., 0] == e2[..., 0]) & (e1[..., 1] == e2[..., 1]), as_tuple=True)[1]
+    if isinstance(edges_color, list):
+        edges_color = [edges_color[i] for i in m]
+
     # set color of nodes
     if node_color_setter is not None:
         node_colors: List[Color] = list()
@@ -55,10 +63,7 @@ def visualization(data: Data,
     if legend is not None:
         if not isinstance(node_colors, list):
             node_colors = [node_colors]
-
-        # exclude legends not exist in the plot
-        legend = dict(filter(lambda x: x[0] in node_colors, legend.items()))
-        
+       
         for color, label in legend.items():
             plt.scatter([],[], c=color, label=label)
         plt.legend()

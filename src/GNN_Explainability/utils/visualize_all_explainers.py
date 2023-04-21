@@ -7,6 +7,8 @@ import os
 from random import sample
 
 import matplotlib.pyplot as plt
+import networkx as nx
+from torch_geometric.utils import to_networkx
 import numpy as np
 import torch
 from torch_geometric.data import DataLoader
@@ -15,6 +17,8 @@ from ..dataset.mutag import MUTAGDataset
 from ..dataset.reddit_binary import RedditDataset
 from ..entrypoints.core.main import get_dataset_cls
 from ..enums.data_spec import DataSpec
+from ..enums.color import Color
+from .node_elimination import isolated_node_elimination
 from .symmetric_edge_mask import symmetric_edges
 from .visualization import visualization
 
@@ -25,15 +29,15 @@ def get_parser() -> Namespace:
     parser.add_argument('-R', '--ratio', type=float, nargs='+', default=[0.1, 0.3, 0.5, 0.7, 0.9], help='ratios to visualize (must be between 0.0 and 1.0)')
     parser.add_argument('-X', '--explainer', type=str, nargs='+', default=['random', 'gnnexplainer', 'gradcam', 'pgexplainer', 'subgraphx'], help='explainers to visualize')
     parser.add_argument('-N', '--num-samples', type=int, default=20, help='number of (randomly selected) samples to visualize.')
-    parser.add_argument('-S', '--symetric', action='store_true', help='If passed then edge weights must be symmetric.')
     parser.add_argument('-W', '--width', type=int, default=3, help='width of a subplot')
     parser.add_argument('-H', '--height', type=int, default=2.5, help='height of a subplot')
     parser.add_argument('-V', '--save-dir', type=str, help='root directory to save visualizations.')
-    parser.add_argument('-I', '--node-size', type=int, default=15, help='node size to be depicted.')
+    parser.add_argument('-I', '--node-size', type=int, default=60, help='node size to be depicted.')
     parser.add_argument('-M', '--max-nodes', type=int, default=60, help='maximum number of nodes a graph could have to be considered as a candidate for visualization.')
     parser.add_argument('-O', '--show-legend-once', action='store_true', help='If given then the legend will appear only on graph `org` subplot.')
     parser.add_argument('-C', '--edge-color', type=str, default='#2E7D32', help='Edge color of explanation outputs.')
     parser.add_argument('-L', '--list-names', type=str, nargs='+', help='The list to be depicted on them only.')
+    parser.add_argument('-T', '--node-elimination', action='store_true', help='If given, then eliminate isolated nodes.')
     args = parser.parse_args()
     return args
 
@@ -81,9 +85,11 @@ def visualize(args: Namespace) -> None:
         subplot_legend = legend
 
         graph = graphs[name]
+        graph.x = torch.cat([graph.x, torch.arange(graph.x.size(0))[:, None]], dim=1)
         
         # just to keep all positions of the graphs the same
-        pos = None
+        pos = nx.kamada_kawai_layout(to_networkx(graph))
+        pos = np.array(list(pos.values()))
         
         for row_ix, explainer in enumerate(args.explainer):
             
@@ -118,20 +124,30 @@ def visualize(args: Namespace) -> None:
                 mask = torch.zeros_like(weights).bool()
                 mask[inds] = True
 
-                g = deepcopy(graph)
+                if args.node_elimination:
+                    nodes_remained = isolated_node_elimination(deepcopy(graph), mask, return_remained_ix=True)[1]
+                    
+                    def color_setter_(x):
+                        x_org, x_i = x[:-1], x[-1]
+                        if torch.any(x_i == nodes_remained):
+                            return color_setter(x_org)
+                        else:
+                            return Color.WHITE
+
+                else:
+                    color_setter_ = color_setter
 
                 if r == 1.0:
                     edge_colors = None
                 else:
                     edge_colors = [args.edge_color if mask[i] else '#C6C6C6' for i in range(mask.numel())]
-                # g.edge_index = g.edge_index[:, mask]
 
-                new_pos = visualization(g, 
+                visualization(graph, 
                     title='', 
                     pos=pos, 
                     node_size=args.node_size, 
                     edge_width=3, 
-                    node_color_setter=color_setter,
+                    node_color_setter=color_setter_,
                     legend=subplot_legend,
                     draw_node_labels=False, 
                     plot=False,
@@ -146,9 +162,6 @@ def visualize(args: Namespace) -> None:
 
                 if col_ix == 0:
                     plt.ylabel(explainer, fontsize=20)
-
-                if pos is None:
-                    pos = new_pos
 
         save_dir = os.path.join(args.save_dir, f"{name}_{graph.y.item()}.png")
         plt.subplots_adjust(wspace=0, hspace=0)

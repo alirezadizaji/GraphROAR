@@ -9,6 +9,7 @@ import torch
 from torch import nn
 from torch_geometric.data import Batch
 
+from .node_elimination import isolated_node_elimination
 from .symmetric_edge_mask import symmetric_edges
 
 
@@ -67,32 +68,12 @@ def init_edge_eliminator(root_dir: str, ratio: float, symmetric: bool,
             else:
                 mask = torch.zeros_like(edge_mask).bool()
                 mask[inds] = True
-
-            masked_edges = edge_index[:, mask] 
             
             # If true then eliminate nodes whose connected edges are totally eliminated.
             if eliminate_node:
-                # If all edges are removed, then (just to enable training) instead of node eliminating, make all of them the same
-                if masked_edges.numel() == 0:
-                    g.x = torch.zeros_like(g.x)
-                else:
-                    B = g.x.size(0)
-                    node_mask = torch.zeros(B).bool()
-                    remained: torch.Tensor = torch.unique(masked_edges)
-                    node_mask[remained] = True
-                    g.x = g.x[node_mask]
-
-                    # let's nodes indices start from zero
-                    row, col = masked_edges
-                    node_indices, _ = torch.sort(torch.unique(masked_edges))
-                    mapping = torch.full((node_indices.max().item() + 1,), fill_value=torch.inf)
-                    mapping[node_indices] = torch.arange(node_indices.numel()).float()
-                    
-                    masked_edges = torch.stack([mapping[row], mapping[col]], dim=0).long()
-                    masked_edges = masked_edges.to(g.edge_index.device)
-                    
-            g.edge_index = masked_edges
-
+                g = isolated_node_elimination(g, mask)
+            else:                     
+                g.edge_index = edge_index[:, mask]
 
         data: Batch = Batch.from_data_list(graphs)
         return data

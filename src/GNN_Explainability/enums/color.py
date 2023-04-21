@@ -1,5 +1,6 @@
 class Color:
     DEFAULT = "#1F78B4"
+    WHITE = "#FFFFFF"
     RED = "#E53935"
     GREEN = "#4CAF50"
     YELLOW = "#FFCA28"
