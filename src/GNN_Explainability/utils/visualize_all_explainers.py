@@ -85,7 +85,10 @@ def visualize(args: Namespace) -> None:
         subplot_legend = legend
 
         graph = graphs[name]
-        graph.x = torch.cat([graph.x, torch.arange(graph.x.size(0))[:, None]], dim=1)
+        
+        # For "node elimination" plots, the index of node should be attached to its features.
+        if args.node_elimination:
+            graph.x = torch.cat([graph.x, torch.arange(graph.x.size(0))[:, None]], dim=1)
         
         # just to keep all positions of the graphs the same
         pos = nx.kamada_kawai_layout(to_networkx(graph))
